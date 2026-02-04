@@ -3,7 +3,7 @@
  *
  * Clean API for rendering model forms with metadata-driven fields.
  * Uses UI adapter for complete UI library independence.
- * v2.2.0: Added responsive Desktop/Mobile automatic switching
+ * Added responsive Desktop/Mobile automatic switching
  */
 
 import React, { useMemo } from 'react'
@@ -61,7 +61,7 @@ import { GetMeta } from '../../../core/utils'
 export function Model(props) {
   const { subheader, forceMobile } = props
 
-  // NEW v2.2: Автоматическое определение Desktop/Mobile
+  // NEW .2: Автоматическое определение Desktop/Mobile
   const isSystemMobile = useMediaQuery({ maxWidth: 768 })
   const isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile
 
