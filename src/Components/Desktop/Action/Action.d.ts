@@ -3,7 +3,7 @@
  *
  * Uses ActionCore (business logic) + ActionRenderer (UI via UIAdapter)
  * Supports simple modal forms and multi-step wizard forms
- * v2.2.0: Added automatic Desktop/Mobile responsive switching
+ * Added automatic Desktop/Mobile responsive switching
  *
  * @version 2.3.0 - TypeScript definitions
  */

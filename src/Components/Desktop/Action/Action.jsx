@@ -104,13 +104,13 @@ export function Action(props) {
     // Children
     children,
 
-    // NEW v2.2: Force mobile rendering
+    // Force mobile rendering
     forceMobile,
 
     ...rendererProps
   } = props
 
-  // NEW v2.2: Автоматическое определение Desktop/Mobile
+  // Автоматическое определение Desktop/Mobile
   const isSystemMobile = useMediaQuery({ maxWidth: 768 })
   const isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile
 
@@ -253,7 +253,7 @@ export function Action(props) {
     [core, core.modal.opened, core.loading, core.wizard.currentStepIndex]
   )
 
-  // NEW v2.2: Выбор рендерера на основе Desktop/Mobile
+  // Выбор рендерера на основе Desktop/Mobile
   // ВАЖНО: ActionCore логика одинакова для Desktop и Mobile!
   // Desktop использует Modal, Mobile использует CenterPopup
   const Renderer = useMemo(

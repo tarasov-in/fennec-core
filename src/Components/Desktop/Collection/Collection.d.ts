@@ -2,7 +2,7 @@
  * Collection - Modern Collection/Table component with UI-agnostic architecture
  *
  * Uses CollectionCore (business logic) + CollectionRenderer (UI via UIAdapter)
- * v2.2.0: Added automatic Desktop/Mobile responsive switching
+ * Added automatic Desktop/Mobile responsive switching
  *
  * @version 2.3.0 - TypeScript definitions
  */

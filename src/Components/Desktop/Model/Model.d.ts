@@ -2,9 +2,8 @@
  * Model - Modern Model/Form component with UI-agnostic architecture
  *
  * Uses ModelCore (business logic) + ModelRenderer (UI via UIAdapter)
- * v2.2.0: Added automatic Desktop/Mobile responsive switching
+ * Added automatic Desktop/Mobile responsive switching
  *
- * @version 2.3.0 - TypeScript definitions
  */
 
 import { ComponentType, ReactNode } from 'react';

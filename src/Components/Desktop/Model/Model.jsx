@@ -61,7 +61,7 @@ import { GetMeta } from '../../../core/utils'
 export function Model(props) {
   const { subheader, forceMobile } = props
 
-  // NEW .2: Автоматическое определение Desktop/Mobile
+  // Автоматическое определение Desktop/Mobile
   const isSystemMobile = useMediaQuery({ maxWidth: 768 })
   const isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile
 
@@ -72,7 +72,7 @@ export function Model(props) {
     return null
   }
 
-  // NEW v2.2: Выбор рендерера на основе Desktop/Mobile
+  // Выбор рендерера на основе Desktop/Mobile
   // ВАЖНО: ModelCore логика одинакова для Desktop и Mobile!
   const Renderer = useMemo(
     () => (isMobile ? ModelMobileRenderer : ModelRenderer),

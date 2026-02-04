@@ -2,8 +2,8 @@
  * Field - Новая версия Field компонента
  *
  * Использует FieldCore (логика) + FieldRenderer (UI через UIAdapter)
- * v2.2.0: Добавлена автоматическая поддержка Desktop/Mobile с responsive переключением
- * v2.3.0: Performance optimization with React.memo
+ * Добавлена автоматическая поддержка Desktop/Mobile с responsive переключением
+ * Performance optimization with React.memo
  * Поддерживает 26 типов полей
  */
 
@@ -30,7 +30,7 @@ import { GetMeta } from '../../../core/meta'
  * @param {string} props.className - CSS класс
  * @param {Object} props.style - Inline стили
  */
-// v2.3.0: Memoized component for performance
+// Memoized component for performance
 const FieldComponent = (props) => {
   const {
     meta,
@@ -44,13 +44,13 @@ const FieldComponent = (props) => {
     tooltip,
     className,
     style,
-    forceMobile, // NEW v2.2: Force mobile rendering
+    forceMobile, // Force mobile rendering
     ...restProps
   } = props
 
   const adapter = useUIAdapter()
 
-  // NEW v2.2: Автоматическое определение Desktop/Mobile
+  // Автоматическое определение Desktop/Mobile
   const isSystemMobile = useMediaQuery({ maxWidth: 768 })
   const isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile
 
@@ -76,7 +76,7 @@ const FieldComponent = (props) => {
     [value, onChange, disabled, readOnly, placeholder, resolvedMeta, adapter, restProps]
   )
 
-  // NEW v2.2: Выбор рендерера на основе Desktop/Mobile
+  // Выбор рендерера на основе Desktop/Mobile
   const Renderer = isMobile ? FieldMobileRenderer : FieldRenderer
 
   // Рендерим поле через выбранный рендерер
@@ -90,7 +90,7 @@ const FieldComponent = (props) => {
   )
 }
 
-// v2.3.0: Custom comparison function for memo
+// Custom comparison function for memo
 const arePropsEqual = (prevProps, nextProps) => {
   // Check if value changed
   if (prevProps.value !== nextProps.value) return false

@@ -16,11 +16,11 @@ Fennec Core - это современная React библиотека для п
 - 🔄 **100% обратная совместимость** - плавная миграция с v1.x
 - ✅ **Fully tested** - unit тесты для всей бизнес-логики
 - 📚 **Storybook** - интерактивная документация
-- 📱 **Mobile Support** (v2.2+) - автоматическое responsive переключение Desktop ↔ Mobile
-- 🎯 **TypeScript Support** (v2.3+) - полная поддержка TypeScript с comprehensive type definitions
-- 🚀 **Performance Optimizations** (v2.3+) - React.memo optimization, 23-87% faster rendering
-- 🎨 **Material UI Adapter** (v2.3+) - полная поддержка Material UI в дополнение к Ant Design
-- ⚡ **Chakra UI Adapter** (v2.4+) - полная поддержка Chakra UI с custom theme и dark mode
+- 📱 **Mobile Support** - автоматическое responsive переключение Desktop ↔ Mobile
+- 🎯 **TypeScript Support** - полная поддержка TypeScript с comprehensive type definitions
+- 🚀 **Performance Optimizations** - React.memo optimization, 23-87% faster rendering
+- 🎨 **Material UI Adapter** - полная поддержка Material UI в дополнение к Ant Design
+- ⚡ **Chakra UI Adapter** - полная поддержка Chakra UI с custom theme и dark mode
 
 ## 📦 Установка
 
@@ -216,7 +216,7 @@ function UsersTable() {
 
 ## 📱 Mobile Support
 
-Fennec Core v2.2 добавляет полную поддержку mobile UI с автоматическим responsive переключением!
+Fennec Core добавляет полную поддержку mobile UI с автоматическим responsive переключением!
 
 ### Автоматическое Responsive Поведение
 
@@ -275,7 +275,7 @@ npm install fennec-core@2.3.0 antd-mobile react-responsive
 
 ### Полная поддержка TypeScript
 
-Fennec Core v2.3+ включает comprehensive TypeScript definitions для всех компонентов:
+Fennec Core включает comprehensive TypeScript definitions для всех компонентов:
 
 ```typescript
 import { Field, Model, Collection } from 'fennec-core';
@@ -589,10 +589,9 @@ Roles.HasRole(user, 'admin')
 
 ## 🔄 Миграция с v1.x
 
-Для миграции на v2 просто измените импорты:
+Для миграции на просто измените импорты:
 
 ```jsx
-// v2.0 - новые компоненты
 import { Field, Model, Collection } from 'fennec-core'
 
 <Field item={...} />
@@ -604,13 +603,13 @@ import { Field, Model, Collection } from 'fennec-core'
 
 ## 📖 Документация
 
-- **[MIGRATION.md](MIGRATION.md)** - руководство по миграции с v1.x
+- **[MIGRATION.md](MIGRATION.md)** - руководство по миграции
 - **[DEPRECATION.md](DEPRECATION.md)** - устаревшие файлы и план удаления
 - **[CHANGELOG.md](CHANGELOG.md)** - полная история изменений
-- **[RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)** - чеклист для релиза v2.0.0
+- **[RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)** - чеклист для релиза
 - **[REFACTORING_PLAN.md](REFACTORING_PLAN.md)** - план рефакторинга
 - **[PROGRESS.md](PROGRESS.md)** - текущий прогресс разработки
-- **[MOBILE_REFACTORING_NOTES.md](MOBILE_REFACTORING_NOTES.md)** - Mobile рефакторинг (v2.2)
+- **[MOBILE_REFACTORING_NOTES.md](MOBILE_REFACTORING_NOTES.md)** - Mobile рефакторинг
 - **[src/adapters/README.md](src/adapters/README.md)** - создание UI адаптеров
 - **[examples/](examples/)** - примеры использования
 - **[Storybook](stories/)** - интерактивные примеры
@@ -622,7 +621,7 @@ import { Field, Model, Collection } from 'fennec-core'
 - **[quick-start.jsx](examples/quick-start.jsx)** - быстрый старт с компонентами
 - **[field-types.jsx](examples/field-types.jsx)** - все 26 типов полей
 - **[custom-adapter.jsx](examples/custom-adapter.jsx)** - создание кастомного UI адаптера
-- **[migration-example.jsx](examples/migration-example.jsx)** - миграция с v1.x на v2.0
+- **[migration-example.jsx](examples/migration-example.jsx)** - миграция
 
 ### Запуск Storybook
 

@@ -63,7 +63,7 @@ export type { CollectionProps } from './Components/Desktop/Collection/Collection
 export { Action } from './Components/Desktop/Action/Action';
 export type { ActionProps } from './Components/Desktop/Action/Action';
 
-// ==================== Mobile Renderers (v2.2.0) ====================
+// ==================== Mobile Renderers ====================
 export { FieldMobileRenderer } from './Components/Desktop/Field/FieldMobileRenderer';
 export { ModelMobileRenderer } from './Components/Desktop/Model/ModelMobileRenderer';
 export { CollectionMobileRenderer } from './Components/Desktop/Collection/CollectionMobileRenderer';

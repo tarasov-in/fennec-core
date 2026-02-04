@@ -364,10 +364,10 @@ export { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRe
 export { AntdMobileAdapter } from './adapters/antd-mobile/AntdMobileAdapter'
 
 // ==================== Additional UI Adapters ====================
-// Material UI Adapter (v2.3.0)
+// Material UI Adapter 
 export { MaterialUIAdapter } from './adapters/material-ui/MaterialUIAdapter'
 
-// Chakra UI Adapter (v2.4.0)
+// Chakra UI Adapter 
 export { ChakraUIAdapter } from './adapters/chakra-ui/ChakraUIAdapter'
 
 // Tailwind UI Adapter

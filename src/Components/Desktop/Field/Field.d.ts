@@ -2,7 +2,7 @@
  * Field - Modern Field component with UI-agnostic architecture
  *
  * Uses FieldCore (business logic) + FieldRenderer (UI via UIAdapter)
- * v2.2.0: Added automatic Desktop/Mobile responsive switching
+ * Added automatic Desktop/Mobile responsive switching
  * Supports 26+ field types
  *
  * @version 2.3.0 - TypeScript definitions
