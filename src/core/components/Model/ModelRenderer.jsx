@@ -11,8 +11,7 @@ import { useUIAdapter } from '../../../adapters/UIProvider'
 import { useFormObserverContext, useMetaContext } from '../../../Components/Context'
 import { Field } from '../../../Components/Desktop/Field/Field'
 import { getObjectDisplay, getLocator } from '../../utils'
-
-var _ = require('lodash')
+import _ from 'lodash'
 
 export function ModelRenderer(props) {
   const {

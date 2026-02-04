@@ -1,5 +1,6 @@
 import { FennecError } from '../error/FennecError'
 import { errorCatch } from '../error/errorCatch'
+import { QueryParams } from '../query'
 
 /**
  * HTTP GET запрос
@@ -33,8 +34,6 @@ export const GET = (auth, url, callback, error) => {
  * @param {Function} error - Callback при ошибке
  */
 export const GETWITH = (auth, url, queryParams, callback, error) => {
-  // QueryParams будет импортирован из query модуля
-  const { QueryParams } = require('../query')
   let ext = QueryParams(queryParams)
   GET(auth, url + (ext ? '?' + ext : ''), callback, error)
 }
@@ -123,7 +122,6 @@ export const GETP = (auth, url) => {
  * @returns {Promise} Promise с результатом
  */
 export const GETWITHP = (auth, url, queryParams) => {
-  const { QueryParams } = require('../query')
   let ext = QueryParams(queryParams)
   return GETP(auth, url + (ext ? '?' + ext : ''))
 }

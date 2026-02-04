@@ -1,4 +1,5 @@
 import { GET, POST, GETP, POSTP } from './http'
+import { QueryParams } from '../query'
 
 /**
  * CREATE - создание объекта
@@ -53,7 +54,6 @@ export const READ = (auth, name, callback, error) => {
  * )
  */
 export const READWITH = (auth, name, queryParams, callback, error) => {
-  const { QueryParams } = require('../query')
   let ext = QueryParams(queryParams)
   GET(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''), callback, error)
 }
@@ -142,7 +142,6 @@ export const READP = (auth, name) => {
  * console.log('Data:', result.data)
  */
 export const READWITHP = (auth, name, queryParams) => {
-  const { QueryParams } = require('../query')
   let ext = QueryParams(queryParams)
   return GETP(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''))
 }

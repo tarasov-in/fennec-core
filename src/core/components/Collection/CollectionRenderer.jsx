@@ -26,8 +26,7 @@ import {
   subscribe as _subscribe,
   unsubscribe
 } from '../../utils'
-
-var _ = require('lodash')
+import _ from 'lodash'
 
 // Neutral SVG icons (no UI-library dependency). Adapters may override via adapter.Icons.
 const svgProps = { width: '1em', height: '1em', viewBox: '0 0 1024 1024', fill: 'currentColor', 'aria-hidden': true }

@@ -3,7 +3,8 @@ import PubSub from 'pubsub-js'
 import uuid from 'react-uuid';
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-var _ = require('lodash');
+import _ from 'lodash'
+import { getNotifier } from '../core/error'
 //--------------------------------------------------------------
 // style={props?.style} className={props?.className }
 // data-locator={getLocator(props?.locator, props?.object)}
@@ -919,7 +920,6 @@ FennecError.prototype = Error.prototype;
 export const errorCatch = (err, callback) => {
     if (err) {
         try {
-            const { getNotifier } = require('../core/error');
             const notifier = getNotifier();
             if (notifier?.error) notifier.error("" + err);
             else console.error("" + err);

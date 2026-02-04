@@ -8,6 +8,7 @@
  */
 
 import React from 'react'
+import { getObjectValue, getDisplay, uncapitalize, getFormatFieldValueTableView } from '../../Tool'
 
 /**
  * Generates table columns configuration from metadata properties
@@ -31,9 +32,6 @@ export function MetaColumns(properties, meta, onColumnClick) {
         // - getObjectValue
         // - getDisplay
         // - uncapitalize
-
-        // Temporary import from Tool for backward compatibility
-        const { getObjectValue, getDisplay, uncapitalize } = require('../../Tool')
 
         let fieldMeta = meta[getObjectValue(item, "relation.reference.object")]
         const display = (display) => {
@@ -59,8 +57,6 @@ export function MetaColumns(properties, meta, onColumnClick) {
 
       // For primitive types - use field formatter
       // Dependency: getFormatFieldValueTableView (from core/utils/display)
-      const { getFormatFieldValueTableView } = require('../../Tool')
-
       return ({
         title: item.label,
         render: (text, record, index) => {

@@ -7,6 +7,7 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { getObjectValue } from './object'
 import { uncapitalize } from './functional'
+import { metaGetFieldByName } from '../meta/helpers'
 
 /**
  * Gets display representation of object by metadata name
@@ -79,9 +80,6 @@ export function getDisplay(data, display, metaObject, meta) {
     var name_field = field.value.split(".")?.map((e) => uncapitalize(e)).join(".")
 
     var value_field = getObjectValue(data, name_field)
-
-    // Import metaGetFieldByName from meta helpers
-    const { metaGetFieldByName } = require('../meta/helpers')
 
     if (_.isObject(value_field)) {
       value_field = getDisplay(value_field, metaGetFieldByName(metaObject, meta, name_field)?.relation?.display, metaObject, meta)

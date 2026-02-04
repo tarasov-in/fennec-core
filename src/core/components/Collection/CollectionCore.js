@@ -15,8 +15,7 @@ import {
   QueryFunc,
   QueryDetail
 } from '../../utils'
-
-var _ = require('lodash')
+import _ from 'lodash'
 
 export class CollectionCore {
   constructor(props) {

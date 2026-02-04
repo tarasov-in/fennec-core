@@ -6,8 +6,7 @@
  */
 
 import { GetMeta, GetMetaProperties, formItemRules, isRequired, uncapitalize, getObjectValue } from '../../utils'
-
-var _ = require('lodash')
+import _ from 'lodash'
 
 export class ModelCore {
   constructor(props) {

@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import getScrollBarSize from "rc-util/lib/getScrollBarSize"
 import { injectCSS, updateCSS, removeCSS } from 'rc-util/lib/Dom/dynamicCSS'
 // import Portal from '@rc-component/portal';
-
-var _ = require('lodash');
+import _ from 'lodash'
 
 /*----------------------------------------------------------------------------------*/
 export function useWindowDimensions() {
