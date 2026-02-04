@@ -1,0 +1,1 @@
+export { MaterialUIAdapter } from './MaterialUIAdapter'

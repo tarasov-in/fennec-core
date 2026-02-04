@@ -1,0 +1,1 @@
+export { AntdMobileAdapter } from './AntdMobileAdapter'

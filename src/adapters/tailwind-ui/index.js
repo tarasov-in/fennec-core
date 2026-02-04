@@ -1,0 +1,1 @@
+export { TailwindUIAdapter } from './TailwindUIAdapter'

@@ -1,0 +1,1 @@
+export { ChakraUIAdapter } from './ChakraUIAdapter'

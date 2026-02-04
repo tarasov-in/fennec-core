@@ -1,0 +1,169 @@
+{
+  "name": "fennec-core",
+  "version": "2.3.0",
+  "description": "Modern React UI library with UI-agnostic architecture",
+  "author": "tarasovin",
+  "license": "MIT",
+  "repository": "tarasov-in/fennec-core",
+  "main": "dist/fennec-core.js",
+  "module": "dist/fennec-core.modern.js",
+  "source": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/fennec-core.modern.js",
+      "require": "./dist/fennec-core.js",
+      "types": "./src/index.d.ts"
+    },
+    "./core/crud": {
+      "import": "./dist/core/crud.modern.js",
+      "require": "./dist/core/crud.js",
+      "default": "./dist/core/crud.modern.js"
+    },
+    "./core/utils": {
+      "import": "./dist/core/utils.modern.js",
+      "require": "./dist/core/utils.js",
+      "default": "./dist/core/utils.modern.js"
+    },
+    "./core/query": {
+      "import": "./dist/core/query.modern.js",
+      "require": "./dist/core/query.js",
+      "default": "./dist/core/query.modern.js"
+    },
+    "./core/meta": {
+      "import": "./dist/core/meta.modern.js",
+      "require": "./dist/core/meta.js",
+      "default": "./dist/core/meta.modern.js"
+    },
+    "./core/error": {
+      "import": "./dist/core/error.modern.js",
+      "require": "./dist/core/error.js",
+      "default": "./dist/core/error.modern.js"
+    },
+    "./core/pubsub": {
+      "import": "./dist/core/pubsub.modern.js",
+      "require": "./dist/core/pubsub.js",
+      "default": "./dist/core/pubsub.modern.js"
+    },
+    "./core/validation": {
+      "import": "./dist/core/validation.modern.js",
+      "require": "./dist/core/validation.js",
+      "default": "./dist/core/validation.modern.js"
+    },
+    "./core/roles": {
+      "import": "./dist/core/roles.modern.js",
+      "require": "./dist/core/roles.js",
+      "default": "./dist/core/roles.modern.js"
+    },
+    "./adapters/antd": {
+      "import": "./dist/adapters/antd.modern.js",
+      "require": "./dist/adapters/antd.js",
+      "default": "./dist/adapters/antd.modern.js"
+    },
+    "./adapters/antd-mobile": {
+      "import": "./dist/adapters/antd-mobile.modern.js",
+      "require": "./dist/adapters/antd-mobile.js",
+      "default": "./dist/adapters/antd-mobile.modern.js"
+    },
+    "./adapters/material-ui": {
+      "import": "./dist/adapters/material-ui.modern.js",
+      "require": "./dist/adapters/material-ui.js",
+      "default": "./dist/adapters/material-ui.modern.js"
+    },
+    "./adapters/chakra-ui": {
+      "import": "./dist/adapters/chakra-ui.modern.js",
+      "require": "./dist/adapters/chakra-ui.js",
+      "default": "./dist/adapters/chakra-ui.modern.js"
+    },
+    "./adapters/tailwind-ui": {
+      "import": "./dist/adapters/tailwind-ui.modern.js",
+      "require": "./dist/adapters/tailwind-ui.js",
+      "default": "./dist/adapters/tailwind-ui.modern.js"
+    },
+    "./adapters/UIContext": {
+      "import": "./dist/adapters/UIContext.modern.js",
+      "require": "./dist/adapters/UIContext.js",
+      "default": "./dist/adapters/UIContext.modern.js"
+    },
+    "./adapters/UIAdapter": {
+      "import": "./dist/adapters/UIAdapter.modern.js",
+      "require": "./dist/adapters/UIAdapter.js",
+      "default": "./dist/adapters/UIAdapter.modern.js"
+    }
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "build": "npm run build:main && node scripts/build-subpaths.js",
+    "build:main": "microbundle-crl -o ./dist --no-css-modules --no-compress --format modern,cjs --external antd,antd-mobile,@ant-design/icons,@ant-design",
+    "build:subpaths": "node scripts/build-subpaths.js",
+    "prestart": "mkdir -p ../fennec-core-dev && cp -r ./package.json ../fennec-core-dev/",
+    "start": "microbundle-crl watch -o ../fennec-core-dev/dist --no-css-modules --no-compress --format modern,cjs",
+    "buildorigin": "microbundle-crl --no-compress --format modern,cjs",
+    "startorigin": "microbundle-crl watch --no-compress --format modern,cjs",
+    "test": "run-s test:unit test:lint test:build",
+    "test:build": "run-s build",
+    "test:lint": "eslint .",
+    "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
+    "test:watch": "react-scripts test --env=jsdom",
+    "predeploy": "cd example && npm install && npm run build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "analyze": "microbundle-crl -o ./dist --no-css-modules --no-compress --format modern,cjs --visualize"
+  },
+  "peerDependencies": {
+    "jwt-decode": "^3.1.2",
+    "pubsub-js": "^1.9.4",
+    "rc-util": "^5.22.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-responsive": "^9.0.0-beta.10",
+    "react-router-dom": "^6.3.0",
+    "react-uuid": "^1.0.2"
+  },
+  "devDependencies": {
+    "antd": "5.29.2",
+    "antd-mobile": "^5.15.1",
+    "babel-eslint": "^10.0.3",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-standard": "^4.1.0",
+    "jwt-decode": "^3.1.2",
+    "microbundle-crl": "^0.13.11",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "pubsub-js": "^1.9.4",
+    "rc-util": "^5.22.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-responsive": "^9.0.0-beta.10",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.1",
+    "react-uuid": "^1.0.2",
+    "@storybook/addon-docs": "^7.6.0",
+    "@storybook/addon-essentials": "^7.6.0",
+    "@storybook/addon-interactions": "^7.6.0",
+    "@storybook/addon-links": "^7.6.0",
+    "@storybook/blocks": "^7.6.0",
+    "@storybook/react": "^7.6.0",
+    "@storybook/react-webpack5": "^7.6.0",
+    "@storybook/testing-library": "^0.2.2",
+    "storybook": "^7.6.0",
+    "webpack-bundle-analyzer": "^4.10.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "dayjs": "^1.11.9",
+    "js-cookie": "^3.0.1"
+  }
+}
