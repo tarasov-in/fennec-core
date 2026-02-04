@@ -178,7 +178,7 @@ function UsersTable() {
 - **Modes**: table и list
 - **Fullscreen**: встроенный режим
 
-### Action - Модальные окна и Wizards (NEW in v2.1)
+### Action - Модальные окна и Wizards
 
 Универсальный компонент для модальных действий:
 - **Simple Actions**: одношаговые действия
@@ -214,7 +214,7 @@ function UsersTable() {
 />
 ```
 
-## 📱 Mobile Support (NEW in v2.2)
+## 📱 Mobile Support
 
 Fennec Core v2.2 добавляет полную поддержку mobile UI с автоматическим responsive переключением!
 
@@ -271,7 +271,7 @@ npm install fennec-core@2.3.0 antd-mobile react-responsive
 
 ---
 
-## 🎯 TypeScript Support (NEW in v2.3)
+## 🎯 TypeScript Support
 
 ### Полная поддержка TypeScript
 
@@ -372,7 +372,7 @@ function MobileApp() {
 
 ---
 
-## 🚀 Performance Optimizations (NEW in v2.3)
+## 🚀 Performance Optimizations
 
 ### React.memo Optimization
 
@@ -409,7 +409,7 @@ npm run analyze
 
 Fennec Core поддерживает несколько UI фреймворков через систему адаптеров:
 
-### Material UI Adapter (NEW in v2.3)
+### Material UI Adapter 
 
 ```tsx
 import { UIProvider, MaterialUIAdapter } from 'fennec-core';
@@ -441,7 +441,7 @@ npm install @mui/material @mui/x-date-pickers @emotion/react @emotion/styled day
 
 См. [MATERIAL_UI_ADAPTER.md](MATERIAL_UI_ADAPTER.md) для полного руководства.
 
-### Chakra UI Adapter (NEW in v2.4)
+### Chakra UI Adapter 
 
 ```tsx
 import { UIProvider, ChakraUIAdapter } from 'fennec-core';
@@ -567,7 +567,7 @@ import {
   Field,
   Model,
   Collection,
-  Action,                // NEW in v2.1
+  Action,                
 } from 'fennec-core'
 
 // Модули
@@ -670,25 +670,6 @@ npm run storybook
 npm test
 ```
 
-## 📊 Статус проекта
-
-### ✅ Завершено (v2.0)
-
-- ✅ UI Adapter System (25 компонентов)
-- ✅ Core модули (PubSub, Roles, Utils, CRUD, Query, Validation, Meta)
-- ✅ Field с 26 типами полей
-- ✅ Model с context filters
-- ✅ Collection с фильтрами и pagination
-- ✅ Storybook с примерами
-- ✅ Unit тесты (100% coverage для Core)
-
-### 🔜 В планах (v2.1+)
-
-- ⏳ TypeScript definitions
-- ⏳ Примеры адаптеров (Material UI, Chakra UI)
-- ⏳ Дополнительные компоненты (DropdownAction — минимальная обёртка)
-- ⏳ Расширенная документация
-
 ## 🤝 Contributing
 
 Мы приветствуем вклад от сообщества! См. [CONTRIBUTING.md](CONTRIBUTING.md) для:
@@ -701,7 +682,7 @@ npm test
 
 ## 📄 License
 
-MIT © [tarasovin](https://github.com/tarasovin)
+MIT © [tarasov-in](https://github.com/tarasov-in)
 
 См. [LICENSE](LICENSE) для полного текста лицензии.
 

@@ -323,12 +323,12 @@ export {
 }
 
 
-// ==================== UI Adapter System (NEW in v1.2.0) ====================
+// ==================== UI Adapter System  ====================
 export { UIProvider, useUI, useUIOptional } from './adapters/UIContext'
 export { UIAdapter } from './adapters/UIAdapter'
 export { AntdAdapter } from './adapters/antd/AntdAdapter'
 
-// ==================== Core Modules (NEW in v1.2.0) ====================
+// ==================== Core Modules  ====================
 // Модульные экспорты для tree-shaking и лучшей организации кода
 // Также доступны через старый Tool экспорт для обратной совместимости
 export * as PubSub from './core/pubsub'
@@ -340,7 +340,7 @@ export * as Query from './core/query'
 export * as Validation from './core/validation'
 export * as Meta from './core/meta'
 
-// ==================== Core Component Logic (NEW in v2.1.0) ====================
+// ==================== Core Component Logic  ====================
 // UI-Agnostic классы бизнес-логики компонентов
 export {
   ActionCore,
@@ -349,11 +349,11 @@ export {
   ActionFormCore
 } from './core/components/Action/ActionCore'
 
-// ==================== Components (NEW in v2.0.0) ====================
+// ==================== Components ====================
 // Field, Model, Action уже экспортируются в блоке выше; Collection — только здесь
 export { Collection } from './Components/Desktop/Collection/Collection'
 
-// ==================== Mobile Components (NEW in v2.2.0) ====================
+// ==================== Mobile Components  ====================
 // Mobile Renderers - используют Desktop Core логику + Mobile UI
 export { FieldMobileRenderer } from './Components/Desktop/Field/FieldMobileRenderer'
 export { ModelMobileRenderer } from './Components/Desktop/Model/ModelMobileRenderer'
@@ -363,7 +363,7 @@ export { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRe
 // Mobile Adapter
 export { AntdMobileAdapter } from './adapters/antd-mobile/AntdMobileAdapter'
 
-// ==================== Additional UI Adapters (NEW in v2.3+) ====================
+// ==================== Additional UI Adapters ====================
 // Material UI Adapter (v2.3.0)
 export { MaterialUIAdapter } from './adapters/material-ui/MaterialUIAdapter'
 

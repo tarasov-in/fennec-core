@@ -85,7 +85,7 @@ export interface ModelProps {
   style?: React.CSSProperties;
 
   /**
-   * Force mobile rendering regardless of screen size (NEW in v2.2)
+   * Force mobile rendering regardless of screen size 
    * @default undefined (auto-detect based on screen width ≤768px)
    */
   forceMobile?: boolean;
