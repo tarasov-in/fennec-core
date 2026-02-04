@@ -172,9 +172,6 @@ import { ModelMobileRenderer } from './Components/Desktop/Model/ModelMobileRende
 import { CollectionMobileRenderer } from './Components/Desktop/Collection/CollectionMobileRenderer'
 import { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRenderer'
 
-// Mobile Adapter
-import { AntdMobileAdapter } from './adapters/antd-mobile/AntdMobileAdapter'
-
 import { Overlay } from './Components/Overlay'
 
 
@@ -326,7 +323,8 @@ export {
 // ==================== UI Adapter System  ====================
 export { UIProvider, useUI, useUIOptional } from './adapters/UIContext'
 export { UIAdapter } from './adapters/UIAdapter'
-export { AntdAdapter } from './adapters/antd/AntdAdapter'
+// Adapters are not re-exported from main entry to avoid requiring optional UI libs.
+// Import from subpaths when needed: fennec-core/adapters/antd, fennec-core/adapters/chakra-ui, etc.
 
 // ==================== Core Modules  ====================
 // Модульные экспорты для tree-shaking и лучшей организации кода
@@ -359,16 +357,3 @@ export { FieldMobileRenderer } from './Components/Desktop/Field/FieldMobileRende
 export { ModelMobileRenderer } from './Components/Desktop/Model/ModelMobileRenderer'
 export { CollectionMobileRenderer } from './Components/Desktop/Collection/CollectionMobileRenderer'
 export { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRenderer'
-
-// Mobile Adapter
-export { AntdMobileAdapter } from './adapters/antd-mobile/AntdMobileAdapter'
-
-// ==================== Additional UI Adapters ====================
-// Material UI Adapter 
-export { MaterialUIAdapter } from './adapters/material-ui/MaterialUIAdapter'
-
-// Chakra UI Adapter 
-export { ChakraUIAdapter } from './adapters/chakra-ui/ChakraUIAdapter'
-
-// Tailwind UI Adapter
-export { TailwindUIAdapter } from './adapters/tailwind-ui/TailwindUIAdapter'

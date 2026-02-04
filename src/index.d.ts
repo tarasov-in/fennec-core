@@ -17,10 +17,8 @@ import { Dayjs } from 'dayjs';
 export * from './adapters/UIAdapter';
 export { UIProvider, useUI, useUIOptional } from './adapters/UIContext';
 export { UIAdapter } from './adapters/UIAdapter';
-export { AntdAdapter } from './adapters/antd/AntdAdapter';
-export { AntdMobileAdapter } from './adapters/antd-mobile/AntdMobileAdapter';
-export { MaterialUIAdapter } from './adapters/material-ui/MaterialUIAdapter';
-export { ChakraUIAdapter } from './adapters/chakra-ui/ChakraUIAdapter';
+// Adapters are not re-exported from main entry. Import from subpaths when needed:
+// fennec-core/adapters/antd, fennec-core/adapters/chakra-ui, etc.
 
 // ==================== Core Component Logic ====================
 export { FieldCore } from './core/components/Field/FieldCore';
