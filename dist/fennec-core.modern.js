@@ -19973,11 +19973,29 @@ var detectMutation = function detectMutation(mutation) {
   return updateInArray$1;
 };
 
+function JSX(render) {
+  return render();
+}
 function JSXMap(array, render) {
-  if (!array) return React.createElement(React.Fragment);
-  return array.map(function (e, idx) {
+  if (!array) return /*#__PURE__*/React.createElement(React.Fragment, null);
+  return array === null || array === void 0 ? void 0 : array.map(function (e, idx) {
     return render(e, idx);
   });
+}
+function JSXPathMap(object, path, render) {
+  var array = _.get(object, path);
+  return JSXMap(array, render);
+}
+function JSXIndex(array, index, render) {
+  if (!array) return /*#__PURE__*/React.createElement(React.Fragment, null);
+  if (!_.isArray(index)) {
+    if (array.length < index) return /*#__PURE__*/React.createElement(React.Fragment, null);
+    return render(array[index], index);
+  } else {
+    return index === null || index === void 0 ? void 0 : index.map(function (i, idx) {
+      return JSXIndex(array, i, render);
+    });
+  }
 }
 
 var QueryParams = function QueryParams(queryParams) {
@@ -23337,5 +23355,5 @@ function CollectionMobileRenderer(props) {
   });
 }
 
-export { Action, ActionCore, ActionFormCore, ActionMobileRenderer, ActionModalCore, ActionWizardCore, And$1 as And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, Collection, CollectionMobileRenderer, ContextFiltersToQueryFilters, DELETE, DELETEP, FennecError, Field, FieldMobileRenderer, FilterToQueryParameters, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse$1 as IfElse, JSXMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, Model, ModelMobileRenderer, ObjectToContextFilters, ObjectToQueryParam, Or, Overlay, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray$1 as deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray$1 as updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useNavigation, useTranslateContext, useUI, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
+export { Action, ActionCore, ActionFormCore, ActionMobileRenderer, ActionModalCore, ActionWizardCore, And$1 as And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, Collection, CollectionMobileRenderer, ContextFiltersToQueryFilters, DELETE, DELETEP, FennecError, Field, FieldMobileRenderer, FilterToQueryParameters, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse$1 as IfElse, JSX, JSXIndex, JSXMap, JSXPathMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, Model, ModelMobileRenderer, ObjectToContextFilters, ObjectToQueryParam, Or, Overlay, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray$1 as deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray$1 as updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useNavigation, useTranslateContext, useUI, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
 //# sourceMappingURL=fennec-core.modern.js.map

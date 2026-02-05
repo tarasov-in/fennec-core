@@ -19976,11 +19976,29 @@ var detectMutation = function detectMutation(mutation) {
   return updateInArray$1;
 };
 
+function JSX(render) {
+  return render();
+}
 function JSXMap(array, render) {
-  if (!array) return React__default.createElement(React__default.Fragment);
-  return array.map(function (e, idx) {
+  if (!array) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
+  return array === null || array === void 0 ? void 0 : array.map(function (e, idx) {
     return render(e, idx);
   });
+}
+function JSXPathMap(object, path, render) {
+  var array = _.get(object, path);
+  return JSXMap(array, render);
+}
+function JSXIndex(array, index, render) {
+  if (!array) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
+  if (!_.isArray(index)) {
+    if (array.length < index) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
+    return render(array[index], index);
+  } else {
+    return index === null || index === void 0 ? void 0 : index.map(function (i, idx) {
+      return JSXIndex(array, i, render);
+    });
+  }
 }
 
 var QueryParams = function QueryParams(queryParams) {
@@ -23373,7 +23391,10 @@ exports.HasRole = HasRole;
 exports.HasRoleID = HasRoleID;
 exports.If = If;
 exports.IfElse = IfElse$1;
+exports.JSX = JSX;
+exports.JSXIndex = JSXIndex;
 exports.JSXMap = JSXMap;
+exports.JSXPathMap = JSXPathMap;
 exports.LOCATOR_ACTIONS = LOCATOR_ACTIONS;
 exports.LOCATOR_TYPES = LOCATOR_TYPES;
 exports.MetaColumns = MetaColumns;
