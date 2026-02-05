@@ -2,28 +2,14 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var PubSub = _interopDefault(require('pubsub-js'));
-var uuid = _interopDefault(require('react-uuid'));
 var reactRouterDom = require('react-router-dom');
 var decode = _interopDefault(require('jwt-decode'));
+var PubSub = _interopDefault(require('pubsub-js'));
+var uuid = _interopDefault(require('react-uuid'));
 var reactResponsive = require('react-responsive');
 var ReactDOM = _interopDefault(require('react-dom'));
 var getScrollBarSize = _interopDefault(require('rc-util/lib/getScrollBarSize'));
 var dynamicCSS = require('rc-util/lib/Dom/dynamicCSS');
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-var dayjs_min = createCommonjsModule(function (module, exports) {
-!function(t,e){module.exports=e();}(commonjsGlobal,(function(){var t=1e3,e=6e4,n=36e5,r="millisecond",i="second",s="minute",u="hour",a="day",o="week",c="month",f="quarter",h="year",d="date",l="Invalid Date",$=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,y=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,M={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),ordinal:function(t){var e=["th","st","nd","rd"],n=t%100;return "["+t+(e[(n-20)%10]||e[n]||e[0])+"]"}},m=function(t,e,n){var r=String(t);return !r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},v={s:m,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return (e<=0?"+":"-")+m(r,2,"0")+":"+m(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return -t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,c),s=n-i<0,u=e.clone().add(r+(s?-1:1),c);return +(-(r+(n-i)/(s?i-u:u-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(t){return {M:c,y:h,w:o,d:a,D:d,h:u,m:s,s:i,ms:r,Q:f}[t]||String(t||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},g="en",D={};D[g]=M;var p="$isDayjsObject",S=function(t){return t instanceof _||!(!t||!t[p])},w=function t(e,n,r){var i;if(!e)return g;if("string"==typeof e){var s=e.toLowerCase();D[s]&&(i=s),n&&(D[s]=n,i=s);var u=e.split("-");if(!i&&u.length>1)return t(u[0])}else {var a=e.name;D[a]=e,i=a;}return !r&&i&&(g=i),i||!r&&g},O=function(t,e){if(S(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new _(n)},b=v;b.l=w,b.i=S,b.w=function(t,e){return O(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var _=function(){function M(t){this.$L=w(t.locale,null,!0),this.parse(t),this.$x=this.$x||t.x||{},this[p]=!0;}var m=M.prototype;return m.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(b.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match($);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.init();},m.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds();},m.$utils=function(){return b},m.isValid=function(){return !(this.$d.toString()===l)},m.isSame=function(t,e){var n=O(t);return this.startOf(e)<=n&&n<=this.endOf(e)},m.isAfter=function(t,e){return O(t)<this.startOf(e)},m.isBefore=function(t,e){return this.endOf(e)<O(t)},m.$g=function(t,e,n){return b.u(t)?this[e]:this.set(n,t)},m.unix=function(){return Math.floor(this.valueOf()/1e3)},m.valueOf=function(){return this.$d.getTime()},m.startOf=function(t,e){var n=this,r=!!b.u(e)||e,f=b.p(t),l=function(t,e){var i=b.w(n.$u?Date.UTC(n.$y,e,t):new Date(n.$y,e,t),n);return r?i:i.endOf(a)},$=function(t,e){return b.w(n.toDate()[t].apply(n.toDate("s"),(r?[0,0,0,0]:[23,59,59,999]).slice(e)),n)},y=this.$W,M=this.$M,m=this.$D,v="set"+(this.$u?"UTC":"");switch(f){case h:return r?l(1,0):l(31,11);case c:return r?l(1,M):l(0,M+1);case o:var g=this.$locale().weekStart||0,D=(y<g?y+7:y)-g;return l(r?m-D:m+(6-D),M);case a:case d:return $(v+"Hours",0);case u:return $(v+"Minutes",1);case s:return $(v+"Seconds",2);case i:return $(v+"Milliseconds",3);default:return this.clone()}},m.endOf=function(t){return this.startOf(t,!1)},m.$set=function(t,e){var n,o=b.p(t),f="set"+(this.$u?"UTC":""),l=(n={},n[a]=f+"Date",n[d]=f+"Date",n[c]=f+"Month",n[h]=f+"FullYear",n[u]=f+"Hours",n[s]=f+"Minutes",n[i]=f+"Seconds",n[r]=f+"Milliseconds",n)[o],$=o===a?this.$D+(e-this.$W):e;if(o===c||o===h){var y=this.clone().set(d,1);y.$d[l]($),y.init(),this.$d=y.set(d,Math.min(this.$D,y.daysInMonth())).$d;}else l&&this.$d[l]($);return this.init(),this},m.set=function(t,e){return this.clone().$set(t,e)},m.get=function(t){return this[b.p(t)]()},m.add=function(r,f){var d,l=this;r=Number(r);var $=b.p(f),y=function(t){var e=O(l);return b.w(e.date(e.date()+Math.round(t*r)),l)};if($===c)return this.set(c,this.$M+r);if($===h)return this.set(h,this.$y+r);if($===a)return y(1);if($===o)return y(7);var M=(d={},d[s]=e,d[u]=n,d[i]=t,d)[$]||1,m=this.$d.getTime()+r*M;return b.w(m,this)},m.subtract=function(t,e){return this.add(-1*t,e)},m.format=function(t){var e=this,n=this.$locale();if(!this.isValid())return n.invalidDate||l;var r=t||"YYYY-MM-DDTHH:mm:ssZ",i=b.z(this),s=this.$H,u=this.$m,a=this.$M,o=n.weekdays,c=n.months,f=n.meridiem,h=function(t,n,i,s){return t&&(t[n]||t(e,r))||i[n].slice(0,s)},d=function(t){return b.s(s%12||12,t,"0")},$=f||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r};return r.replace(y,(function(t,r){return r||function(t){switch(t){case"YY":return String(e.$y).slice(-2);case"YYYY":return b.s(e.$y,4,"0");case"M":return a+1;case"MM":return b.s(a+1,2,"0");case"MMM":return h(n.monthsShort,a,c,3);case"MMMM":return h(c,a);case"D":return e.$D;case"DD":return b.s(e.$D,2,"0");case"d":return String(e.$W);case"dd":return h(n.weekdaysMin,e.$W,o,2);case"ddd":return h(n.weekdaysShort,e.$W,o,3);case"dddd":return o[e.$W];case"H":return String(s);case"HH":return b.s(s,2,"0");case"h":return d(1);case"hh":return d(2);case"a":return $(s,u,!0);case"A":return $(s,u,!1);case"m":return String(u);case"mm":return b.s(u,2,"0");case"s":return String(e.$s);case"ss":return b.s(e.$s,2,"0");case"SSS":return b.s(e.$ms,3,"0");case"Z":return i}return null}(t)||i.replace(":","")}))},m.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},m.diff=function(r,d,l){var $,y=this,M=b.p(d),m=O(r),v=(m.utcOffset()-this.utcOffset())*e,g=this-m,D=function(){return b.m(y,m)};switch(M){case h:$=D()/12;break;case c:$=D();break;case f:$=D()/3;break;case o:$=(g-v)/6048e5;break;case a:$=(g-v)/864e5;break;case u:$=g/n;break;case s:$=g/e;break;case i:$=g/t;break;default:$=g;}return l?$:b.a($)},m.daysInMonth=function(){return this.endOf(c).$D},m.$locale=function(){return D[this.$L]},m.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=w(t,e,!0);return r&&(n.$L=r),n},m.clone=function(){return b.w(this.$d,this)},m.toDate=function(){return new Date(this.valueOf())},m.toJSON=function(){return this.isValid()?this.toISOString():null},m.toISOString=function(){return this.$d.toISOString()},m.toString=function(){return this.$d.toUTCString()},M}(),k=_.prototype;return O.prototype=k,[["$ms",r],["$s",i],["$m",s],["$H",u],["$W",a],["$M",c],["$y",h],["$D",d]].forEach((function(t){k[t[1]]=function(e){return this.$g(e,t[0],t[1])};})),O.extend=function(t,e){return t.$i||(t(e,_,O),t.$i=!0),O},O.locale=w,O.isDayjs=S,O.unix=function(t){return O(1e3*t)},O.en=D[g],O.Ls=D,O.p={},O}));
-});
-
-var ru = createCommonjsModule(function (module, exports) {
-!function(_,t){module.exports=t(dayjs_min);}(commonjsGlobal,(function(_){function t(_){return _&&"object"==typeof _&&"default"in _?_:{default:_}}var e=t(_),n="января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря".split("_"),s="январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),r="янв._февр._мар._апр._мая_июня_июля_авг._сент._окт._нояб._дек.".split("_"),o="янв._февр._март_апр._май_июнь_июль_авг._сент._окт._нояб._дек.".split("_"),i=/D[oD]?(\[[^[\]]*\]|\s)+MMMM?/;function d(_,t,e){var n,s;return "m"===e?t?"минута":"минуту":_+" "+(n=+_,s={mm:t?"минута_минуты_минут":"минуту_минуты_минут",hh:"час_часа_часов",dd:"день_дня_дней",MM:"месяц_месяца_месяцев",yy:"год_года_лет"}[e].split("_"),n%10==1&&n%100!=11?s[0]:n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?s[1]:s[2])}var u=function(_,t){return i.test(t)?n[_.month()]:s[_.month()]};u.s=s,u.f=n;var a=function(_,t){return i.test(t)?r[_.month()]:o[_.month()]};a.s=o,a.f=r;var m={name:"ru",weekdays:"воскресенье_понедельник_вторник_среда_четверг_пятница_суббота".split("_"),weekdaysShort:"вск_пнд_втр_срд_чтв_птн_сбт".split("_"),weekdaysMin:"вс_пн_вт_ср_чт_пт_сб".split("_"),months:u,monthsShort:a,weekStart:1,yearStart:4,formats:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY г.",LLL:"D MMMM YYYY г., H:mm",LLLL:"dddd, D MMMM YYYY г., H:mm"},relativeTime:{future:"через %s",past:"%s назад",s:"несколько секунд",m:d,mm:d,h:"час",hh:d,d:"день",dd:d,M:"месяц",MM:d,y:"год",yy:d},ordinal:function(_){return _},meridiem:function(_){return _<4?"ночи":_<12?"утра":_<17?"дня":"вечера"}};return e.default.locale(m,null,!0),m}));
-});
 
 function _defineProperties(e, r) {
   for (var t = 0; t < r.length; t++) {
@@ -75,6 +61,880 @@ function _toPrimitive(t, r) {
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == typeof i ? i : i + "";
+}
+
+// A type of promise-like that resolves synchronously and supports only one observer
+
+const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
+
+const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
+
+// Asynchronously call a function and send errors to recovery continuation
+function _catch(body, recover) {
+	try {
+		var result = body();
+	} catch(e) {
+		return recover(e);
+	}
+	if (result && result.then) {
+		return result.then(void 0, recover);
+	}
+	return result;
+}
+
+var WSocket = /*#__PURE__*/function (_React$Component) {
+  function WSocket(props) {
+    var _this;
+    _this = _React$Component.call(this, props) || this;
+    _this.state = {
+      ws: {}
+    };
+    _this.open = _this.open.bind(_this);
+    return _this;
+  }
+  _inheritsLoose(WSocket, _React$Component);
+  var _proto = WSocket.prototype;
+  _proto.open = function open(url, wsName, onmessage_callback, onopen_callback, onclose_callback, onerror_callback) {
+    try {
+      var _temp3 = function _temp3() {
+        var ws = new WebSocket(url);
+        ws.onmessage = onmessage_callback;
+        ws.onerror = onerror_callback;
+        ws.onopen = function () {
+          var _extends2;
+          context.state = _extends({}, context.state, {
+            ws: _extends({}, context.state.ws, (_extends2 = {}, _extends2[wsName] = {
+              socket: ws
+            }, _extends2))
+          });
+          console.log("Установлено соединение с идентификатором " + wsName);
+          if (onopen_callback) onopen_callback();
+        };
+        ws.onclose = function (event) {
+          var _extends3;
+          context.state = _extends({}, context.state, {
+            ws: _extends({}, context.state.ws, (_extends3 = {}, _extends3[wsName] = {
+              socket: undefined
+            }, _extends3))
+          });
+          if (event.wasClean) {} else {
+            setTimeout(function () {
+              context.open.call(context, url, wsName, onmessage_callback, onopen_callback, onclose_callback, onerror_callback);
+            }, 5000);
+          }
+          if (onclose_callback) onclose_callback(event);
+        };
+        ws.onerror = function (error) {};
+        return Promise.resolve(1);
+      };
+      var _this2 = this;
+      var context = _this2;
+      var auth = _this2.props.auth;
+      if (_this2.state.ws[wsName] && _this2.state.ws[wsName].cancelConnect) {
+        console.warn("Отмена открытия соединения с идентификатором " + wsName);
+        return Promise.resolve(1);
+      }
+      if (_this2.state.ws[wsName] && _this2.state.ws[wsName].socket && _this2.state.ws[wsName].socket.send) {
+        console.error("Соединение с идентификатором " + wsName + " уже существует");
+        return Promise.resolve(1);
+      }
+      var _temp2 = function () {
+        if (auth.keepAlive) {
+          var _temp = _catch(function () {
+            return Promise.resolve(auth.fetch(auth.keepAlive)).then(function () {});
+          }, function () {});
+          if (_temp && _temp.then) return _temp.then(function () {});
+        }
+      }();
+      return Promise.resolve(_temp2 && _temp2.then ? _temp2.then(_temp3) : _temp3(_temp2));
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+  _proto.close = function close(wsName, cancelConnect) {
+    var _extends4;
+    if (cancelConnect === void 0) {
+      cancelConnect = true;
+    }
+    console.log("Закрываем соединение " + wsName);
+    if (this.state.ws[wsName] && this.state.ws[wsName].socket && this.state.ws[wsName].socket.close) {
+      this.state.ws[wsName].socket.close(4100, "Client close WSocket");
+    } else {
+      console.error("Не найдено соединение с идентификатором " + wsName);
+    }
+    this.setState({
+      ws: _extends({}, this.state.ws, (_extends4 = {}, _extends4[wsName] = {
+        cancelConnect: cancelConnect
+      }, _extends4))
+    });
+  };
+  _proto.send = function send(wsName, data) {
+    if (this.state.ws[wsName] && this.state.ws[wsName].socket && this.state.ws[wsName].socket.send) {
+      this.state.ws[wsName].socket.send(data);
+    } else {
+      console.error("Не найдено соединение с идентификатором " + wsName);
+    }
+  };
+  return WSocket;
+}(React__default.Component);
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var dayjs_min = createCommonjsModule(function (module, exports) {
+!function(t,e){module.exports=e();}(commonjsGlobal,(function(){var t=1e3,e=6e4,n=36e5,r="millisecond",i="second",s="minute",u="hour",a="day",o="week",c="month",f="quarter",h="year",d="date",l="Invalid Date",$=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,y=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,M={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),ordinal:function(t){var e=["th","st","nd","rd"],n=t%100;return "["+t+(e[(n-20)%10]||e[n]||e[0])+"]"}},m=function(t,e,n){var r=String(t);return !r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},v={s:m,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return (e<=0?"+":"-")+m(r,2,"0")+":"+m(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return -t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,c),s=n-i<0,u=e.clone().add(r+(s?-1:1),c);return +(-(r+(n-i)/(s?i-u:u-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(t){return {M:c,y:h,w:o,d:a,D:d,h:u,m:s,s:i,ms:r,Q:f}[t]||String(t||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},g="en",D={};D[g]=M;var p="$isDayjsObject",S=function(t){return t instanceof _||!(!t||!t[p])},w=function t(e,n,r){var i;if(!e)return g;if("string"==typeof e){var s=e.toLowerCase();D[s]&&(i=s),n&&(D[s]=n,i=s);var u=e.split("-");if(!i&&u.length>1)return t(u[0])}else {var a=e.name;D[a]=e,i=a;}return !r&&i&&(g=i),i||!r&&g},O=function(t,e){if(S(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new _(n)},b=v;b.l=w,b.i=S,b.w=function(t,e){return O(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var _=function(){function M(t){this.$L=w(t.locale,null,!0),this.parse(t),this.$x=this.$x||t.x||{},this[p]=!0;}var m=M.prototype;return m.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(b.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match($);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.init();},m.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds();},m.$utils=function(){return b},m.isValid=function(){return !(this.$d.toString()===l)},m.isSame=function(t,e){var n=O(t);return this.startOf(e)<=n&&n<=this.endOf(e)},m.isAfter=function(t,e){return O(t)<this.startOf(e)},m.isBefore=function(t,e){return this.endOf(e)<O(t)},m.$g=function(t,e,n){return b.u(t)?this[e]:this.set(n,t)},m.unix=function(){return Math.floor(this.valueOf()/1e3)},m.valueOf=function(){return this.$d.getTime()},m.startOf=function(t,e){var n=this,r=!!b.u(e)||e,f=b.p(t),l=function(t,e){var i=b.w(n.$u?Date.UTC(n.$y,e,t):new Date(n.$y,e,t),n);return r?i:i.endOf(a)},$=function(t,e){return b.w(n.toDate()[t].apply(n.toDate("s"),(r?[0,0,0,0]:[23,59,59,999]).slice(e)),n)},y=this.$W,M=this.$M,m=this.$D,v="set"+(this.$u?"UTC":"");switch(f){case h:return r?l(1,0):l(31,11);case c:return r?l(1,M):l(0,M+1);case o:var g=this.$locale().weekStart||0,D=(y<g?y+7:y)-g;return l(r?m-D:m+(6-D),M);case a:case d:return $(v+"Hours",0);case u:return $(v+"Minutes",1);case s:return $(v+"Seconds",2);case i:return $(v+"Milliseconds",3);default:return this.clone()}},m.endOf=function(t){return this.startOf(t,!1)},m.$set=function(t,e){var n,o=b.p(t),f="set"+(this.$u?"UTC":""),l=(n={},n[a]=f+"Date",n[d]=f+"Date",n[c]=f+"Month",n[h]=f+"FullYear",n[u]=f+"Hours",n[s]=f+"Minutes",n[i]=f+"Seconds",n[r]=f+"Milliseconds",n)[o],$=o===a?this.$D+(e-this.$W):e;if(o===c||o===h){var y=this.clone().set(d,1);y.$d[l]($),y.init(),this.$d=y.set(d,Math.min(this.$D,y.daysInMonth())).$d;}else l&&this.$d[l]($);return this.init(),this},m.set=function(t,e){return this.clone().$set(t,e)},m.get=function(t){return this[b.p(t)]()},m.add=function(r,f){var d,l=this;r=Number(r);var $=b.p(f),y=function(t){var e=O(l);return b.w(e.date(e.date()+Math.round(t*r)),l)};if($===c)return this.set(c,this.$M+r);if($===h)return this.set(h,this.$y+r);if($===a)return y(1);if($===o)return y(7);var M=(d={},d[s]=e,d[u]=n,d[i]=t,d)[$]||1,m=this.$d.getTime()+r*M;return b.w(m,this)},m.subtract=function(t,e){return this.add(-1*t,e)},m.format=function(t){var e=this,n=this.$locale();if(!this.isValid())return n.invalidDate||l;var r=t||"YYYY-MM-DDTHH:mm:ssZ",i=b.z(this),s=this.$H,u=this.$m,a=this.$M,o=n.weekdays,c=n.months,f=n.meridiem,h=function(t,n,i,s){return t&&(t[n]||t(e,r))||i[n].slice(0,s)},d=function(t){return b.s(s%12||12,t,"0")},$=f||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r};return r.replace(y,(function(t,r){return r||function(t){switch(t){case"YY":return String(e.$y).slice(-2);case"YYYY":return b.s(e.$y,4,"0");case"M":return a+1;case"MM":return b.s(a+1,2,"0");case"MMM":return h(n.monthsShort,a,c,3);case"MMMM":return h(c,a);case"D":return e.$D;case"DD":return b.s(e.$D,2,"0");case"d":return String(e.$W);case"dd":return h(n.weekdaysMin,e.$W,o,2);case"ddd":return h(n.weekdaysShort,e.$W,o,3);case"dddd":return o[e.$W];case"H":return String(s);case"HH":return b.s(s,2,"0");case"h":return d(1);case"hh":return d(2);case"a":return $(s,u,!0);case"A":return $(s,u,!1);case"m":return String(u);case"mm":return b.s(u,2,"0");case"s":return String(e.$s);case"ss":return b.s(e.$s,2,"0");case"SSS":return b.s(e.$ms,3,"0");case"Z":return i}return null}(t)||i.replace(":","")}))},m.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},m.diff=function(r,d,l){var $,y=this,M=b.p(d),m=O(r),v=(m.utcOffset()-this.utcOffset())*e,g=this-m,D=function(){return b.m(y,m)};switch(M){case h:$=D()/12;break;case c:$=D();break;case f:$=D()/3;break;case o:$=(g-v)/6048e5;break;case a:$=(g-v)/864e5;break;case u:$=g/n;break;case s:$=g/e;break;case i:$=g/t;break;default:$=g;}return l?$:b.a($)},m.daysInMonth=function(){return this.endOf(c).$D},m.$locale=function(){return D[this.$L]},m.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=w(t,e,!0);return r&&(n.$L=r),n},m.clone=function(){return b.w(this.$d,this)},m.toDate=function(){return new Date(this.valueOf())},m.toJSON=function(){return this.isValid()?this.toISOString():null},m.toISOString=function(){return this.$d.toISOString()},m.toString=function(){return this.$d.toUTCString()},M}(),k=_.prototype;return O.prototype=k,[["$ms",r],["$s",i],["$m",s],["$H",u],["$W",a],["$M",c],["$y",h],["$D",d]].forEach((function(t){k[t[1]]=function(e){return this.$g(e,t[0],t[1])};})),O.extend=function(t,e){return t.$i||(t(e,_,O),t.$i=!0),O},O.locale=w,O.isDayjs=S,O.unix=function(t){return O(1e3*t)},O.en=D[g],O.Ls=D,O.p={},O}));
+});
+
+var ru = createCommonjsModule(function (module, exports) {
+!function(_,t){module.exports=t(dayjs_min);}(commonjsGlobal,(function(_){function t(_){return _&&"object"==typeof _&&"default"in _?_:{default:_}}var e=t(_),n="января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря".split("_"),s="январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),r="янв._февр._мар._апр._мая_июня_июля_авг._сент._окт._нояб._дек.".split("_"),o="янв._февр._март_апр._май_июнь_июль_авг._сент._окт._нояб._дек.".split("_"),i=/D[oD]?(\[[^[\]]*\]|\s)+MMMM?/;function d(_,t,e){var n,s;return "m"===e?t?"минута":"минуту":_+" "+(n=+_,s={mm:t?"минута_минуты_минут":"минуту_минуты_минут",hh:"час_часа_часов",dd:"день_дня_дней",MM:"месяц_месяца_месяцев",yy:"год_года_лет"}[e].split("_"),n%10==1&&n%100!=11?s[0]:n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?s[1]:s[2])}var u=function(_,t){return i.test(t)?n[_.month()]:s[_.month()]};u.s=s,u.f=n;var a=function(_,t){return i.test(t)?r[_.month()]:o[_.month()]};a.s=o,a.f=r;var m={name:"ru",weekdays:"воскресенье_понедельник_вторник_среда_четверг_пятница_суббота".split("_"),weekdaysShort:"вск_пнд_втр_срд_чтв_птн_сбт".split("_"),weekdaysMin:"вс_пн_вт_ср_чт_пт_сб".split("_"),months:u,monthsShort:a,weekStart:1,yearStart:4,formats:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY г.",LLL:"D MMMM YYYY г., H:mm",LLLL:"dddd, D MMMM YYYY г., H:mm"},relativeTime:{future:"через %s",past:"%s назад",s:"несколько секунд",m:d,mm:d,h:"час",hh:d,d:"день",dd:d,M:"месяц",MM:d,y:"год",yy:d},ordinal:function(_){return _},meridiem:function(_){return _<4?"ночи":_<12?"утра":_<17?"дня":"вечера"}};return e.default.locale(m,null,!0),m}));
+});
+
+var js_cookie = createCommonjsModule(function (module, exports) {
+(function (global, factory) {
+   module.exports = factory() ;
+})(commonjsGlobal, (function () {
+  /* eslint-disable no-var */
+  function assign (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        target[key] = source[key];
+      }
+    }
+    return target
+  }
+  /* eslint-enable no-var */
+
+  /* eslint-disable no-var */
+  var defaultConverter = {
+    read: function (value) {
+      if (value[0] === '"') {
+        value = value.slice(1, -1);
+      }
+      return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent)
+    },
+    write: function (value) {
+      return encodeURIComponent(value).replace(
+        /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
+        decodeURIComponent
+      )
+    }
+  };
+  /* eslint-enable no-var */
+
+  /* eslint-disable no-var */
+
+  function init (converter, defaultAttributes) {
+    function set (name, value, attributes) {
+      if (typeof document === 'undefined') {
+        return
+      }
+
+      attributes = assign({}, defaultAttributes, attributes);
+
+      if (typeof attributes.expires === 'number') {
+        attributes.expires = new Date(Date.now() + attributes.expires * 864e5);
+      }
+      if (attributes.expires) {
+        attributes.expires = attributes.expires.toUTCString();
+      }
+
+      name = encodeURIComponent(name)
+        .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
+        .replace(/[()]/g, escape);
+
+      var stringifiedAttributes = '';
+      for (var attributeName in attributes) {
+        if (!attributes[attributeName]) {
+          continue
+        }
+
+        stringifiedAttributes += '; ' + attributeName;
+
+        if (attributes[attributeName] === true) {
+          continue
+        }
+
+        // Considers RFC 6265 section 5.2:
+        // ...
+        // 3.  If the remaining unparsed-attributes contains a %x3B (";")
+        //     character:
+        // Consume the characters of the unparsed-attributes up to,
+        // not including, the first %x3B (";") character.
+        // ...
+        stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+      }
+
+      return (document.cookie =
+        name + '=' + converter.write(value, name) + stringifiedAttributes)
+    }
+
+    function get (name) {
+      if (typeof document === 'undefined' || (arguments.length && !name)) {
+        return
+      }
+
+      // To prevent the for loop in the first place assign an empty array
+      // in case there are no cookies at all.
+      var cookies = document.cookie ? document.cookie.split('; ') : [];
+      var jar = {};
+      for (var i = 0; i < cookies.length; i++) {
+        var parts = cookies[i].split('=');
+        var value = parts.slice(1).join('=');
+
+        try {
+          var found = decodeURIComponent(parts[0]);
+          jar[found] = converter.read(value, found);
+
+          if (name === found) {
+            break
+          }
+        } catch (e) {}
+      }
+
+      return name ? jar[name] : jar
+    }
+
+    return Object.create(
+      {
+        set,
+        get,
+        remove: function (name, attributes) {
+          set(
+            name,
+            '',
+            assign({}, attributes, {
+              expires: -1
+            })
+          );
+        },
+        withAttributes: function (attributes) {
+          return init(this.converter, assign({}, this.attributes, attributes))
+        },
+        withConverter: function (converter) {
+          return init(assign({}, this.converter, converter), this.attributes)
+        }
+      },
+      {
+        attributes: { value: Object.freeze(defaultAttributes) },
+        converter: { value: Object.freeze(converter) }
+      }
+    )
+  }
+
+  var api = init(defaultConverter, { path: '/' });
+  /* eslint-enable no-var */
+
+  return api;
+
+}));
+});
+
+function FennecError(message, name, object) {
+  if (message === void 0) {
+    message = '';
+  }
+  if (name === void 0) {
+    name = '';
+  }
+  if (object === void 0) {
+    object = {};
+  }
+  this.name = "Error" + (name ? ': ' + name : '');
+  this.message = message;
+  this.object = object;
+}
+FennecError.prototype = Error.prototype;
+
+var _notifier = null;
+function setNotifier(notifier) {
+  _notifier = notifier;
+}
+function getNotifier() {
+  return _notifier;
+}
+var errorCatch = function errorCatch(err, callback) {
+  if (err) {
+    var _notifier2;
+    var msg = '' + err;
+    if ((_notifier2 = _notifier) !== null && _notifier2 !== void 0 && _notifier2.error) {
+      _notifier.error(msg);
+    } else {
+      console.error(msg);
+    }
+    if (callback) callback();
+  }
+};
+var errorAlert = function errorAlert(err, callback) {
+  var messageError = function messageError(err) {
+    var alertInstance = alert('Ошибка', err, [{
+      text: 'OK',
+      onPress: function onPress() {
+        return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
+      }
+    }]);
+    setTimeout(function () {
+      alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
+    }, 5000);
+  };
+  if (err) {
+    messageError('' + err);
+    if (callback) callback();
+  }
+};
+var messageError = function messageError(err) {
+  var alertInstance = alert('Ошибка', err, [{
+    text: 'OK',
+    onPress: function onPress() {
+      return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
+    }
+  }]);
+  setTimeout(function () {
+    alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
+  }, 5000);
+};
+
+
+
+var index = {
+  __proto__: null,
+  FennecError: FennecError,
+  errorCatch: errorCatch,
+  errorAlert: errorAlert,
+  messageError: messageError,
+  setNotifier: setNotifier,
+  getNotifier: getNotifier
+};
+
+var AuthService = /*#__PURE__*/function () {
+  function AuthService(domain) {
+    this.fetchRfToken = configureRefreshFetch(this);
+    this.ws = new WSocket({
+      auth: this
+    });
+    this._port = process.env.REACT_APP_PORT ? ":" + process.env.REACT_APP_PORT : "";
+    this._portws = process.env.REACT_APP_PORTWS ? ":" + process.env.REACT_APP_PORTWS : "";
+    this._domainParam = domain;
+    this.schemws = process.env.REACT_APP_SCHEMWS || "ws";
+    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || "http";
+    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp;
+    this.appProfile = process.env.REACT_APP_PROFILE || "dev";
+    this.publicMode = false;
+    this.setPublicMode = this.setPublicMode.bind(this);
+    this.keepAlive = "";
+    this.setKeepAlive = this.setKeepAlive.bind(this);
+    this.fetch = this.fetch.bind(this);
+    this.fetchRfToken = this.fetchRfToken.bind(this);
+    this.login = this.login.bind(this);
+    this.refresh = this.refresh.bind(this);
+    this.loginLink = this.loginLink.bind(this);
+    this.logoutLink = this.logoutLink.bind(this);
+    this.logoutAllLink = this.logoutAllLink.bind(this);
+    this.redirect = this.redirect.bind(this);
+    this.signup = this.signup.bind(this);
+    this.getProfile = this.getProfile.bind(this);
+    this._checkStatus = this._checkStatus.bind(this);
+    this.PerformanceStart = this.PerformanceStart.bind(this);
+    this.getPerformance = this.getPerformance.bind(this);
+    this.getCookies = this.getCookies.bind(this);
+    this.getCookie = this.getCookie.bind(this);
+    this.getCity = this.getCity.bind(this);
+    this.utf8_to_b64 = this.utf8_to_b64.bind(this);
+    this.b64_to_utf8 = this.b64_to_utf8.bind(this);
+    this.performance = new Map();
+  }
+  var _proto = AuthService.prototype;
+  _proto.getDomainWithoutSubdomain = function getDomainWithoutSubdomain(url) {
+    var urlParts = new URL(url).hostname.split('.');
+    return urlParts.slice(0).slice(-(urlParts.length === 4 ? 3 : 2)).join('.');
+  };
+  _proto.utf8_to_b64 = function utf8_to_b64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  };
+  _proto.b64_to_utf8 = function b64_to_utf8(str) {
+    return decodeURIComponent(escape(atob(str)));
+  };
+  _proto.getCity = function getCity() {
+    var c = js_cookie.get("city");
+    if (c) {
+      try {
+        var ce = this.b64_to_utf8(c);
+        var _ce$split = ce.split('@'),
+          ID = _ce$split[0],
+          name = _ce$split[1],
+          region = _ce$split[2],
+          latitude = _ce$split[3],
+          longitude = _ce$split[4];
+        var IDi = parseInt(ID, 10);
+        if (ID && name && region) {
+          return {
+            ID: !isNaN(IDi) ? IDi : undefined,
+            name: name,
+            region: region,
+            latitude: latitude,
+            longitude: longitude
+          };
+        }
+      } catch (error) {}
+    }
+    return;
+  };
+  _proto.getCookies = function getCookies() {
+    var result = {};
+    var cookies = document.cookie.split("; ");
+    for (var i = 0; i < cookies.length; i++) {
+      var spl = cookies[i].split("=");
+      result[spl[0]] = spl[1];
+    }
+    return result;
+  };
+  _proto.getCookie = function getCookie(name) {
+    var result = this.getCookies();
+    return result[name];
+  };
+  _proto.getPerformance = function getPerformance() {
+    return this.performance;
+  };
+  _proto.PerformanceStart = function PerformanceStart(path) {
+    var _this = this;
+    var start = performance.now();
+    var endCallback = function endCallback() {
+      var end = performance.now();
+      if (_this.performance.has(path)) {
+        var prev = _this.performance.get(path);
+        _this.performance.set(path, {
+          last: dayjs_min(new Date()).format(),
+          delta: end - start,
+          avg: Math.abs(end - start + prev.avg) / 2
+        });
+      } else {
+        _this.performance.set(path, {
+          last: dayjs_min(new Date()).format(),
+          delta: end - start,
+          avg: end - start
+        });
+      }
+    };
+    return endCallback;
+  };
+  _proto.openSocket = function openSocket(path, name, onmessage, onopen, onclose, onerror) {
+    if (this.ws.state.ws[name]) {
+      this.ws.close(name, false);
+    }
+    this.ws.open(this.schemws + "://" + this.Hostnamews + path, name, function (e) {
+      try {
+        var message = JSON.parse(e.data);
+        onmessage(message.type, message.payload);
+      } catch (ex) {}
+    }, onopen, onclose, onerror);
+  };
+  _proto.closeSocket = function closeSocket(name) {
+    this.ws.close(name);
+  };
+  _proto.redirect = function redirect(res) {
+    if (typeof window === 'undefined') return;
+    var nurl = new URL(window.location.href);
+    var refUrl = nurl.searchParams.get("service");
+    if (refUrl) {
+      window.location.href = refUrl;
+      return;
+    }
+    if (res.user.roleUser && res.user.roleUser.length) {
+      for (var i = 0; i < res.user.roleUser.length; i++) {
+        res.user.roleUser.sort(function (a, b) {
+          return a.role.priority - b.role.priority;
+        });
+        if (res.user.roleUser[i].roleID === 1 || res.user.roleUser[i].roleID === 2) {
+          window.location.href = "/";
+        } else {
+          window.location.href = this.schemhttp + "://" + this.getDomainWithoutSubdomain(window.location.href);
+          return;
+        }
+      }
+    }
+    window.location.href = this.schemhttp + "://" + this.getDomainWithoutSubdomain(window.location.href);
+  };
+  _proto.login = function login(email, password) {
+    var _this2 = this;
+    return this.fetch("/api/login", {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    }).then(function (res) {
+      if (res && res.user) {
+        localStorage.setItem('iam', res.user.ID);
+        _this2.redirect(res);
+      } else {
+        return Promise.resolve(res);
+      }
+    });
+  };
+  _proto.signup = function signup(data) {
+    data.genderID = +data.genderID;
+    data.regionID = +data.regionID;
+    data.cityID = +data.cityID;
+    data.tipTelefonaID = +data.tipTelefonaID;
+    return this.fetch("/api/signup", {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      if (res && res.user) {
+        localStorage.setItem('iam', res.user.ID);
+      }
+      return Promise.resolve(res);
+    });
+  };
+  _proto.forgotPassword = function forgotPassword(data) {
+    return this.fetch("/api/forgot-password", {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      return Promise.resolve(res);
+    });
+  };
+  _proto.resetPassword = function resetPassword(data) {
+    if (typeof window === 'undefined') return Promise.reject(new Error('resetPassword requires browser environment'));
+    var nurl = new URL(window.location.href);
+    var token = nurl.searchParams.get("token");
+    return this.fetch("/api/reset-password?token=" + token, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }).then(function (res) {
+      return Promise.resolve(res);
+    });
+  };
+  _proto.loggedIn = function loggedIn() {
+    var token = this.getToken();
+    var refreshToken = this.getCookie("refreshToken");
+    return !!token && !this.isTokenExpired(token) || !!refreshToken && !this.isTokenExpired(refreshToken);
+  };
+  _proto.isTokenExpired = function isTokenExpired(token) {
+    try {
+      var decoded = decode(token);
+      if (decoded.exp < Date.now() / 1000) {
+        return true;
+      } else return false;
+    } catch (err) {
+      return false;
+    }
+  };
+  _proto.getToken = function getToken() {
+    return this.getCookie("token");
+  };
+  _proto.logout = function logout(cb) {
+    if (typeof window === 'undefined') return;
+    window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logout?service=" + window.location.href;
+  };
+  _proto.logoutall = function logoutall(cb) {
+    if (typeof window === 'undefined') return;
+    window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logoutall?service=" + window.location.href;
+  };
+  _proto.refresh = function refresh(location) {
+    if (typeof window === 'undefined') return;
+    var l = location || window.location.href;
+    window.location.href = l;
+  };
+  _proto.loginLink = function loginLink(location) {
+    if (typeof window === 'undefined') return '';
+    var l = location || window.location.href;
+    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/login?service=" + l;
+  };
+  _proto.logoutLink = function logoutLink(location) {
+    if (typeof window === 'undefined') return '';
+    var l = location || window.location.href;
+    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/logout?service=" + l;
+  };
+  _proto.logoutAllLink = function logoutAllLink(location) {
+    if (typeof window === 'undefined') return '';
+    var l = location || window.location.href;
+    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/logoutall?service=" + l;
+  };
+  _proto.getProfile = function getProfile() {
+    return decode(this.getToken());
+  };
+  _proto.setPublicMode = function setPublicMode(value) {
+    this.publicMode = value;
+  };
+  _proto.setKeepAlive = function setKeepAlive(value) {
+    this.keepAlive = value;
+  };
+  _proto.fetchRaw = function fetchRaw(url, options) {
+    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
+    if (this.loggedIn()) {
+      headers['Authorization'] = 'Bearer ' + this.getToken();
+    }
+    var end = this.PerformanceStart(url);
+    return this.fetchRfToken(this.domain + url, _extends({}, options, {
+      headers: headers
+    })).then(this._checkStatus).then(function (response) {
+      if (end) {
+        end();
+      }
+      return response;
+    });
+  };
+  _proto.fetchFile = function fetchFile(url, options) {
+    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
+    if (this.loggedIn()) {
+      headers['Authorization'] = 'Bearer ' + this.getToken();
+    }
+    var end = this.PerformanceStart(url);
+    return this.fetchRfToken(this.domain + url, _extends({}, options, {
+      headers: headers
+    })).then(this._checkStatus).then(function (res) {
+      if (end) {
+        end();
+      }
+      if (res.headers.get("Content-Type") == "application/json") {
+        res.json().then(function (jData) {
+          if (jData && !jData.status) {
+            var notifier = getNotifier();
+            if (notifier !== null && notifier !== void 0 && notifier.error) notifier.error(jData.message);else console.error(jData.message);
+            return;
+          }
+        });
+      } else {
+        res.blob().then(function (blob) {
+          if (typeof window === 'undefined') return;
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          var fname = res.headers.get("x-filename") || "";
+          a.download = decodeURI(fname.replace(/^\"+|\"+$/g, ''));
+          a.click();
+        });
+      }
+    });
+  };
+  _proto.fetchForData = function fetchForData(url, options) {
+    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
+    if (this.loggedIn()) {
+      headers['Authorization'] = 'Bearer ' + this.getToken();
+    }
+    var end = this.PerformanceStart(url);
+    return this.fetchRfToken(this.domain + url, _extends({}, options, {
+      headers: headers
+    })).then(this._checkStatus).then(function (response) {
+      if (end) {
+        end();
+      }
+      return response.json();
+    }).then(function (res) {
+      return Promise.resolve(res);
+    });
+  };
+  _proto.fetch = function fetch(url, options) {
+    var headers = _extends({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }, options === null || options === void 0 ? void 0 : options.headers);
+    if (this.loggedIn()) {
+      headers['Authorization'] = 'Bearer ' + this.getToken();
+    }
+    var end = this.PerformanceStart(url);
+    return this.fetchRfToken(this.domain + url, _extends({}, options, {
+      headers: headers
+    })).then(this._checkStatus).then(function (response) {
+      if (end) {
+        end();
+      }
+      return response.json();
+    }).then(function (res) {
+      return Promise.resolve(res);
+    });
+  };
+  _proto._checkStatus = function _checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response;
+    } else if (response.status == 401 && response.headers.get('x-authenticate-error') == 'NeedLogin') {
+      if (typeof window !== 'undefined') {
+        if (this.publicMode) {
+          if (this.getCookie("token") || this.getCookie("refreshToken")) {
+            js_cookie.remove("token", {
+              domain: this.getDomainWithoutSubdomain(window.location.href)
+            });
+            js_cookie.remove("refreshToken", {
+              domain: this.getDomainWithoutSubdomain(window.location.href)
+            });
+            window.location.href = window.location.href;
+          } else {
+            return response;
+          }
+        } else {
+          window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
+        }
+      }
+      return response;
+    } else if (response.status == 403) {
+      console.error(response.status, "Доступ запрещен", response.url);
+      return response;
+    } else {
+      var error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  };
+  return _createClass(AuthService, [{
+    key: "Hostname",
+    get: function get() {
+      return typeof window !== 'undefined' ? window.location.hostname + this._port || "localhost:3000" : "localhost" + this._port;
+    }
+  }, {
+    key: "Hostnamews",
+    get: function get() {
+      return typeof window !== 'undefined' ? window.location.hostname + this._portws || "localhost:8480" : "localhost" + this._portws;
+    }
+  }, {
+    key: "domain",
+    get: function get() {
+      return this._domainParam || this.schemhttp + '://' + this.Hostname;
+    }
+  }]);
+}();
+var XAuthContext = React.createContext(null);
+var NavigationContext = React.createContext(null);
+function AuthProvider(_ref) {
+  var children = _ref.children,
+    publicMode = _ref.publicMode,
+    keepAlive = _ref.keepAlive;
+  var auth = new AuthService();
+  auth.setPublicMode(publicMode);
+  auth.setKeepAlive(keepAlive);
+  return /*#__PURE__*/React__default.createElement(XAuthContext.Provider, {
+    value: auth
+  }, children);
+}
+function useAuth() {
+  var auth = React.useContext(XAuthContext);
+  return auth;
+}
+function useNavigation() {
+  var navigation = React.useContext(NavigationContext);
+  return navigation;
+}
+function RequireAuth(_ref2) {
+  var children = _ref2.children,
+    inline = _ref2.inline;
+  var auth = useAuth();
+  auth.setPublicMode(true);
+  var navigate = reactRouterDom.useNavigate();
+  if (!auth.loggedIn()) {
+    if (inline) {
+      return inline;
+    }
+    if (typeof window !== 'undefined') {
+      window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
+    }
+  }
+  return /*#__PURE__*/React__default.createElement(NavigationContext.Provider, {
+    value: navigate
+  }, children);
+}
+function configureRefreshFetch(auth) {
+  var refreshingTokenPromise = null;
+  var customFetch = function customFetch(url, options) {
+    if (refreshingTokenPromise !== null) {
+      return refreshingTokenPromise.then(function () {
+        if (options && options.headers && options.headers['Authorization']) {
+          options.headers['Authorization'] = 'Bearer ' + auth.getToken();
+        }
+        return __fetch(url, options);
+      })["catch"](function () {
+        if (options && options.headers && options.headers['Authorization']) {
+          options.headers['Authorization'] = 'Bearer ' + auth.getToken();
+        }
+        return __fetch(url, options);
+      });
+    }
+    return __fetch(url, options).then(function (response) {
+      var xAuthError = response.headers.get('x-authenticate-error');
+      if (response.status == 401 && xAuthError != 'NeedLogin') {
+        if (refreshingTokenPromise === null) {
+          refreshingTokenPromise = new Promise(function (resolve, reject) {
+            __fetch("/api/refresh-token", {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + auth.getToken()
+              },
+              body: JSON.stringify({
+                refreshToken: js_cookie.get("refreshToken")
+              })
+            }).then(function (response) {
+              var xAuthError = response.headers.get('x-authenticate-error');
+              if (response.status == 401 && xAuthError == 'NeedLogin') {
+                if (typeof window !== 'undefined') {
+                  if (auth.publicMode) {
+                    if (auth.getCookie("token") || auth.getCookie("refreshToken")) {
+                      js_cookie.remove("token", {
+                        domain: auth.getDomainWithoutSubdomain(window.location.href)
+                      });
+                      js_cookie.remove("refreshToken", {
+                        domain: auth.getDomainWithoutSubdomain(window.location.href)
+                      });
+                      window.location.href = window.location.href;
+                    } else {
+                      return response;
+                    }
+                  } else {
+                    window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
+                  }
+                }
+                return;
+              }
+              refreshingTokenPromise = null;
+              resolve();
+            })["catch"](function (error) {
+              refreshingTokenPromise = null;
+              reject(error);
+            });
+          });
+        }
+        return refreshingTokenPromise["catch"](function () {
+          throw error;
+        }).then(function () {
+          if (options && options.headers && options.headers['Authorization']) {
+            options.headers['Authorization'] = 'Bearer ' + auth.getToken();
+          }
+          return __fetch(url, options);
+        });
+      } else if (response.status == 401 && xAuthError == 'NeedLogin') {
+        if (typeof window !== 'undefined') {
+          if (auth.publicMode) {
+            if (auth.getCookie("token") || auth.getCookie("refreshToken")) {
+              js_cookie.remove("token", {
+                domain: auth.getDomainWithoutSubdomain(window.location.href)
+              });
+              js_cookie.remove("refreshToken", {
+                domain: auth.getDomainWithoutSubdomain(window.location.href)
+              });
+              window.location.href = window.location.href;
+            } else {
+              return response;
+            }
+          } else {
+            window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
+          }
+        }
+        return;
+      }
+      return response;
+    });
+  };
+  if (typeof window !== 'undefined') {
+    if (window.fetch.toString() != customFetch.toString()) {
+      window.__fetch = fetch;
+      window.fetch = customFetch;
+    }
+    return window.fetch;
+  }
+  return typeof globalThis !== 'undefined' ? globalThis.fetch : fetch;
 }
 
 var lodash = createCommonjsModule(function (module, exports) {
@@ -17306,310 +18166,11 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-function FennecError(message, name, object) {
-  if (message === void 0) {
-    message = '';
-  }
-  if (name === void 0) {
-    name = '';
-  }
-  if (object === void 0) {
-    object = {};
-  }
-  this.name = "Error" + (name ? ': ' + name : '');
-  this.message = message;
-  this.object = object;
-}
-FennecError.prototype = Error.prototype;
-
-var _notifier = null;
-function setNotifier(notifier) {
-  _notifier = notifier;
-}
-function getNotifier() {
-  return _notifier;
-}
-var errorCatch = function errorCatch(err, callback) {
-  if (err) {
-    var _notifier2;
-    var msg = '' + err;
-    if ((_notifier2 = _notifier) !== null && _notifier2 !== void 0 && _notifier2.error) {
-      _notifier.error(msg);
-    } else {
-      console.error(msg);
-    }
-    if (callback) callback();
-  }
-};
-var errorAlert = function errorAlert(err, callback) {
-  var messageError = function messageError(err) {
-    var alertInstance = alert('Ошибка', err, [{
-      text: 'OK',
-      onPress: function onPress() {
-        return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-      }
-    }]);
-    setTimeout(function () {
-      alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-    }, 5000);
-  };
-  if (err) {
-    messageError('' + err);
-    if (callback) callback();
-  }
-};
-var messageError = function messageError(err) {
-  var alertInstance = alert('Ошибка', err, [{
-    text: 'OK',
-    onPress: function onPress() {
-      return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-    }
-  }]);
-  setTimeout(function () {
-    alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-  }, 5000);
-};
-
-
-
-var index = {
-	__proto__: null,
-	FennecError: FennecError,
-	errorCatch: errorCatch,
-	errorAlert: errorAlert,
-	messageError: messageError,
-	setNotifier: setNotifier,
-	getNotifier: getNotifier
-};
-
-function getLocator(locator, obj) {
-  if (lodash.isObject(obj)) {
-    var id = obj !== null && obj !== void 0 && obj.ID ? "ID" + (obj === null || obj === void 0 ? void 0 : obj.ID) : "";
-    var _uuid = obj !== null && obj !== void 0 && obj.uuid ? "UUID" + (obj === null || obj === void 0 ? void 0 : obj.uuid) : "";
-    var key = obj !== null && obj !== void 0 && obj.key ? "KEY" + (obj === null || obj === void 0 ? void 0 : obj.key) : "";
-    var ID = id || _uuid || key;
-    return (locator || "") + ID;
-  } else if (obj) {
-    return (locator || "") + obj;
-  } else return locator || "";
-}
-var LOCATOR_TYPES = {
-  BUTTON: 'button',
-  INPUT: 'input',
-  TEXTAREA: 'textarea',
-  SELECT: 'select',
-  CHECKBOX: 'checkbox',
-  RADIO: 'radio',
-  TOGGLE: 'toggle',
-  LINK: 'link',
-  FILE_INPUT: 'file-input',
-  DATE_PICKER: 'date-picker',
-  SLIDER: 'slider',
-  CONTAINER: 'container',
-  LIST_ITEM: 'list-item',
-  CARD: 'card',
-  TABLE: 'table',
-  TABLE_ROW: 'table-row',
-  TABLE_CELL: 'table-cell',
-  TABLE_HEADER: 'table-header',
-  NAVIGATION: 'navigation',
-  TAB: 'tab',
-  TAB_PANEL: 'tab-panel',
-  MODAL: 'modal',
-  DIALOG: 'dialog',
-  POPUP: 'popup',
-  TOOLTIP: 'tooltip',
-  DROPDOWN: 'dropdown',
-  DROPDOWN_ITEM: 'dropdown-item',
-  MENU: 'menu',
-  MENU_ITEM: 'menu-item',
-  STATUS: 'status',
-  NOTIFICATION: 'notification',
-  ALERT: 'alert',
-  BADGE: 'badge',
-  PROGRESS: 'progress',
-  LOADING: 'loading',
-  TEXT: 'text',
-  TITLE: 'title',
-  LABEL: 'label',
-  HEADING: 'heading',
-  PARAGRAPH: 'paragraph',
-  IMAGE: 'image',
-  VIDEO: 'video',
-  AUDIO: 'audio',
-  ICON: 'icon',
-  FORM: 'form',
-  FORM_GROUP: 'form-group',
-  FORM_FIELD: 'form-field',
-  SEARCHBAR: 'searchbar',
-  PAGINATION: 'pagination',
-  BREADCRUMBS: 'breadcrumbs',
-  SIDEBAR: 'sidebar',
-  HEADER: 'header',
-  FOOTER: 'footer'
-};
-var LOCATOR_ACTIONS = {
-  CLICK: 'click',
-  DOUBLE_CLICK: 'double-click',
-  RIGHT_CLICK: 'right-click',
-  HOVER: 'hover',
-  FOCUS: 'focus',
-  BLUR: 'blur',
-  INPUT: 'input',
-  TYPE: 'type',
-  CLEAR: 'clear',
-  PASTE: 'paste',
-  SELECT: 'select',
-  DESELECT: 'deselect',
-  CHECK: 'check',
-  UNCHECK: 'uncheck',
-  TOGGLE: 'toggle',
-  DRAG: 'drag',
-  DROP: 'drop',
-  DRAG_AND_DROP: 'drag-and-drop',
-  UPLOAD: 'upload',
-  DOWNLOAD: 'download',
-  SUBMIT: 'submit',
-  RESET: 'reset',
-  VALIDATE: 'validate',
-  OPEN: 'open',
-  CLOSE: 'close',
-  CONFIRM: 'confirm',
-  CANCEL: 'cancel',
-  DISMISS: 'dismiss',
-  SORT: 'sort',
-  FILTER: 'filter',
-  SEARCH: 'search',
-  PAGINATE: 'paginate',
-  CREATE: 'create',
-  READ: 'read',
-  UPDATE: 'update',
-  DELETE: 'delete',
-  ADD_ITEM: 'add-item',
-  REMOVE_ITEM: 'remove-item',
-  EDIT_ITEM: 'edit-item',
-  MOVE_ITEM: 'move-item',
-  EXPAND: 'expand',
-  COLLAPSE: 'collapse',
-  ZOOM: 'zoom',
-  SCROLL: 'scroll',
-  COPY: 'copy',
-  PRINT: 'print',
-  SHARE: 'share',
-  REFRESH: 'refresh'
-};
-function getAILocator(id, value, options) {
-  if (value === void 0) {
-    value = null;
-  }
-  if (options === void 0) {
-    options = {};
-  }
-  if (!id || typeof id !== 'string') {
-    console.warn('getLocator: id должен быть непустой строкой');
-    return '';
-  }
-  var parts = [id];
-  if (options.type) {
-    parts.push("type-" + options.type);
-  }
-  if (options.action) {
-    parts.push("action-" + options.action);
-  }
-  if (options.index !== undefined) {
-    parts.push("index-" + options.index);
-  }
-  if (value !== null && value !== undefined) {
-    if (typeof value === 'object' && value !== null) {
-      var identifier = value.id || value.ID || value.key || value.uuid || value._id;
-      if (identifier) {
-        parts.push("id-" + identifier);
-      }
-    } else if (['string', 'number', 'boolean'].includes(typeof value)) {
-      if (typeof value === 'boolean') {
-        parts.push("value-" + (value ? 'true' : 'false'));
-      } else {
-        var valueStr = String(value).substring(0, 30);
-        parts.push("value-" + valueStr);
-      }
-    }
-  }
-  return parts.join('::');
-}
-var publish = function publish(msg, data) {
-  PubSub.publish(msg, data);
-};
 var subscribe = function subscribe(msg, func) {
   return PubSub.subscribe(msg, func);
 };
 var unsubscribe = function unsubscribe(token) {
   PubSub.unsubscribe(token);
-};
-var HasRoleID = function HasRoleID(user, roleID) {
-  if (user && user.roleUser) {
-    for (var i = 0; i < user.roleUser.length; i++) {
-      var element = user.roleUser[i];
-      if (element.roleID === roleID) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-var HasRole = function HasRole(user, name) {
-  if (user && user.roleUser) {
-    for (var i = 0; i < user.roleUser.length; i++) {
-      var element = user.roleUser[i];
-      if (element.role.name === name) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-var _unwrap = function unwrap(value, element) {
-  if (lodash.isFunction(value) == true) {
-    return _unwrap(value());
-  } else if (lodash.isArray(value)) {
-    return value;
-  }
-  return !element ? [value] : value;
-};
-var clean = function clean(value, element) {
-  var _ref;
-  if (lodash.isArray(value)) {
-    return value === null || value === void 0 ? void 0 : value.filter(function (e) {
-      return e !== null && e !== undefined;
-    });
-  }
-  return !element ? (_ref = [value]) === null || _ref === void 0 ? void 0 : _ref.filter(function (e) {
-    return e !== null && e !== undefined;
-  }) : value;
-};
-var If = function If(equations, truthful) {
-  return And(equations) ? _unwrap(truthful, true) : undefined;
-};
-var IfElse = function IfElse(equations, truthful, untruthful) {
-  return And(equations) ? _unwrap(truthful, true) : _unwrap(untruthful, true);
-};
-var And = function And(args) {
-  var acc = true;
-  var unwraped = _unwrap(args);
-  for (var i = 0; i < unwraped.length; i++) {
-    var element = unwraped[i];
-    acc = acc && element;
-    if (!acc) break;
-  }
-  return acc;
-};
-var Or = function Or(args) {
-  var acc = true;
-  var unwraped = _unwrap(args);
-  for (var i = 0; i < unwraped.length; i++) {
-    var element = unwraped[i];
-    acc = acc || element;
-  }
-  return acc;
 };
 var uncapitalize = function uncapitalize(str) {
   return str.charAt(0).toLowerCase() + str.slice(1);
@@ -17628,33 +18189,15 @@ var QueryParams = function QueryParams(queryParams) {
   }
   return ext;
 };
-var QueryFunc = function QueryFunc(func, name) {
-  return "f-" + func + "-" + name;
-};
 var QueryParam = function QueryParam(name, value) {
   return name + "=" + value;
-};
-var QueryOrder = function QueryOrder(name, value) {
-  return "s-" + name + "=" + value;
 };
 var QueryDetail = function QueryDetail(value) {
   return QueryParam("detail", value ? value : "none");
 };
-var CREATE = function CREATE(auth, name, object, callback, error) {
-  POST(auth, '/api/query-create/' + name.toLowerCase(), object, callback, error);
-};
-var READ = function READ(auth, name, callback, error) {
-  GET(auth, '/api/query/' + name.toLowerCase(), callback, error);
-};
 var READWITH = function READWITH(auth, name, queryParams, callback, error) {
   var ext = QueryParams(queryParams);
   GET(auth, '/api/query/' + name.toLowerCase() + (ext ? "?" + ext : ""), callback, error);
-};
-var UPDATE = function UPDATE(auth, name, object, callback, error) {
-  POST(auth, '/api/query-update/' + name.toLowerCase(), object, callback, error);
-};
-var DELETE = function DELETE(auth, name, id, callback, error) {
-  GET(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id, callback, error);
 };
 var POST = function POST(auth, url, object, callback, error) {
   auth.fetch(url, {
@@ -17670,24 +18213,6 @@ var POST = function POST(auth, url, object, callback, error) {
     }
   })["catch"](error || errorCatch$1);
 };
-var POSTFormData = function POSTFormData(auth, url, formData, callback, error) {
-  auth.fetchForData(url, {
-    method: 'POST',
-    body: formData
-  }).then(function (res) {
-    if (res && res.status === true) {
-      if (callback) {
-        callback(res);
-      }
-    } else if (res && res.status === false) {
-      throw new FennecError$1(res.message, "", res);
-    }
-  })["catch"](error || errorCatch$1);
-};
-var GETWITH = function GETWITH(auth, url, queryParams, callback, error) {
-  var ext = QueryParams(queryParams);
-  GET(auth, url + (ext ? "?" + ext : ""), callback, error);
-};
 var GET = function GET(auth, url, callback, error) {
   auth.fetch(url).then(function (res) {
     if (res && res.status === true) {
@@ -17699,436 +18224,6 @@ var GET = function GET(auth, url, callback, error) {
     }
   })["catch"](error || errorCatch$1);
 };
-var CREATEP = function CREATEP(auth, name, object) {
-  return POSTP(auth, '/api/query-create/' + name.toLowerCase(), object);
-};
-var READP = function READP(auth, name) {
-  return GETP(auth, '/api/query/' + name.toLowerCase());
-};
-var READWITHP = function READWITHP(auth, name, queryParams) {
-  var ext = QueryParams(queryParams);
-  return GETP(auth, '/api/query/' + name.toLowerCase() + (ext ? "?" + ext : ""));
-};
-var UPDATEP = function UPDATEP(auth, name, object) {
-  return POSTP(auth, '/api/query-update/' + name.toLowerCase(), object);
-};
-var DELETEP = function DELETEP(auth, name, id) {
-  return GETP(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id);
-};
-var POSTP = function POSTP(auth, url, object) {
-  return new Promise(function (resolve, reject) {
-    auth.fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(object)
-    }).then(function (res) {
-      if (res && res.status === true) {
-        resolve(res);
-      } else if (res && res.status === false) {
-        throw new FennecError$1(res.message, err.exception, res);
-      }
-    })["catch"](reject);
-  });
-};
-var POSTFormDataP = function POSTFormDataP(auth, url, formData) {
-  return new Promise(function (resolve, reject) {
-    auth.fetchForData(url, {
-      method: 'POST',
-      body: formData
-    }).then(function (res) {
-      if (res && res.status === true) {
-        resolve(res);
-      } else if (res && res.status === false) {
-        throw new FennecError$1(res.message, err.exception, res);
-      }
-    })["catch"](reject);
-  });
-};
-var GETWITHP = function GETWITHP(auth, url, queryParams) {
-  var ext = QueryParams(queryParams);
-  return GET(auth, url + (ext ? "?" + ext : ""));
-};
-var GETP = function GETP(auth, url) {
-  return new Promise(function (resolve, reject) {
-    auth.fetch(url).then(function (res) {
-      if (res && res.status === true) {
-        resolve(res);
-      } else if (res && res.status === false) {
-        throw new FennecError$1(res.message, err.exception, res);
-      }
-    })["catch"](reject);
-  });
-};
-var _equals = function equals(obj1, obj2) {
-  if (obj1 === obj2) return true;
-  if (!obj1 || !obj2 || typeof obj1 !== "object" || typeof obj2 !== "object") return false;
-  if (typeof obj1 === "function") {
-    if (obj1.toString() === obj2.toString()) return true;else return false;
-  }
-  if (typeof obj2 === "function") {
-    return false;
-  }
-  var obj1PropertyCount = Object.keys(obj1).length;
-  var obj2PropertyCount = Object.keys(obj2).length;
-  if (obj1PropertyCount !== obj2PropertyCount) return false;
-  if (obj1PropertyCount === 0) return true;
-  for (var property in obj1) {
-    var prop1 = obj1[property];
-    var prop2 = obj2[property];
-    if (typeof prop1 === "object") {
-      if (!_equals(prop1, prop2)) {
-        return false;
-      }
-    } else if (typeof prop2 === "object") {
-      return false;
-    } else if (typeof prop1 !== "object" && typeof prop2 !== "object") {
-      if (prop1 !== prop2) return false;
-    }
-  }
-  return true;
-};
-var contextFilterToObject = function contextFilterToObject(contextFilters) {
-  var ctxFlt = {};
-  if (contextFilters) {
-    var ctx = [];
-    if (lodash.isFunction(contextFilters)) {
-      ctx = clean(contextFilters());
-    } else {
-      ctx = contextFilters;
-    }
-    if (lodash.isArray(ctx)) {
-      ctx.forEach(function (item) {
-        if (item) {
-          var v = _queryFiltersToContextFilter(item);
-          if (v !== null && v !== void 0 && v.name) {
-            var _v$name, _v$name2;
-            ctxFlt[(v === null || v === void 0 ? void 0 : (_v$name = v.name) === null || _v$name === void 0 ? void 0 : _v$name.toLowerCase()) + (v !== null && v !== void 0 && v.name && v !== null && v !== void 0 && (_v$name2 = v.name) !== null && _v$name2 !== void 0 && _v$name2.endsWith("ID") ? "" : "ID")] = v === null || v === void 0 ? void 0 : v.value;
-          }
-        }
-      });
-    }
-  }
-  return ctxFlt;
-};
-var contextFilterToQueryFilters = function contextFilterToQueryFilters(item) {
-  if (lodash.isObject(item)) {
-    var keyName = item.name.endsWith('ID') === true && item.name.endsWith('.ID') !== true ? item.name.slice(0, -2) + ".ID" : item.name;
-    return QueryParam("w-" + (item.method ? item.method + "-" : "eq-") + keyName, item.value);
-  } else if (lodash.isFunction(item)) {
-    return item();
-  } else if (lodash.isString(item)) {
-    return item;
-  }
-};
-var ContextFiltersToQueryFilters = function ContextFiltersToQueryFilters(contextFilters) {
-  var ctxFlt = [];
-  if (contextFilters) {
-    var ctx = [];
-    if (lodash.isFunction(contextFilters)) {
-      ctx = clean(contextFilters());
-    } else {
-      ctx = contextFilters;
-    }
-    if (lodash.isArray(ctx)) {
-      ctx.forEach(function (item) {
-        if (item) {
-          var v = contextFilterToQueryFilters(item);
-          if (v) {
-            ctxFlt.push(v);
-          }
-        }
-      });
-    }
-  }
-  return ctxFlt;
-};
-var _queryFiltersToContextFilter = function queryFiltersToContextFilter(item) {
-  if (lodash.isObject(item) && item !== null && item !== void 0 && item.name) {
-    return item;
-  } else if (lodash.isFunction(item)) {
-    return _queryFiltersToContextFilter(item());
-  } else if (lodash.isString(item)) {
-    var nameValue = item.split("=");
-    if (nameValue.length >= 2) {
-      var fieldNameArr = nameValue[0].split("-");
-      if (fieldNameArr.length > 1 && fieldNameArr[0] === "w") {
-        var _fieldNameArr, _nameValue$;
-        return {
-          name: (_fieldNameArr = fieldNameArr[fieldNameArr.length - 1]) === null || _fieldNameArr === void 0 ? void 0 : _fieldNameArr.trim(),
-          value: (_nameValue$ = nameValue[1]) === null || _nameValue$ === void 0 ? void 0 : _nameValue$.trim()
-        };
-      }
-    }
-  }
-};
-var QueryFiltersToContextFilters = function QueryFiltersToContextFilters(queryFilters) {
-  var ctxFlt = [];
-  if (queryFilters) {
-    var ctx = [];
-    if (lodash.isFunction(queryFilters)) {
-      ctx = clean(queryFilters());
-    } else {
-      ctx = queryFilters;
-    }
-    if (lodash.isArray(ctx)) {
-      ctx.forEach(function (item) {
-        if (item) {
-          var v = _queryFiltersToContextFilter(item);
-          if (v) {
-            ctxFlt.push(v);
-          }
-        }
-      });
-    }
-  }
-  return ctxFlt;
-};
-var ObjectToQueryParam = function ObjectToQueryParam(object, method) {
-  var f = [];
-  var array = Object.entries(object);
-  for (var i = 0; i < array.length; i++) {
-    var element = array[i];
-    if (element) {
-      var keyName = element[0].endsWith('ID') === true && element[0].endsWith('.ID') !== true ? element[0].slice(0, -2) + ".ID" : element[0];
-      f.push(QueryParam("w-" + keyName, element[1]));
-    }
-  }
-  return f;
-};
-var ObjectToContextFilters = function ObjectToContextFilters(obj, method) {
-  if (!obj) return [];
-  var contextFilters = [];
-  for (var key in obj) {
-    if (Object.hasOwnProperty.call(obj, key)) {
-      var value = obj[key];
-      var keyName = key;
-      if (value) {
-        contextFilters.push({
-          name: keyName,
-          value: value,
-          method: method
-        });
-      }
-    }
-  }
-  return contextFilters;
-};
-var queryFilterByItem = function queryFilterByItem(item) {
-  if (!item) return [];
-  var query = [];
-  for (var key in item) {
-    if (Object.hasOwnProperty.call(item, key)) {
-      var value = item[key];
-      var keyName = key.endsWith('ID') === true && key.endsWith('.ID') !== true ? key.slice(0, -2) + ".ID" : key;
-      if (value) {
-        query.push("w-" + keyName + "=" + value);
-      }
-    }
-  }
-  return query.join("&");
-};
-var filterByItem = function filterByItem(item, element) {
-  for (var key in item) {
-    if (Object.hasOwnProperty.call(item, key)) {
-      var value = item[key];
-      if (element[key] === value) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-function FilterToQueryParameters(filters, filter, sorting, page, count) {
-  var flt = {};
-  Object.keys(filter).forEach(function (key) {
-    var item = filters === null || filters === void 0 ? void 0 : filters.find(function (e) {
-      return e.name == key;
-    });
-    var filterByKey = filter[key];
-    switch (item.filterType) {
-      case "group":
-        switch (item.type) {
-          case "object":
-          case "document":
-            flt["w-in-" + key] = filterByKey && filterByKey.length && filterByKey.join ? filterByKey.join(",") : filterByKey;
-            break;
-          default:
-            flt["w-in-" + key] = filterByKey && filterByKey.length && filterByKey.join ? filterByKey.join(",") : filterByKey;
-            break;
-        }
-        break;
-      case "range":
-        switch (item.type) {
-          case "int":
-          case "uint":
-          case "integer":
-          case "int64":
-          case "int32":
-          case "uint64":
-          case "uint32":
-            if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
-              flt["w-lge-" + key] = filterByKey[0];
-              flt["w-lwe-" + key] = filterByKey[1];
-            }
-            break;
-          case "double":
-          case "float":
-          case "float64":
-          case "float32":
-            if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
-              flt["w-lge-" + key] = filterByKey[0];
-              flt["w-lwe-" + key] = filterByKey[1];
-            }
-            break;
-          case "time":
-            if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
-              flt["w-lge-" + key] = filterByKey[0].format("HH:mm:ss");
-              flt["w-lwe-" + key] = filterByKey[1].format("HH:mm:ss");
-            }
-            break;
-          case "date":
-            if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
-              flt["w-lge-" + key] = filterByKey[0].format("YYYY-MM-DD");
-              flt["w-lwe-" + key] = filterByKey[1].format("YYYY-MM-DD");
-            }
-            break;
-          case "datetime":
-          case "time.Time":
-            if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
-              flt["w-lge-" + key] = filterByKey[0].format("YYYY-MM-DD HH:mm");
-              flt["w-lwe-" + key] = filterByKey[1].format("YYYY-MM-DD HH:mm");
-            }
-            break;
-          default:
-            flt["w-" + key] = filterByKey;
-            break;
-        }
-        break;
-      default:
-        switch (item.type) {
-          case "string":
-            flt["w-co-" + key] = filterByKey;
-            break;
-          default:
-            flt["w-" + key] = filterByKey;
-            break;
-        }
-        break;
-    }
-  });
-  var srt = {};
-  if (sorting !== null && sorting !== void 0 && sorting.name) {
-    srt["s-" + sorting.name] = sorting.order;
-  }
-  var pc = {
-    page: page,
-    count: count
-  };
-  return _extends({}, flt, srt, pc);
-}
-function QueryParametersToFilters(urlRequestParameters, filters) {
-  var flt = [].concat(filters);
-  var _loop = function _loop() {
-    var item = flt[i];
-    function set(item, flt, i, s) {
-      var v = urlRequestParameters.get("" + s + item.name);
-      if (v) {
-        flt[i].filtered = v;
-      }
-    }
-    function setin(item, flt, i, s) {
-      var v = urlRequestParameters.get("" + s + item.name);
-      if (v) {
-        flt[i].filtered = v && v.split ? v.split(",").map(function (val) {
-          var nval = parseInt(val);
-          if (!isNaN(nval)) {
-            return nval;
-          }
-          return val;
-        }) : v;
-      }
-    }
-    function seta(item, flt, i, s1, s2) {
-      var v1 = urlRequestParameters.get("" + s1 + item.name);
-      var v2 = urlRequestParameters.get("" + s2 + item.name);
-      if (v1 && v2) {
-        flt[i].filtered = [v1, v2];
-      }
-    }
-    function setm(item, flt, i, s1, s2, format) {
-      var v1 = urlRequestParameters.get("" + s1 + item.name);
-      var v2 = urlRequestParameters.get("" + s2 + item.name);
-      if (v1 && v2) {
-        flt[i].filtered = [dayjs_min(v1), dayjs_min(v2)];
-      }
-    }
-    switch (item.filterType) {
-      case "group":
-        switch (item.type) {
-          case "object":
-          case "document":
-            setin(item, flt, i, "w-in-");
-            break;
-          default:
-            setin(item, flt, i, "w-in-");
-            break;
-        }
-        break;
-      case "range":
-        switch (item.type) {
-          case "int":
-          case "uint":
-          case "integer":
-          case "int64":
-          case "int32":
-          case "uint64":
-          case "uint32":
-            seta(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "double":
-          case "float":
-          case "float64":
-          case "float32":
-            seta(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "time":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "date":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "datetime":
-          case "time.Time":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          default:
-            set(item, flt, i, "w-");
-            break;
-        }
-        break;
-      default:
-        switch (item.type) {
-          case "string":
-            set(item, flt, i, "w-co-");
-            break;
-          default:
-            set(item, flt, i, "w-");
-            break;
-        }
-        break;
-    }
-  };
-  for (var i = 0; i < flt.length; i++) {
-    _loop();
-  }
-  for (var _i = 0; _i < flt.length; _i++) {
-    var item = flt[_i];
-    var v = urlRequestParameters.get("s-" + item.name);
-    if (v) {
-      flt[_i].sorted = v;
-    }
-  }
-  return flt;
-}
 function FennecError$1(message, name, object) {
   if (message === void 0) {
     message = "";
@@ -18155,133 +18250,6 @@ var errorCatch$1 = function errorCatch(err, callback) {
     if (callback) callback();
   }
 };
-var errorAlert$1 = function errorAlert(err, callback) {
-  var messageError = function messageError(err) {
-    var alertInstance = alert('Ошибка', err, [{
-      text: 'OK',
-      onPress: function onPress() {
-        return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-      }
-    }]);
-    setTimeout(function () {
-      alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-    }, 5000);
-  };
-  if (err) {
-    messageError("" + err);
-    if (callback) callback();
-  }
-};
-var messageError$1 = function messageError(err) {
-  var alertInstance = alert('Ошибка', err, [{
-    text: 'OK',
-    onPress: function onPress() {
-      return alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-    }
-  }]);
-  setTimeout(function () {
-    alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
-  }, 5000);
-};
-var arrayUnpack = function arrayUnpack(values, field, target) {
-  var f = values[field];
-  delete values[field];
-  if (target && values) {
-    for (var i = 0; i < target.length; i++) {
-      values[target[i]] = f[i];
-    }
-  }
-  return values;
-};
-var upgradeInArray = function upgradeInArray(array, item) {
-  if (!item) return item;
-  if (lodash.isArray(item)) {
-    return item;
-  }
-  return [item];
-};
-var createInArray = function createInArray(array, item) {
-  return updateInArray(array, item);
-};
-var updateInArray = function updateInArray(array, item, first) {
-  if (!array) array = [];
-  if (!item || !item.ID) return array;
-  if (lodash.findIndex(array, {
-    ID: item.ID
-  }) >= 0) {
-    var _array;
-    return (_array = array) === null || _array === void 0 ? void 0 : _array.map(function (e) {
-      return IfElse(e.ID === item.ID, item, e);
-    });
-  } else {
-    return first ? [item].concat(array) : [].concat(array, [item]);
-  }
-};
-var deleteInArray = function deleteInArray(array, item) {
-  var _array2;
-  if (!array) array = [];
-  if (!item || !item.ID) return array;
-  return (_array2 = array) === null || _array2 === void 0 ? void 0 : _array2.filter(function (e) {
-    return e.ID !== item.ID;
-  });
-};
-var triggerInArray = function triggerInArray(array, item) {
-  if (array.find(function (x) {
-    return x.ID === item.ID;
-  }) !== undefined) {
-    return deleteInArray(array, item);
-  } else {
-    return updateInArray(array, item);
-  }
-};
-var emptyInArray = function emptyInArray(array, item) {
-  return [];
-};
-var undefinedInArray = function undefinedInArray(array, item) {
-  return undefined;
-};
-var createArrayInArray = function createArrayInArray(array, item) {
-  return updateArrayInArray(array, item);
-};
-var updateArrayInArray = function updateArrayInArray(array, item) {
-  if (!array) array = [];
-  if (lodash.isArray(item)) {
-    var tmp = [].concat(array);
-    for (var i = 0; i < item.length; i++) {
-      var it = item[i];
-      tmp = updateInArray(tmp, it);
-    }
-    return tmp;
-  } else {
-    return updateInArray(array, item);
-  }
-};
-var deleteArrayInArray = function deleteArrayInArray(array, item) {
-  if (!array) array = [];
-  if (lodash.isArray(item)) {
-    var tmp = [].concat(array);
-    for (var i = 0; i < item.length; i++) {
-      var it = item[i];
-      tmp = deleteInArray(tmp, it);
-    }
-    return tmp;
-  } else {
-    return deleteInArray(array, item);
-  }
-};
-var triggerArrayInArray = function triggerArrayInArray(array, item) {
-  if (!array) array = [];
-  if (lodash.isArray(item)) {
-    var tmp = [].concat(array);
-    for (var i = 0; i < item.length; i++) {
-      var it = item[i];
-      tmp = triggerInArray(tmp, it);
-    }
-    return tmp;
-  } else {
-    return triggerInArray(array, item);
-  }
-};
 var makeFormData = function makeFormData(values) {
   var formData = new FormData();
   var _loop2 = function _loop2(key) {
@@ -18304,137 +18272,6 @@ var makeFormData = function makeFormData(values) {
     _loop2(key);
   }
   return formData;
-};
-var unpackFormFields = function unpackFormFields(form, values) {
-  if (!form) return values;
-  var fields = form.getFieldsValue();
-  for (var name in fields) {
-    if (name.startsWith("@")) {
-      var _form$getFieldInstanc, _form$getFieldInstanc2;
-      var flds = form === null || form === void 0 ? void 0 : (_form$getFieldInstanc = form.getFieldInstance(name)) === null || _form$getFieldInstanc === void 0 ? void 0 : (_form$getFieldInstanc2 = _form$getFieldInstanc.props) === null || _form$getFieldInstanc2 === void 0 ? void 0 : _form$getFieldInstanc2.fields;
-      values = arrayUnpack(values, name, flds);
-    }
-  }
-  return values;
-};
-var preventDefault = function preventDefault(e) {
-  e.preventDefault();
-  e.stopPropagation();
-};
-var eventExecution = function eventExecution(event, values, context) {
-  if (!event) return values;
-  return event(values, context) || values;
-};
-var detectMutation = function detectMutation(mutation) {
-  if (lodash.isFunction(mutation)) {
-    return mutation;
-  } else if (lodash.isString(mutation)) {
-    switch (mutation) {
-      case "upgrade":
-        return upgradeInArray;
-      case "create":
-        return createInArray;
-      case "update":
-        return updateInArray;
-      case "delete":
-        return deleteInArray;
-      case "empty":
-        return emptyInArray;
-      case "undefined":
-        return undefinedInArray;
-      default:
-        return updateInArray;
-    }
-  }
-  return updateInArray;
-};
-var Request = function Request(values, item, props) {
-  var auth = props.auth,
-    collection = props.collection,
-    setCollection = props.setCollection,
-    collectionRef = props.collectionRef,
-    updateCollection = props.updateCollection,
-    contextFilters = props.contextFilters,
-    property = props.property,
-    label = props.label,
-    itemByProperty = props.itemByProperty,
-    apply = props.apply,
-    index = props.index,
-    lock = props.lock,
-    unlock = props.unlock,
-    plock = props.plock,
-    punlock = props.punlock,
-    close = props.close,
-    onValues = props.onValues,
-    onData = props.onData,
-    onClose = props.onClose,
-    onError = props.onError,
-    onDispatch = props.onDispatch;
-  if (item.action) {
-    var properties = {
-      item: item,
-      index: index,
-      collection: collection,
-      setCollection: setCollection,
-      collectionRef: collectionRef,
-      updateCollection: updateCollection,
-      contextFilters: contextFilters,
-      property: property,
-      label: label,
-      itemByProperty: itemByProperty,
-      apply: apply,
-      plock: plock,
-      punlock: punlock,
-      lock: lock,
-      unlock: unlock
-    };
-    if (lodash.isFunction(item.action)) {
-      var v = eventExecution(onValues, values, properties);
-      var _dispatch = item.action(v, unlock, close, properties);
-      if (lodash.isFunction(_dispatch)) {
-        _dispatch(properties);
-      }
-    } else if (lodash.isObject(item.action)) {
-      var config = item.action;
-      var _REQUEST_ = function _REQUEST_(auth, url, object, callback, error) {
-        if (config.method === "POSTFormData") {
-          return POSTFormData(auth, url, object, callback, error);
-        } else if (config.method === "POST") {
-          return POST(auth, url, object, callback, error);
-        }
-        return GET(auth, url, callback, error);
-      };
-      var errFunc = config.onError || onError;
-      var payload = eventExecution(config.onValues || onValues, values, properties);
-      if (lock) lock();
-      _REQUEST_(auth, config.path, payload, function (x) {
-        var onDispatchFunc = config.onDispatch || onDispatch;
-        var mutation = detectMutation(config.mutation);
-        var v = mutation(collection, eventExecution(config.onData || onData, x, properties));
-        if (onDispatchFunc) {
-          var _dispatch2 = onDispatchFunc(v, properties);
-          if (lodash.isFunction(_dispatch2)) {
-            _dispatch2(v);
-          } else {
-            setCollection(v);
-          }
-        } else {
-          setCollection(v);
-        }
-        eventExecution(config.onClose || onClose, {
-          unlock: unlock,
-          close: close
-        }, properties);
-      }, function (err) {
-        return errFunc ? errFunc(err, {
-          unlock: unlock,
-          close: close
-        }) : errorCatch$1(err, unlock);
-      });
-    }
-  } else {
-    console.error("Не задано свойство action для указанного действия");
-  }
 };
 var historyCallbackFunctions = {};
 var pushStateHistoryModal = function pushStateHistoryModal(setVisible, getStack) {
@@ -18461,229 +18298,6 @@ var pushStateHistoryModal = function pushStateHistoryModal(setVisible, getStack)
       }
     }
   };
-};
-function ycStorage(auth) {
-  return "https://storage.yandexcloud.net/";
-}
-function JSX(render) {
-  return render();
-}
-function JSXMap(array, render) {
-  if (!array) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
-  return array === null || array === void 0 ? void 0 : array.map(function (e, idx) {
-    return render(e, idx);
-  });
-}
-function JSXPathMap(object, path, render) {
-  var array = lodash.get(object, path);
-  return JSXMap(array, render);
-}
-function JSXIndex(array, index, render) {
-  if (!array) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
-  if (!lodash.isArray(index)) {
-    if (array.length < index) return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
-    return render(array[index], index);
-  } else {
-    return index === null || index === void 0 ? void 0 : index.map(function (i, idx) {
-      return JSXIndex(array, i, render);
-    });
-  }
-}
-function GetMetaPropertyByPath(meta, obj, path) {
-  var properties = GetMetaProperties(obj);
-  var array = path === null || path === void 0 ? void 0 : path.split(".");
-  if (array && array.length > 1) {
-    var _loop3 = function _loop3() {
-        var element = array[i];
-        var property = properties.find(function (e) {
-          return e.name.toLowerCase() == element.toLowerCase();
-        });
-        var nobj = lodash.get(property, "relation.reference.object");
-        var type = lodash.get(property, "relation.type");
-        if (nobj) {
-          var mnobj = meta[nobj];
-          if (mnobj) {
-            return {
-              v: GetMetaPropertyByPath(meta, mnobj, array.slice(1, array.length).join("."))
-            };
-          }
-        }
-      },
-      _ret;
-    for (var i = 0; i < array.length; i++) {
-      _ret = _loop3();
-      if (_ret) return _ret.v;
-    }
-  } else {
-    return properties.find(function (e) {
-      return e.name.toLowerCase() == path.toLowerCase();
-    });
-  }
-}
-function GetMetaProperties(meta, exclude) {
-  var xmeta = GetMeta(meta);
-  if (typeof xmeta === "object" && !Array.isArray(xmeta)) {
-    var p = xmeta.properties;
-    if (p && exclude) {
-      var _p;
-      p = (_p = p) === null || _p === void 0 ? void 0 : _p.filter(function (e) {
-        return exclude.findIndex(function (f) {
-          return f.toLowerCase() === e.name.toLowerCase();
-        }) < 0;
-      });
-    }
-    return p;
-  } else if (typeof xmeta === "object" && Array.isArray(xmeta)) {
-    return xmeta;
-  } else {
-    console.warn("Не удалось определить метаданные из переданного параметра");
-  }
-}
-function SetMetaProperties(meta, properties) {
-  return meta && lodash.isArray(meta) ? properties : _extends({}, meta, {
-    properties: properties
-  });
-}
-function GetMeta(meta) {
-  if (meta && meta !== null && typeof meta === "function") {
-    var m = meta();
-    if (m && m !== null && typeof m === "function") {
-      return GetMeta(m);
-    } else if (typeof m === "object") {
-      return m;
-    }
-  }
-  return meta;
-}
-var updateInPropertiesUUID = function updateInPropertiesUUID(properties, item, first) {
-  var _$findIndex;
-  var key = "uuid";
-  if (!properties) properties = [];
-  if (!item || !item[key]) return properties;
-  if (lodash.findIndex(properties, (_$findIndex = {}, _$findIndex[key] = item[key], _$findIndex)) >= 0) {
-    var _properties;
-    return (_properties = properties) === null || _properties === void 0 ? void 0 : _properties.map(function (e) {
-      return IfElse(e[key] === item[key], _extends({}, e, item), e);
-    });
-  } else {
-    return first ? [item].concat(properties) : [].concat(properties, [item]);
-  }
-};
-var updateInProperties = function updateInProperties(properties, item, first) {
-  var _$findIndex2;
-  var key = "name";
-  if (!properties) properties = [];
-  if (!item || !item[key]) return properties;
-  if (lodash.findIndex(properties, (_$findIndex2 = {}, _$findIndex2[key] = item[key], _$findIndex2)) >= 0) {
-    var _properties2;
-    return (_properties2 = properties) === null || _properties2 === void 0 ? void 0 : _properties2.map(function (e) {
-      return IfElse(e[key] === item[key], _extends({}, e, item), e);
-    });
-  } else {
-    return first ? [item].concat(properties) : [].concat(properties, [item]);
-  }
-};
-var deleteInPropertiesUUID = function deleteInPropertiesUUID(properties, item) {
-  var _properties4;
-  var key = "uuid";
-  if (!properties) properties = [];
-  if (!item || !lodash.isArray(item) && lodash.isObject(item) && !item[key]) return properties;
-  var i = _unwrap(item);
-  if (lodash.isArray(i)) {
-    var _properties3;
-    return (_properties3 = properties) === null || _properties3 === void 0 ? void 0 : _properties3.filter(function (e) {
-      return And(i.map(function (c) {
-        return e[key] !== (lodash.isObject(c) ? c[key] : c);
-      }));
-    });
-  }
-  return (_properties4 = properties) === null || _properties4 === void 0 ? void 0 : _properties4.filter(function (e) {
-    return e[key] !== item[key];
-  });
-};
-var deleteInProperties = function deleteInProperties(properties, item) {
-  var _properties6;
-  var key = "name";
-  if (!properties) properties = [];
-  if (!item || !lodash.isArray(item) && lodash.isObject(item) && !item[key]) return properties;
-  var i = _unwrap(item);
-  if (lodash.isArray(i)) {
-    var _properties5;
-    return (_properties5 = properties) === null || _properties5 === void 0 ? void 0 : _properties5.filter(function (e) {
-      return And(i.map(function (c) {
-        return e[key] !== (lodash.isObject(c) ? c[key] : c);
-      }));
-    });
-  }
-  return (_properties6 = properties) === null || _properties6 === void 0 ? void 0 : _properties6.filter(function (e) {
-    return e[key] !== item[key];
-  });
-};
-var triggerInPropertiesUUID = function triggerInPropertiesUUID(properties, item) {
-  var key = "uuid";
-  if (properties.find(function (x) {
-    return x[key] === item[key];
-  }) !== undefined) {
-    return deleteInArray(properties, item);
-  } else {
-    return updateInArray(properties, item);
-  }
-};
-var triggerInProperties = function triggerInProperties(properties, item) {
-  var key = "name";
-  if (properties.find(function (x) {
-    return x[key] === item[key];
-  }) !== undefined) {
-    return deleteInArray(properties, item);
-  } else {
-    return updateInArray(properties, item);
-  }
-};
-var foreachInProperties = function foreachInProperties(properties, func, item) {
-  if (!properties) properties = [];
-  if (!item) return properties;
-  return properties.map(function (n) {
-    return And(func(n)) ? _extends({}, n, lodash.isFunction(item) ? item(n) : item) : n;
-  });
-};
-var updatePropertiesInProperties = function updatePropertiesInProperties(properties, items) {
-  if (!properties) properties = [];
-  if (lodash.isArray(items)) {
-    var tmp = [].concat(properties);
-    for (var i = 0; i < items.length; i++) {
-      var it = items[i];
-      tmp = updateInProperties(tmp, it);
-    }
-    return tmp;
-  } else {
-    return updateInProperties(properties, items);
-  }
-};
-var deletePropertiesInProperties = function deletePropertiesInProperties(properties, items) {
-  if (!properties) properties = [];
-  if (lodash.isArray(items)) {
-    var tmp = [].concat(properties);
-    for (var i = 0; i < items.length; i++) {
-      var it = items[i];
-      tmp = deleteInProperties(tmp, it);
-    }
-    return tmp;
-  } else {
-    return deleteInProperties(properties, items);
-  }
-};
-var triggerPropertiesInProperties = function triggerPropertiesInProperties(properties, items) {
-  if (!properties) properties = [];
-  if (lodash.isArray(items)) {
-    var tmp = [].concat(properties);
-    for (var i = 0; i < items.length; i++) {
-      var it = items[i];
-      tmp = triggerInProperties(tmp, it);
-    }
-    return tmp;
-  } else {
-    return triggerInProperties(properties, items);
-  }
 };
 function getObjectValue(object, subObject) {
   if (object && subObject) {
@@ -18731,36 +18345,6 @@ function getObjectValue(object, subObject) {
     }
   }
   return object;
-}
-function getObjectValueOrDefault(object, subObject, defValue) {
-  var result = getObjectValue(object, subObject);
-  if (result === undefined || result === null) {
-    if (defValue !== undefined) {
-      return defValue;
-    }
-  }
-  return result;
-}
-function getObjectDisplay(data, name, meta) {
-  if (!name || !meta || !data) return undefined;
-  var display = function display(_display) {
-    if (_display !== null && _display !== void 0 && _display.fields) {
-      return _display;
-    }
-  };
-  var metaObject = meta[name];
-  return getDisplay(data, display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
-}
-function getFieldDisplay(data, propertyMeta, meta) {
-  var _propertyMeta$relatio;
-  if (!propertyMeta || !meta || !data) return undefined;
-  var display = function display(_display2) {
-    if (_display2.fields) {
-      return _display2;
-    }
-  };
-  var metaObject = meta[getObjectValue(propertyMeta, "relation.reference.object")];
-  return getDisplay(data, display(propertyMeta === null || propertyMeta === void 0 ? void 0 : (_propertyMeta$relatio = propertyMeta.relation) === null || _propertyMeta$relatio === void 0 ? void 0 : _propertyMeta$relatio.display) || display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
 }
 function getDisplay(data, display, metaObject, meta) {
   var result = "";
@@ -18838,37 +18422,6 @@ function metaGetFieldByName(metaObject, meta, fieldName) {
     }
   }
 }
-function getSortingDisplayFields(display, metaObject, meta, parent, result) {
-  result = result || [];
-  parent = parent || "";
-  if (!display || !display.length || !metaObject) {
-    return result;
-  }
-  for (var i = 0; i < display.length; i++) {
-    var _field$value$split2;
-    var field = display[i];
-    if (!field.sorting) {
-      continue;
-    }
-    var name_field = (_field$value$split2 = field.value.split(".")) === null || _field$value$split2 === void 0 ? void 0 : _field$value$split2.map(function (e) {
-      return uncapitalize(e);
-    }).join(".");
-    var metaField = metaGetFieldByName(metaObject, meta, name_field);
-    if (parent) {
-      name_field = parent + "." + name_field;
-    }
-    if (getObjectValue(metaField, "relation.reference.object") && meta[metaField.relation.reference.object]) {
-      var fieldMeta = meta[metaField.relation.reference.object];
-      getSortingDisplayFields(metaField.relation.display || fieldMeta.display, fieldMeta, meta, name_field, result);
-    } else {
-      result.push(name_field);
-    }
-  }
-  return result;
-}
-function typeIsNumber(type) {
-  return type === "int" || type === "integer" || type === "long" || type === "double" || type === "bigdecimal";
-}
 function getFormatFieldValueTableView(data, type, meta) {
   if (type === "boolean" || type === "bool") {
     var trueValue = getObjectValue(meta, "booleanPresenter.trueValue") || "Да";
@@ -18920,915 +18473,6 @@ function priceFormat(price, precision) {
   return Number(price.toFixed(precision)).toLocaleString('ru', {
     minimumFractionDigits: precision
   });
-}
-function MetaColumns(properties, meta, onColumnClick) {
-  return function (_ref2) {
-    var request = _ref2.request;
-    var click = function click(record, item) {
-      if (onColumnClick && item && onColumnClick[item.name]) {
-        request(record, {
-          action: onColumnClick[item.name]
-        });
-      }
-    };
-    return properties === null || properties === void 0 ? void 0 : properties.map(function (item, idx) {
-      if (item.type === "object" || item.type === "document") {
-        var fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
-        var display = function display(_display3) {
-          if (_display3.fields) {
-            return _display3;
-          }
-        };
-        return {
-          title: item.label,
-          render: function render(text, record, index) {
-            return /*#__PURE__*/React__default.createElement("div", {
-              style: onColumnClick && onColumnClick[item.name] ? {
-                cursor: "pointer",
-                color: "#1890ff"
-              } : {},
-              onClick: function onClick() {
-                return click(record, item);
-              }
-            }, getDisplay(record[uncapitalize(item.name)], display(item.relation.display) || display(fieldMeta.display), fieldMeta, meta));
-          }
-        };
-      }
-      return {
-        title: item.label,
-        render: function render(text, record, index) {
-          return /*#__PURE__*/React__default.createElement("div", {
-            style: onColumnClick && onColumnClick[item.name] ? {
-              cursor: "pointer",
-              color: "#1890ff"
-            } : {},
-            onClick: function onClick() {
-              return click(record, item);
-            }
-          }, getFormatFieldValueTableView(record[uncapitalize(item.name)], item.type, item));
-        }
-      };
-    });
-  };
-}
-function isRequired(item) {
-  if (item && item.validators) {
-    return item.validators.required || item.required;
-  }
-  return false;
-}
-function validator(func, message) {
-  return {
-    validator: function validator(_, value) {
-      if (func(value)) {
-        return Promise.resolve();
-      }
-      return Promise.reject(new Error(message));
-    }
-  };
-}
-function formItemRules(item) {
-  var res = [];
-  if (item && item.validators) {
-    if (lodash.isArray(item.validators)) {
-      for (var i = 0; i < item.validators.length; i++) {
-        var _validator = item.validators[i];
-        if (_validator.func) {
-          res.push(validator(_validator.func, _validator.message));
-        } else {
-          res.push(_validator);
-        }
-      }
-    } else if (lodash.isObject(item.validators)) {
-      var _item$validators, _item$validators2, _item$validators3, _item$validators4, _item$validators5, _item$validators6, _item$validators7, _item$validators8, _item$validators1, _item$validators10, _item$validators13;
-      if (isRequired(item) === true) {
-        res.push({
-          required: true,
-          message: 'Укажите ' + item.label.toLowerCase() + '!'
-        });
-      }
-      if ((item === null || item === void 0 ? void 0 : (_item$validators = item.validators) === null || _item$validators === void 0 ? void 0 : _item$validators.email) !== undefined && (item === null || item === void 0 ? void 0 : (_item$validators2 = item.validators) === null || _item$validators2 === void 0 ? void 0 : _item$validators2.email) !== null && (item === null || item === void 0 ? void 0 : (_item$validators3 = item.validators) === null || _item$validators3 === void 0 ? void 0 : _item$validators3.email) === true) {
-        res.push({
-          type: "email",
-          message: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0430\u0434\u0440\u0435\u0441\u043E\u043C \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u043E\u0439 \u043F\u043E\u0447\u0442\u044B!"
-        });
-      }
-      if ((item === null || item === void 0 ? void 0 : (_item$validators4 = item.validators) === null || _item$validators4 === void 0 ? void 0 : _item$validators4.url) !== undefined && (item === null || item === void 0 ? void 0 : (_item$validators5 = item.validators) === null || _item$validators5 === void 0 ? void 0 : _item$validators5.url) !== null && (item === null || item === void 0 ? void 0 : (_item$validators6 = item.validators) === null || _item$validators6 === void 0 ? void 0 : _item$validators6.url) === true) {
-        res.push({
-          type: "url",
-          message: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0434\u043E\u043B\u0436\u043D\u043E URL \u0430\u0434\u0440\u0435\u0441\u043E\u043C (\u043D\u0430\u0447\u0438\u043D\u0430\u0435\u0442\u0441\u044F \u0441 http:// \u0438\u043B\u0438 https:// )!"
-        });
-      }
-      if ((item === null || item === void 0 ? void 0 : (_item$validators7 = item.validators) === null || _item$validators7 === void 0 ? void 0 : _item$validators7.max) !== undefined && (item === null || item === void 0 ? void 0 : (_item$validators8 = item.validators) === null || _item$validators8 === void 0 ? void 0 : _item$validators8.max) !== null) {
-        var _item$validators9, _item$validators0;
-        res.push({
-          type: (item === null || item === void 0 ? void 0 : item.type) == "string" || (item === null || item === void 0 ? void 0 : item.type) == "text" ? "string" : "number",
-          max: item === null || item === void 0 ? void 0 : (_item$validators9 = item.validators) === null || _item$validators9 === void 0 ? void 0 : _item$validators9.max,
-          message: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u043D\u0435 \u0431\u043E\u043B\u044C\u0448\u0435 " + (item === null || item === void 0 ? void 0 : (_item$validators0 = item.validators) === null || _item$validators0 === void 0 ? void 0 : _item$validators0.max) + ((item === null || item === void 0 ? void 0 : item.type) == "string" ? " символов" : "") + "!"
-        });
-      }
-      if ((item === null || item === void 0 ? void 0 : (_item$validators1 = item.validators) === null || _item$validators1 === void 0 ? void 0 : _item$validators1.min) !== undefined && (item === null || item === void 0 ? void 0 : (_item$validators10 = item.validators) === null || _item$validators10 === void 0 ? void 0 : _item$validators10.min) !== null) {
-        var _item$validators11, _item$validators12;
-        res.push({
-          type: (item === null || item === void 0 ? void 0 : item.type) == "string" || (item === null || item === void 0 ? void 0 : item.type) == "text" ? "string" : "number",
-          min: item === null || item === void 0 ? void 0 : (_item$validators11 = item.validators) === null || _item$validators11 === void 0 ? void 0 : _item$validators11.min,
-          message: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u043D\u0435 \u043C\u0435\u043D\u044C\u0448\u0435 " + (item === null || item === void 0 ? void 0 : (_item$validators12 = item.validators) === null || _item$validators12 === void 0 ? void 0 : _item$validators12.mix) + ((item === null || item === void 0 ? void 0 : item.type) == "string" ? " символов" : "") + "!"
-        });
-      }
-      if (item !== null && item !== void 0 && (_item$validators13 = item.validators) !== null && _item$validators13 !== void 0 && _item$validators13.pattern) {
-        var _item$validators14, _item$validators15;
-        res.push({
-          pattern: item === null || item === void 0 ? void 0 : (_item$validators14 = item.validators) === null || _item$validators14 === void 0 ? void 0 : _item$validators14.pattern,
-          message: "\u0417\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u0434\u043E\u043B\u0436\u043D\u043E \u0441\u043E\u043E\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u043E\u0432\u0430\u0442\u044C \u0448\u0430\u0431\u043B\u043E\u043D\u0443 " + (item === null || item === void 0 ? void 0 : (_item$validators15 = item.validators) === null || _item$validators15 === void 0 ? void 0 : _item$validators15.pattern) + "!"
-        });
-      }
-    }
-  }
-  return res;
-}
-
-// A type of promise-like that resolves synchronously and supports only one observer
-
-const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
-
-const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
-
-// Asynchronously call a function and send errors to recovery continuation
-function _catch(body, recover) {
-	try {
-		var result = body();
-	} catch(e) {
-		return recover(e);
-	}
-	if (result && result.then) {
-		return result.then(void 0, recover);
-	}
-	return result;
-}
-
-var WSocket = /*#__PURE__*/function (_React$Component) {
-  function WSocket(props) {
-    var _this;
-    _this = _React$Component.call(this, props) || this;
-    _this.state = {
-      ws: {}
-    };
-    _this.open = _this.open.bind(_this);
-    return _this;
-  }
-  _inheritsLoose(WSocket, _React$Component);
-  var _proto = WSocket.prototype;
-  _proto.open = function open(url, wsName, onmessage_callback, onopen_callback, onclose_callback, onerror_callback) {
-    try {
-      var _temp3 = function _temp3() {
-        var ws = new WebSocket(url);
-        ws.onmessage = onmessage_callback;
-        ws.onerror = onerror_callback;
-        ws.onopen = function () {
-          var _extends2;
-          context.state = _extends({}, context.state, {
-            ws: _extends({}, context.state.ws, (_extends2 = {}, _extends2[wsName] = {
-              socket: ws
-            }, _extends2))
-          });
-          console.log("Установлено соединение с идентификатором " + wsName);
-          if (onopen_callback) onopen_callback();
-        };
-        ws.onclose = function (event) {
-          var _extends3;
-          context.state = _extends({}, context.state, {
-            ws: _extends({}, context.state.ws, (_extends3 = {}, _extends3[wsName] = {
-              socket: undefined
-            }, _extends3))
-          });
-          if (event.wasClean) {} else {
-            setTimeout(function () {
-              context.open.call(context, url, wsName, onmessage_callback, onopen_callback, onclose_callback, onerror_callback);
-            }, 5000);
-          }
-          if (onclose_callback) onclose_callback(event);
-        };
-        ws.onerror = function (error) {};
-        return Promise.resolve(1);
-      };
-      var _this2 = this;
-      var context = _this2;
-      var auth = _this2.props.auth;
-      if (_this2.state.ws[wsName] && _this2.state.ws[wsName].cancelConnect) {
-        console.warn("Отмена открытия соединения с идентификатором " + wsName);
-        return Promise.resolve(1);
-      }
-      if (_this2.state.ws[wsName] && _this2.state.ws[wsName].socket && _this2.state.ws[wsName].socket.send) {
-        console.error("Соединение с идентификатором " + wsName + " уже существует");
-        return Promise.resolve(1);
-      }
-      var _temp2 = function () {
-        if (auth.keepAlive) {
-          var _temp = _catch(function () {
-            return Promise.resolve(auth.fetch(auth.keepAlive)).then(function () {});
-          }, function () {});
-          if (_temp && _temp.then) return _temp.then(function () {});
-        }
-      }();
-      return Promise.resolve(_temp2 && _temp2.then ? _temp2.then(_temp3) : _temp3(_temp2));
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-  _proto.close = function close(wsName, cancelConnect) {
-    var _extends4;
-    if (cancelConnect === void 0) {
-      cancelConnect = true;
-    }
-    console.log("Закрываем соединение " + wsName);
-    if (this.state.ws[wsName] && this.state.ws[wsName].socket && this.state.ws[wsName].socket.close) {
-      this.state.ws[wsName].socket.close(4100, "Client close WSocket");
-    } else {
-      console.error("Не найдено соединение с идентификатором " + wsName);
-    }
-    this.setState({
-      ws: _extends({}, this.state.ws, (_extends4 = {}, _extends4[wsName] = {
-        cancelConnect: cancelConnect
-      }, _extends4))
-    });
-  };
-  _proto.send = function send(wsName, data) {
-    if (this.state.ws[wsName] && this.state.ws[wsName].socket && this.state.ws[wsName].socket.send) {
-      this.state.ws[wsName].socket.send(data);
-    } else {
-      console.error("Не найдено соединение с идентификатором " + wsName);
-    }
-  };
-  return WSocket;
-}(React__default.Component);
-
-var js_cookie = createCommonjsModule(function (module, exports) {
-(function (global, factory) {
-   module.exports = factory() ;
-})(commonjsGlobal, (function () {
-  /* eslint-disable no-var */
-  function assign (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        target[key] = source[key];
-      }
-    }
-    return target
-  }
-  /* eslint-enable no-var */
-
-  /* eslint-disable no-var */
-  var defaultConverter = {
-    read: function (value) {
-      if (value[0] === '"') {
-        value = value.slice(1, -1);
-      }
-      return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent)
-    },
-    write: function (value) {
-      return encodeURIComponent(value).replace(
-        /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
-        decodeURIComponent
-      )
-    }
-  };
-  /* eslint-enable no-var */
-
-  /* eslint-disable no-var */
-
-  function init (converter, defaultAttributes) {
-    function set (name, value, attributes) {
-      if (typeof document === 'undefined') {
-        return
-      }
-
-      attributes = assign({}, defaultAttributes, attributes);
-
-      if (typeof attributes.expires === 'number') {
-        attributes.expires = new Date(Date.now() + attributes.expires * 864e5);
-      }
-      if (attributes.expires) {
-        attributes.expires = attributes.expires.toUTCString();
-      }
-
-      name = encodeURIComponent(name)
-        .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
-        .replace(/[()]/g, escape);
-
-      var stringifiedAttributes = '';
-      for (var attributeName in attributes) {
-        if (!attributes[attributeName]) {
-          continue
-        }
-
-        stringifiedAttributes += '; ' + attributeName;
-
-        if (attributes[attributeName] === true) {
-          continue
-        }
-
-        // Considers RFC 6265 section 5.2:
-        // ...
-        // 3.  If the remaining unparsed-attributes contains a %x3B (";")
-        //     character:
-        // Consume the characters of the unparsed-attributes up to,
-        // not including, the first %x3B (";") character.
-        // ...
-        stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
-      }
-
-      return (document.cookie =
-        name + '=' + converter.write(value, name) + stringifiedAttributes)
-    }
-
-    function get (name) {
-      if (typeof document === 'undefined' || (arguments.length && !name)) {
-        return
-      }
-
-      // To prevent the for loop in the first place assign an empty array
-      // in case there are no cookies at all.
-      var cookies = document.cookie ? document.cookie.split('; ') : [];
-      var jar = {};
-      for (var i = 0; i < cookies.length; i++) {
-        var parts = cookies[i].split('=');
-        var value = parts.slice(1).join('=');
-
-        try {
-          var found = decodeURIComponent(parts[0]);
-          jar[found] = converter.read(value, found);
-
-          if (name === found) {
-            break
-          }
-        } catch (e) {}
-      }
-
-      return name ? jar[name] : jar
-    }
-
-    return Object.create(
-      {
-        set,
-        get,
-        remove: function (name, attributes) {
-          set(
-            name,
-            '',
-            assign({}, attributes, {
-              expires: -1
-            })
-          );
-        },
-        withAttributes: function (attributes) {
-          return init(this.converter, assign({}, this.attributes, attributes))
-        },
-        withConverter: function (converter) {
-          return init(assign({}, this.converter, converter), this.attributes)
-        }
-      },
-      {
-        attributes: { value: Object.freeze(defaultAttributes) },
-        converter: { value: Object.freeze(converter) }
-      }
-    )
-  }
-
-  var api = init(defaultConverter, { path: '/' });
-  /* eslint-enable no-var */
-
-  return api;
-
-}));
-});
-
-var AuthService = /*#__PURE__*/function () {
-  function AuthService(domain) {
-    this.fetchRfToken = configureRefreshFetch(this);
-    this.ws = new WSocket({
-      auth: this
-    });
-    this._port = process.env.REACT_APP_PORT ? ":" + process.env.REACT_APP_PORT : "";
-    this._portws = process.env.REACT_APP_PORTWS ? ":" + process.env.REACT_APP_PORTWS : "";
-    this._domainParam = domain;
-    this.schemws = process.env.REACT_APP_SCHEMWS || "ws";
-    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || "http";
-    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp;
-    this.appProfile = process.env.REACT_APP_PROFILE || "dev";
-    this.publicMode = false;
-    this.setPublicMode = this.setPublicMode.bind(this);
-    this.keepAlive = "";
-    this.setKeepAlive = this.setKeepAlive.bind(this);
-    this.fetch = this.fetch.bind(this);
-    this.fetchRfToken = this.fetchRfToken.bind(this);
-    this.login = this.login.bind(this);
-    this.refresh = this.refresh.bind(this);
-    this.loginLink = this.loginLink.bind(this);
-    this.logoutLink = this.logoutLink.bind(this);
-    this.logoutAllLink = this.logoutAllLink.bind(this);
-    this.redirect = this.redirect.bind(this);
-    this.signup = this.signup.bind(this);
-    this.getProfile = this.getProfile.bind(this);
-    this._checkStatus = this._checkStatus.bind(this);
-    this.PerformanceStart = this.PerformanceStart.bind(this);
-    this.getPerformance = this.getPerformance.bind(this);
-    this.getCookies = this.getCookies.bind(this);
-    this.getCookie = this.getCookie.bind(this);
-    this.getCity = this.getCity.bind(this);
-    this.utf8_to_b64 = this.utf8_to_b64.bind(this);
-    this.b64_to_utf8 = this.b64_to_utf8.bind(this);
-    this.performance = new Map();
-  }
-  var _proto = AuthService.prototype;
-  _proto.getDomainWithoutSubdomain = function getDomainWithoutSubdomain(url) {
-    var urlParts = new URL(url).hostname.split('.');
-    return urlParts.slice(0).slice(-(urlParts.length === 4 ? 3 : 2)).join('.');
-  };
-  _proto.utf8_to_b64 = function utf8_to_b64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  };
-  _proto.b64_to_utf8 = function b64_to_utf8(str) {
-    return decodeURIComponent(escape(atob(str)));
-  };
-  _proto.getCity = function getCity() {
-    var c = js_cookie.get("city");
-    if (c) {
-      try {
-        var ce = this.b64_to_utf8(c);
-        var _ce$split = ce.split('@'),
-          ID = _ce$split[0],
-          name = _ce$split[1],
-          region = _ce$split[2],
-          latitude = _ce$split[3],
-          longitude = _ce$split[4];
-        var IDi = parseInt(ID, 10);
-        if (ID && name && region) {
-          return {
-            ID: !isNaN(IDi) ? IDi : undefined,
-            name: name,
-            region: region,
-            latitude: latitude,
-            longitude: longitude
-          };
-        }
-      } catch (error) {}
-    }
-    return;
-  };
-  _proto.getCookies = function getCookies() {
-    var result = {};
-    var cookies = document.cookie.split("; ");
-    for (var i = 0; i < cookies.length; i++) {
-      var spl = cookies[i].split("=");
-      result[spl[0]] = spl[1];
-    }
-    return result;
-  };
-  _proto.getCookie = function getCookie(name) {
-    var result = this.getCookies();
-    return result[name];
-  };
-  _proto.getPerformance = function getPerformance() {
-    return this.performance;
-  };
-  _proto.PerformanceStart = function PerformanceStart(path) {
-    var _this = this;
-    var start = performance.now();
-    var endCallback = function endCallback() {
-      var end = performance.now();
-      if (_this.performance.has(path)) {
-        var prev = _this.performance.get(path);
-        _this.performance.set(path, {
-          last: dayjs_min(new Date()).format(),
-          delta: end - start,
-          avg: Math.abs(end - start + prev.avg) / 2
-        });
-      } else {
-        _this.performance.set(path, {
-          last: dayjs_min(new Date()).format(),
-          delta: end - start,
-          avg: end - start
-        });
-      }
-    };
-    return endCallback;
-  };
-  _proto.openSocket = function openSocket(path, name, onmessage, onopen, onclose, onerror) {
-    if (this.ws.state.ws[name]) {
-      this.ws.close(name, false);
-    }
-    this.ws.open(this.schemws + "://" + this.Hostnamews + path, name, function (e) {
-      try {
-        var message = JSON.parse(e.data);
-        onmessage(message.type, message.payload);
-      } catch (ex) {}
-    }, onopen, onclose, onerror);
-  };
-  _proto.closeSocket = function closeSocket(name) {
-    this.ws.close(name);
-  };
-  _proto.redirect = function redirect(res) {
-    if (typeof window === 'undefined') return;
-    var nurl = new URL(window.location.href);
-    var refUrl = nurl.searchParams.get("service");
-    if (refUrl) {
-      window.location.href = refUrl;
-      return;
-    }
-    if (res.user.roleUser && res.user.roleUser.length) {
-      for (var i = 0; i < res.user.roleUser.length; i++) {
-        res.user.roleUser.sort(function (a, b) {
-          return a.role.priority - b.role.priority;
-        });
-        if (res.user.roleUser[i].roleID === 1 || res.user.roleUser[i].roleID === 2) {
-          window.location.href = "/";
-        } else {
-          window.location.href = this.schemhttp + "://" + this.getDomainWithoutSubdomain(window.location.href);
-          return;
-        }
-      }
-    }
-    window.location.href = this.schemhttp + "://" + this.getDomainWithoutSubdomain(window.location.href);
-  };
-  _proto.login = function login(email, password) {
-    var _this2 = this;
-    return this.fetch("/api/login", {
-      method: 'POST',
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    }).then(function (res) {
-      if (res && res.user) {
-        localStorage.setItem('iam', res.user.ID);
-        _this2.redirect(res);
-      } else {
-        return Promise.resolve(res);
-      }
-    });
-  };
-  _proto.signup = function signup(data) {
-    data.genderID = +data.genderID;
-    data.regionID = +data.regionID;
-    data.cityID = +data.cityID;
-    data.tipTelefonaID = +data.tipTelefonaID;
-    return this.fetch("/api/signup", {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }).then(function (res) {
-      if (res && res.user) {
-        localStorage.setItem('iam', res.user.ID);
-      }
-      return Promise.resolve(res);
-    });
-  };
-  _proto.forgotPassword = function forgotPassword(data) {
-    return this.fetch("/api/forgot-password", {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }).then(function (res) {
-      return Promise.resolve(res);
-    });
-  };
-  _proto.resetPassword = function resetPassword(data) {
-    if (typeof window === 'undefined') return Promise.reject(new Error('resetPassword requires browser environment'));
-    var nurl = new URL(window.location.href);
-    var token = nurl.searchParams.get("token");
-    return this.fetch("/api/reset-password?token=" + token, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    }).then(function (res) {
-      return Promise.resolve(res);
-    });
-  };
-  _proto.loggedIn = function loggedIn() {
-    var token = this.getToken();
-    var refreshToken = this.getCookie("refreshToken");
-    return !!token && !this.isTokenExpired(token) || !!refreshToken && !this.isTokenExpired(refreshToken);
-  };
-  _proto.isTokenExpired = function isTokenExpired(token) {
-    try {
-      var decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else return false;
-    } catch (err) {
-      return false;
-    }
-  };
-  _proto.getToken = function getToken() {
-    return this.getCookie("token");
-  };
-  _proto.logout = function logout(cb) {
-    if (typeof window === 'undefined') return;
-    window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logout?service=" + window.location.href;
-  };
-  _proto.logoutall = function logoutall(cb) {
-    if (typeof window === 'undefined') return;
-    window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logoutall?service=" + window.location.href;
-  };
-  _proto.refresh = function refresh(location) {
-    if (typeof window === 'undefined') return;
-    var l = location || window.location.href;
-    window.location.href = l;
-  };
-  _proto.loginLink = function loginLink(location) {
-    if (typeof window === 'undefined') return '';
-    var l = location || window.location.href;
-    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/login?service=" + l;
-  };
-  _proto.logoutLink = function logoutLink(location) {
-    if (typeof window === 'undefined') return '';
-    var l = location || window.location.href;
-    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/logout?service=" + l;
-  };
-  _proto.logoutAllLink = function logoutAllLink(location) {
-    if (typeof window === 'undefined') return '';
-    var l = location || window.location.href;
-    return this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(l) + "/logoutall?service=" + l;
-  };
-  _proto.getProfile = function getProfile() {
-    return decode(this.getToken());
-  };
-  _proto.setPublicMode = function setPublicMode(value) {
-    this.publicMode = value;
-  };
-  _proto.setKeepAlive = function setKeepAlive(value) {
-    this.keepAlive = value;
-  };
-  _proto.fetchRaw = function fetchRaw(url, options) {
-    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
-    if (this.loggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken();
-    }
-    var end = this.PerformanceStart(url);
-    return this.fetchRfToken(this.domain + url, _extends({}, options, {
-      headers: headers
-    })).then(this._checkStatus).then(function (response) {
-      if (end) {
-        end();
-      }
-      return response;
-    });
-  };
-  _proto.fetchFile = function fetchFile(url, options) {
-    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
-    if (this.loggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken();
-    }
-    var end = this.PerformanceStart(url);
-    return this.fetchRfToken(this.domain + url, _extends({}, options, {
-      headers: headers
-    })).then(this._checkStatus).then(function (res) {
-      if (end) {
-        end();
-      }
-      if (res.headers.get("Content-Type") == "application/json") {
-        res.json().then(function (jData) {
-          if (jData && !jData.status) {
-            var notifier = getNotifier();
-            if (notifier !== null && notifier !== void 0 && notifier.error) notifier.error(jData.message);else console.error(jData.message);
-            return;
-          }
-        });
-      } else {
-        res.blob().then(function (blob) {
-          if (typeof window === 'undefined') return;
-          var url = window.URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = url;
-          var fname = res.headers.get("x-filename") || "";
-          a.download = decodeURI(fname.replace(/^\"+|\"+$/g, ''));
-          a.click();
-        });
-      }
-    });
-  };
-  _proto.fetchForData = function fetchForData(url, options) {
-    var headers = _extends({}, options === null || options === void 0 ? void 0 : options.headers);
-    if (this.loggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken();
-    }
-    var end = this.PerformanceStart(url);
-    return this.fetchRfToken(this.domain + url, _extends({}, options, {
-      headers: headers
-    })).then(this._checkStatus).then(function (response) {
-      if (end) {
-        end();
-      }
-      return response.json();
-    }).then(function (res) {
-      return Promise.resolve(res);
-    });
-  };
-  _proto.fetch = function fetch(url, options) {
-    var headers = _extends({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }, options === null || options === void 0 ? void 0 : options.headers);
-    if (this.loggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken();
-    }
-    var end = this.PerformanceStart(url);
-    return this.fetchRfToken(this.domain + url, _extends({}, options, {
-      headers: headers
-    })).then(this._checkStatus).then(function (response) {
-      if (end) {
-        end();
-      }
-      return response.json();
-    }).then(function (res) {
-      return Promise.resolve(res);
-    });
-  };
-  _proto._checkStatus = function _checkStatus(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return response;
-    } else if (response.status == 401 && response.headers.get('x-authenticate-error') == 'NeedLogin') {
-      if (typeof window !== 'undefined') {
-        if (this.publicMode) {
-          if (this.getCookie("token") || this.getCookie("refreshToken")) {
-            js_cookie.remove("token", {
-              domain: this.getDomainWithoutSubdomain(window.location.href)
-            });
-            js_cookie.remove("refreshToken", {
-              domain: this.getDomainWithoutSubdomain(window.location.href)
-            });
-            window.location.href = window.location.href;
-          } else {
-            return response;
-          }
-        } else {
-          window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
-        }
-      }
-      return response;
-    } else if (response.status == 403) {
-      console.error(response.status, "Доступ запрещен", response.url);
-      return response;
-    } else {
-      var error = new Error(response.statusText);
-      error.response = response;
-      throw error;
-    }
-  };
-  return _createClass(AuthService, [{
-    key: "Hostname",
-    get: function get() {
-      return typeof window !== 'undefined' ? window.location.hostname + this._port || "localhost:3000" : "localhost" + this._port;
-    }
-  }, {
-    key: "Hostnamews",
-    get: function get() {
-      return typeof window !== 'undefined' ? window.location.hostname + this._portws || "localhost:8480" : "localhost" + this._portws;
-    }
-  }, {
-    key: "domain",
-    get: function get() {
-      return this._domainParam || this.schemhttp + '://' + this.Hostname;
-    }
-  }]);
-}();
-var XAuthContext = React.createContext(null);
-var NavigationContext = React.createContext(null);
-function AuthProvider(_ref) {
-  var children = _ref.children,
-    publicMode = _ref.publicMode,
-    keepAlive = _ref.keepAlive;
-  var auth = new AuthService();
-  auth.setPublicMode(publicMode);
-  auth.setKeepAlive(keepAlive);
-  return /*#__PURE__*/React__default.createElement(XAuthContext.Provider, {
-    value: auth
-  }, children);
-}
-function useAuth() {
-  var auth = React.useContext(XAuthContext);
-  return auth;
-}
-function useNavigation() {
-  var navigation = React.useContext(NavigationContext);
-  return navigation;
-}
-function RequireAuth(_ref2) {
-  var children = _ref2.children,
-    inline = _ref2.inline;
-  var auth = useAuth();
-  auth.setPublicMode(true);
-  var navigate = reactRouterDom.useNavigate();
-  if (!auth.loggedIn()) {
-    if (inline) {
-      return inline;
-    }
-    if (typeof window !== 'undefined') {
-      window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
-    }
-  }
-  return /*#__PURE__*/React__default.createElement(NavigationContext.Provider, {
-    value: navigate
-  }, children);
-}
-function configureRefreshFetch(auth) {
-  var refreshingTokenPromise = null;
-  var customFetch = function customFetch(url, options) {
-    if (refreshingTokenPromise !== null) {
-      return refreshingTokenPromise.then(function () {
-        if (options && options.headers && options.headers['Authorization']) {
-          options.headers['Authorization'] = 'Bearer ' + auth.getToken();
-        }
-        return __fetch(url, options);
-      })["catch"](function () {
-        if (options && options.headers && options.headers['Authorization']) {
-          options.headers['Authorization'] = 'Bearer ' + auth.getToken();
-        }
-        return __fetch(url, options);
-      });
-    }
-    return __fetch(url, options).then(function (response) {
-      var xAuthError = response.headers.get('x-authenticate-error');
-      if (response.status == 401 && xAuthError != 'NeedLogin') {
-        if (refreshingTokenPromise === null) {
-          refreshingTokenPromise = new Promise(function (resolve, reject) {
-            __fetch("/api/refresh-token", {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + auth.getToken()
-              },
-              body: JSON.stringify({
-                refreshToken: js_cookie.get("refreshToken")
-              })
-            }).then(function (response) {
-              var xAuthError = response.headers.get('x-authenticate-error');
-              if (response.status == 401 && xAuthError == 'NeedLogin') {
-                if (typeof window !== 'undefined') {
-                  if (auth.publicMode) {
-                    if (auth.getCookie("token") || auth.getCookie("refreshToken")) {
-                      js_cookie.remove("token", {
-                        domain: auth.getDomainWithoutSubdomain(window.location.href)
-                      });
-                      js_cookie.remove("refreshToken", {
-                        domain: auth.getDomainWithoutSubdomain(window.location.href)
-                      });
-                      window.location.href = window.location.href;
-                    } else {
-                      return response;
-                    }
-                  } else {
-                    window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
-                  }
-                }
-                return;
-              }
-              refreshingTokenPromise = null;
-              resolve();
-            })["catch"](function (error) {
-              refreshingTokenPromise = null;
-              reject(error);
-            });
-          });
-        }
-        return refreshingTokenPromise["catch"](function () {
-          throw error;
-        }).then(function () {
-          if (options && options.headers && options.headers['Authorization']) {
-            options.headers['Authorization'] = 'Bearer ' + auth.getToken();
-          }
-          return __fetch(url, options);
-        });
-      } else if (response.status == 401 && xAuthError == 'NeedLogin') {
-        if (typeof window !== 'undefined') {
-          if (auth.publicMode) {
-            if (auth.getCookie("token") || auth.getCookie("refreshToken")) {
-              js_cookie.remove("token", {
-                domain: auth.getDomainWithoutSubdomain(window.location.href)
-              });
-              js_cookie.remove("refreshToken", {
-                domain: auth.getDomainWithoutSubdomain(window.location.href)
-              });
-              window.location.href = window.location.href;
-            } else {
-              return response;
-            }
-          } else {
-            window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
-          }
-        }
-        return;
-      }
-      return response;
-    });
-  };
-  if (typeof window !== 'undefined') {
-    if (window.fetch.toString() != customFetch.toString()) {
-      window.__fetch = fetch;
-      window.fetch = customFetch;
-    }
-    return window.fetch;
-  }
-  return typeof globalThis !== 'undefined' ? globalThis.fetch : fetch;
 }
 
 var UserContext = React.createContext();
@@ -19997,14 +18641,14 @@ function MetaProvider(_ref) {
   }, (ready || !auth.loggedIn()) && children);
 }
 
-function isRequired$1(item) {
+function isRequired(item) {
   if (item && item.validators) {
     return item.validators.required || item.required;
   }
   return false;
 }
 
-function validator$1(func, message) {
+function validator(func, message) {
   return {
     validator: function validator(_, value) {
       if (func(value)) {
@@ -20015,21 +18659,21 @@ function validator$1(func, message) {
   };
 }
 
-function formItemRules$1(item) {
+function formItemRules(item) {
   var res = [];
   if (item && item.validators) {
     if (lodash.isArray(item.validators)) {
       for (var i = 0; i < item.validators.length; i++) {
         var _validator = item.validators[i];
         if (_validator.func) {
-          res.push(validator$1(_validator.func, _validator.message));
+          res.push(validator(_validator.func, _validator.message));
         } else {
           res.push(_validator);
         }
       }
     } else if (lodash.isObject(item.validators)) {
       var _item$validators, _item$validators2, _item$validators3, _item$validators4, _item$validators5, _item$validators6, _item$validators7, _item$validators8, _item$validators1, _item$validators10, _item$validators13;
-      if (isRequired$1(item) === true) {
+      if (isRequired(item) === true) {
         res.push({
           required: true,
           message: 'Укажите ' + item.label.toLowerCase() + '!'
@@ -20078,10 +18722,10 @@ function formItemRules$1(item) {
 
 
 var index$1 = {
-	__proto__: null,
-	isRequired: isRequired$1,
-	validator: validator$1,
-	formItemRules: formItemRules$1
+  __proto__: null,
+  isRequired: isRequired,
+  validator: validator,
+  formItemRules: formItemRules
 };
 
 var FieldCore = /*#__PURE__*/function () {
@@ -20096,10 +18740,10 @@ var FieldCore = /*#__PURE__*/function () {
     return ((_this$meta = this.meta) === null || _this$meta === void 0 ? void 0 : _this$meta.type) || 'string';
   };
   _proto.getValidationRules = function getValidationRules() {
-    return formItemRules$1(this.meta);
+    return formItemRules(this.meta);
   };
-  _proto.isRequired = function isRequired() {
-    return isRequired$1(this.meta);
+  _proto.isRequired = function isRequired$1() {
+    return isRequired(this.meta);
   };
   _proto.formatValue = function formatValue(value) {
     var type = this.getFieldType();
@@ -20952,11 +19596,11 @@ function FieldMobileRenderer(props) {
   }, renderField()));
 }
 
-function GetMeta$1(meta) {
+function GetMeta(meta) {
   if (meta && meta !== null && typeof meta === "function") {
     var m = meta();
     if (m && m !== null && typeof m === "function") {
-      return GetMeta$1(m);
+      return GetMeta(m);
     } else if (typeof m === "object") {
       return m;
     }
@@ -20964,8 +19608,8 @@ function GetMeta$1(meta) {
   return meta;
 }
 
-function GetMetaProperties$1(meta, exclude) {
-  var xmeta = GetMeta$1(meta);
+function GetMetaProperties(meta, exclude) {
+  var xmeta = GetMeta(meta);
   if (typeof xmeta === "object" && !Array.isArray(xmeta)) {
     var p = xmeta.properties;
     if (p && exclude) {
@@ -20983,13 +19627,13 @@ function GetMetaProperties$1(meta, exclude) {
     console.warn("Не удалось определить метаданные из переданного параметра");
   }
 }
-function SetMetaProperties$1(meta, properties) {
+function SetMetaProperties(meta, properties) {
   return meta && lodash.isArray(meta) ? properties : _extends({}, meta, {
     properties: properties
   });
 }
-function GetMetaPropertyByPath$1(meta, obj, path) {
-  var properties = GetMetaProperties$1(obj);
+function GetMetaPropertyByPath(meta, obj, path) {
+  var properties = GetMetaProperties(obj);
   var array = path === null || path === void 0 ? void 0 : path.split(".");
   if (array && array.length > 1) {
     var _loop = function _loop() {
@@ -21003,7 +19647,7 @@ function GetMetaPropertyByPath$1(meta, obj, path) {
           var mnobj = meta[nobj];
           if (mnobj) {
             return {
-              v: GetMetaPropertyByPath$1(meta, mnobj, array.slice(1, array.length).join("."))
+              v: GetMetaPropertyByPath(meta, mnobj, array.slice(1, array.length).join("."))
             };
           }
         }
@@ -21055,7 +19699,7 @@ function metaGetFieldByName$1(metaObject, meta, fieldName) {
     }
   }
 }
-function getSortingDisplayFields$1(display, metaObject, meta, parent, result) {
+function getSortingDisplayFields(display, metaObject, meta, parent, result) {
   result = result || [];
   parent = parent || "";
   if (!display || !display.length || !metaObject) {
@@ -21079,7 +19723,7 @@ function getSortingDisplayFields$1(display, metaObject, meta, parent, result) {
       }
       if (lodash.get(metaField, "relation.reference.object") && meta[metaField.relation.reference.object]) {
         fieldMeta = meta[metaField.relation.reference.object];
-        getSortingDisplayFields$1(metaField.relation.display || fieldMeta.display, fieldMeta, meta, name_field, result);
+        getSortingDisplayFields(metaField.relation.display || fieldMeta.display, fieldMeta, meta, name_field, result);
       } else {
         result.push(name_field);
       }
@@ -21094,7 +19738,7 @@ function getSortingDisplayFields$1(display, metaObject, meta, parent, result) {
   return result;
 }
 
-function MetaColumns$1(properties, meta, onColumnClick) {
+function MetaColumns(properties, meta, onColumnClick) {
   return function (_ref) {
     var request = _ref.request;
     var click = function click(record, item) {
@@ -21148,15 +19792,15 @@ function MetaColumns$1(properties, meta, onColumnClick) {
 
 
 var index$2 = {
-	__proto__: null,
-	GetMeta: GetMeta$1,
-	GetMetaProperties: GetMetaProperties$1,
-	SetMetaProperties: SetMetaProperties$1,
-	GetMetaPropertyByPath: GetMetaPropertyByPath$1,
-	metaGetCloneObject: metaGetCloneObject$1,
-	metaGetFieldByName: metaGetFieldByName$1,
-	getSortingDisplayFields: getSortingDisplayFields$1,
-	MetaColumns: MetaColumns$1
+  __proto__: null,
+  GetMeta: GetMeta,
+  GetMetaProperties: GetMetaProperties,
+  SetMetaProperties: SetMetaProperties,
+  GetMetaPropertyByPath: GetMetaPropertyByPath,
+  metaGetCloneObject: metaGetCloneObject$1,
+  metaGetFieldByName: metaGetFieldByName$1,
+  getSortingDisplayFields: getSortingDisplayFields,
+  MetaColumns: MetaColumns
 };
 
 var _excluded = ["meta", "value", "onChange", "disabled", "readOnly", "placeholder", "label", "help", "tooltip", "className", "style", "forceMobile"];
@@ -21176,7 +19820,7 @@ var FieldComponent = function FieldComponent(props) {
     maxWidth: 768
   });
   var isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile;
-  var resolvedMeta = GetMeta$1(meta);
+  var resolvedMeta = GetMeta(meta);
   var fieldCore = React.useMemo(function () {
     return new FieldCore(_extends({
       value: value,
@@ -21215,7 +19859,7 @@ var arePropsEqual = function arePropsEqual(prevProps, nextProps) {
 };
 var Field = React.memo(FieldComponent, arePropsEqual);
 
-function getLocator$1(locator, obj) {
+function getLocator(locator, obj) {
   if (lodash.isObject(obj)) {
     var id = obj !== null && obj !== void 0 && obj.ID ? "ID" + (obj === null || obj === void 0 ? void 0 : obj.ID) : '';
     var uuid = obj !== null && obj !== void 0 && obj.uuid ? "UUID" + (obj === null || obj === void 0 ? void 0 : obj.uuid) : '';
@@ -21226,7 +19870,7 @@ function getLocator$1(locator, obj) {
     return (locator || '') + obj;
   } else return locator || '';
 }
-var LOCATOR_TYPES$1 = {
+var LOCATOR_TYPES = {
   BUTTON: 'button',
   INPUT: 'input',
   TEXTAREA: 'textarea',
@@ -21281,7 +19925,7 @@ var LOCATOR_TYPES$1 = {
   HEADER: 'header',
   FOOTER: 'footer'
 };
-var LOCATOR_ACTIONS$1 = {
+var LOCATOR_ACTIONS = {
   CLICK: 'click',
   DOUBLE_CLICK: 'double-click',
   RIGHT_CLICK: 'right-click',
@@ -21331,7 +19975,7 @@ var LOCATOR_ACTIONS$1 = {
   SHARE: 'share',
   REFRESH: 'refresh'
 };
-function getAILocator$1(id, value, options) {
+function getAILocator(id, value, options) {
   if (value === void 0) {
     value = null;
   }
@@ -21359,7 +20003,7 @@ function getAILocator$1(id, value, options) {
   return parts.join('-');
 }
 
-var _equals$1 = function equals(obj1, obj2) {
+var _equals = function equals(obj1, obj2) {
   if (obj1 === obj2) return true;
   if (!obj1 || !obj2 || typeof obj1 !== "object" || typeof obj2 !== "object") return false;
   if (typeof obj1 === "function") {
@@ -21376,7 +20020,7 @@ var _equals$1 = function equals(obj1, obj2) {
     var prop1 = obj1[property];
     var prop2 = obj2[property];
     if (typeof prop1 === "object") {
-      if (!_equals$1(prop1, prop2)) {
+      if (!_equals(prop1, prop2)) {
         return false;
       }
     } else if (typeof prop2 === "object") {
@@ -21388,15 +20032,15 @@ var _equals$1 = function equals(obj1, obj2) {
   return true;
 };
 
-var _unwrap$1 = function unwrap(value, element) {
+var _unwrap = function unwrap(value, element) {
   if (lodash.isFunction(value) == true) {
-    return _unwrap$1(value());
+    return _unwrap(value());
   } else if (lodash.isArray(value)) {
     return value;
   }
   return !element ? [value] : value;
 };
-var clean$1 = function clean(value, element) {
+var clean = function clean(value, element) {
   var _ref;
   if (lodash.isArray(value)) {
     return value === null || value === void 0 ? void 0 : value.filter(function (e) {
@@ -21407,15 +20051,15 @@ var clean$1 = function clean(value, element) {
     return e !== null && e !== undefined;
   }) : value;
 };
-var If$1 = function If(equations, truthful) {
-  return And$1(equations) ? _unwrap$1(truthful, true) : undefined;
+var If = function If(equations, truthful) {
+  return And(equations) ? _unwrap(truthful, true) : undefined;
 };
-var IfElse$1 = function IfElse(equations, truthful, untruthful) {
-  return And$1(equations) ? _unwrap$1(truthful, true) : _unwrap$1(untruthful, true);
+var IfElse = function IfElse(equations, truthful, untruthful) {
+  return And(equations) ? _unwrap(truthful, true) : _unwrap(untruthful, true);
 };
-var And$1 = function And(args) {
+var And = function And(args) {
   var acc = true;
-  var unwraped = _unwrap$1(args);
+  var unwraped = _unwrap(args);
   for (var i = 0; i < unwraped.length; i++) {
     var element = unwraped[i];
     acc = acc && element;
@@ -21423,9 +20067,9 @@ var And$1 = function And(args) {
   }
   return acc;
 };
-var Or$1 = function Or(args) {
+var Or = function Or(args) {
   var acc = true;
-  var unwraped = _unwrap$1(args);
+  var unwraped = _unwrap(args);
   for (var i = 0; i < unwraped.length; i++) {
     var element = unwraped[i];
     acc = acc || element;
@@ -21436,7 +20080,7 @@ var uncapitalize$1 = function uncapitalize(str) {
   return str.charAt(0).toLowerCase() + str.slice(1);
 };
 
-var arrayUnpack$1 = function arrayUnpack(values, field, target) {
+var arrayUnpack = function arrayUnpack(values, field, target) {
   var f = values[field];
   delete values[field];
   if (target && values) {
@@ -21446,14 +20090,14 @@ var arrayUnpack$1 = function arrayUnpack(values, field, target) {
   }
   return values;
 };
-var upgradeInArray$1 = function upgradeInArray(array, item) {
+var upgradeInArray = function upgradeInArray(array, item) {
   if (!item) return item;
   if (lodash.isArray(item)) {
     return item;
   }
   return [item];
 };
-var updateInArray$1 = function updateInArray(array, item, first) {
+var updateInArray = function updateInArray(array, item, first) {
   if (!array) array = [];
   if (!item || !item.ID) return array;
   if (lodash.findIndex(array, {
@@ -21461,16 +20105,16 @@ var updateInArray$1 = function updateInArray(array, item, first) {
   }) >= 0) {
     var _array;
     return (_array = array) === null || _array === void 0 ? void 0 : _array.map(function (e) {
-      return IfElse$1(e.ID === item.ID, item, e);
+      return IfElse(e.ID === item.ID, item, e);
     });
   } else {
     return first ? [item].concat(array) : [].concat(array, [item]);
   }
 };
-var createInArray$1 = function createInArray(array, item) {
-  return updateInArray$1(array, item);
+var createInArray = function createInArray(array, item) {
+  return updateInArray(array, item);
 };
-var deleteInArray$1 = function deleteInArray(array, item) {
+var deleteInArray = function deleteInArray(array, item) {
   var _array2;
   if (!array) array = [];
   if (!item || !item.ID) return array;
@@ -21478,61 +20122,61 @@ var deleteInArray$1 = function deleteInArray(array, item) {
     return e.ID !== item.ID;
   });
 };
-var triggerInArray$1 = function triggerInArray(array, item) {
+var triggerInArray = function triggerInArray(array, item) {
   if (array.find(function (x) {
     return x.ID === item.ID;
   }) !== undefined) {
-    return deleteInArray$1(array, item);
+    return deleteInArray(array, item);
   } else {
-    return updateInArray$1(array, item);
+    return updateInArray(array, item);
   }
 };
-var emptyInArray$1 = function emptyInArray(array, item) {
+var emptyInArray = function emptyInArray(array, item) {
   return [];
 };
-var undefinedInArray$1 = function undefinedInArray(array, item) {
+var undefinedInArray = function undefinedInArray(array, item) {
   return undefined;
 };
-var updateArrayInArray$1 = function updateArrayInArray(array, item) {
+var updateArrayInArray = function updateArrayInArray(array, item) {
   if (!array) array = [];
   if (lodash.isArray(item)) {
     var tmp = [].concat(array);
     for (var i = 0; i < item.length; i++) {
       var it = item[i];
-      tmp = updateInArray$1(tmp, it);
+      tmp = updateInArray(tmp, it);
     }
     return tmp;
   } else {
-    return updateInArray$1(array, item);
+    return updateInArray(array, item);
   }
 };
-var createArrayInArray$1 = function createArrayInArray(array, item) {
-  return updateArrayInArray$1(array, item);
+var createArrayInArray = function createArrayInArray(array, item) {
+  return updateArrayInArray(array, item);
 };
-var deleteArrayInArray$1 = function deleteArrayInArray(array, item) {
+var deleteArrayInArray = function deleteArrayInArray(array, item) {
   if (!array) array = [];
   if (lodash.isArray(item)) {
     var tmp = [].concat(array);
     for (var i = 0; i < item.length; i++) {
       var it = item[i];
-      tmp = deleteInArray$1(tmp, it);
+      tmp = deleteInArray(tmp, it);
     }
     return tmp;
   } else {
-    return deleteInArray$1(array, item);
+    return deleteInArray(array, item);
   }
 };
-var triggerArrayInArray$1 = function triggerArrayInArray(array, item) {
+var triggerArrayInArray = function triggerArrayInArray(array, item) {
   if (!array) array = [];
   if (lodash.isArray(item)) {
     var tmp = [].concat(array);
     for (var i = 0; i < item.length; i++) {
       var it = item[i];
-      tmp = triggerInArray$1(tmp, it);
+      tmp = triggerInArray(tmp, it);
     }
     return tmp;
   } else {
-    return triggerInArray$1(array, item);
+    return triggerInArray(array, item);
   }
 };
 
@@ -21583,7 +20227,7 @@ function getObjectValue$1(object, subObject) {
   }
   return object;
 }
-function getObjectValueOrDefault$1(object, subObject, defValue) {
+function getObjectValueOrDefault(object, subObject, defValue) {
   var result = getObjectValue$1(object, subObject);
   if (result === undefined || result === null) {
     if (defValue !== undefined) {
@@ -21593,7 +20237,7 @@ function getObjectValueOrDefault$1(object, subObject, defValue) {
   return result;
 }
 
-function getObjectDisplay$1(data, name, meta) {
+function getObjectDisplay(data, name, meta) {
   if (!name || !meta || !data) return undefined;
   var display = function display(_display) {
     if (_display !== null && _display !== void 0 && _display.fields) {
@@ -21603,7 +20247,7 @@ function getObjectDisplay$1(data, name, meta) {
   var metaObject = meta[name];
   return getDisplay$1(data, display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
 }
-function getFieldDisplay$1(data, propertyMeta, meta) {
+function getFieldDisplay(data, propertyMeta, meta) {
   var _propertyMeta$relatio;
   if (!propertyMeta || !meta || !data) return undefined;
   var display = function display(_display2) {
@@ -21655,7 +20299,7 @@ function getDisplay$1(data, display, metaObject, meta) {
   }
   return result;
 }
-function typeIsNumber$1(type) {
+function typeIsNumber(type) {
   return type === "int" || type === "integer" || type === "long" || type === "double" || type === "bigdecimal";
 }
 function getFormatFieldValueTableView$1(data, type, meta) {
@@ -21734,51 +20378,51 @@ var makeFormData$1 = function makeFormData(values) {
   }
   return formData;
 };
-var unpackFormFields$1 = function unpackFormFields(form, values) {
+var unpackFormFields = function unpackFormFields(form, values) {
   if (!form) return values;
   var fields = form.getFieldsValue();
   for (var name in fields) {
     if (name.startsWith("@")) {
       var _form$getFieldInstanc, _form$getFieldInstanc2;
       var flds = form === null || form === void 0 ? void 0 : (_form$getFieldInstanc = form.getFieldInstance(name)) === null || _form$getFieldInstanc === void 0 ? void 0 : (_form$getFieldInstanc2 = _form$getFieldInstanc.props) === null || _form$getFieldInstanc2 === void 0 ? void 0 : _form$getFieldInstanc2.fields;
-      values = arrayUnpack$1(values, name, flds);
+      values = arrayUnpack(values, name, flds);
     }
   }
   return values;
 };
-var preventDefault$1 = function preventDefault(e) {
+var preventDefault = function preventDefault(e) {
   e.preventDefault();
   e.stopPropagation();
 };
-var eventExecution$1 = function eventExecution(event, values, context) {
+var eventExecution = function eventExecution(event, values, context) {
   if (!event) return values;
   return event(values, context) || values;
 };
-var detectMutation$1 = function detectMutation(mutation) {
+var detectMutation = function detectMutation(mutation) {
   if (lodash.isFunction(mutation)) {
     return mutation;
   } else if (lodash.isString(mutation)) {
     switch (mutation) {
       case "upgrade":
-        return upgradeInArray$1;
+        return upgradeInArray;
       case "create":
-        return createInArray$1;
+        return createInArray;
       case "update":
-        return updateInArray$1;
+        return updateInArray;
       case "delete":
-        return deleteInArray$1;
+        return deleteInArray;
       case "empty":
-        return emptyInArray$1;
+        return emptyInArray;
       case "undefined":
-        return undefinedInArray$1;
+        return undefinedInArray;
       default:
-        return updateInArray$1;
+        return updateInArray;
     }
   }
-  return updateInArray$1;
+  return updateInArray;
 };
 
-function JSXMap$1(array, render) {
+function JSXMap(array, render) {
   if (!array) return React__default.createElement(React__default.Fragment);
   return array.map(function (e, idx) {
     return render(e, idx);
@@ -21799,19 +20443,19 @@ var QueryParams$1 = function QueryParams(queryParams) {
   }
   return ext;
 };
-var QueryFunc$1 = function QueryFunc(func, name) {
+var QueryFunc = function QueryFunc(func, name) {
   return "f-" + func + "-" + name;
 };
 var QueryParam$1 = function QueryParam(name, value) {
   return name + "=" + value;
 };
-var QueryOrder$1 = function QueryOrder(name, value) {
+var QueryOrder = function QueryOrder(name, value) {
   return "s-" + name + "=" + value;
 };
 var QueryDetail$1 = function QueryDetail(value) {
   return QueryParam$1("detail", value ? value : "none");
 };
-var ObjectToQueryParam$1 = function ObjectToQueryParam(object, method) {
+var ObjectToQueryParam = function ObjectToQueryParam(object, method) {
   var f = [];
   var array = Object.entries(object);
   for (var i = 0; i < array.length; i++) {
@@ -21824,19 +20468,19 @@ var ObjectToQueryParam$1 = function ObjectToQueryParam(object, method) {
   return f;
 };
 
-var contextFilterToObject$1 = function contextFilterToObject(contextFilters) {
+var contextFilterToObject = function contextFilterToObject(contextFilters) {
   var ctxFlt = {};
   if (contextFilters) {
     var ctx = [];
     if (lodash.isFunction(contextFilters)) {
-      ctx = clean$1(contextFilters());
+      ctx = clean(contextFilters());
     } else {
       ctx = contextFilters;
     }
     if (lodash.isArray(ctx)) {
       ctx.forEach(function (item) {
         if (item) {
-          var v = _queryFiltersToContextFilter$1(item);
+          var v = _queryFiltersToContextFilter(item);
           if (v !== null && v !== void 0 && v.name) {
             var _v$name, _v$name2;
             ctxFlt[(v === null || v === void 0 ? void 0 : (_v$name = v.name) === null || _v$name === void 0 ? void 0 : _v$name.toLowerCase()) + (v !== null && v !== void 0 && v.name && v !== null && v !== void 0 && (_v$name2 = v.name) !== null && _v$name2 !== void 0 && _v$name2.endsWith("ID") ? "" : "ID")] = v === null || v === void 0 ? void 0 : v.value;
@@ -21847,7 +20491,7 @@ var contextFilterToObject$1 = function contextFilterToObject(contextFilters) {
   }
   return ctxFlt;
 };
-var contextFilterToQueryFilters$1 = function contextFilterToQueryFilters(item) {
+var contextFilterToQueryFilters = function contextFilterToQueryFilters(item) {
   if (lodash.isObject(item)) {
     var keyName = item.name.endsWith('ID') === true && item.name.endsWith('.ID') !== true ? item.name.slice(0, -2) + ".ID" : item.name;
     return QueryParam$1("w-" + (item.method ? item.method + "-" : "eq-") + keyName, item.value);
@@ -21857,19 +20501,19 @@ var contextFilterToQueryFilters$1 = function contextFilterToQueryFilters(item) {
     return item;
   }
 };
-var ContextFiltersToQueryFilters$1 = function ContextFiltersToQueryFilters(contextFilters) {
+var ContextFiltersToQueryFilters = function ContextFiltersToQueryFilters(contextFilters) {
   var ctxFlt = [];
   if (contextFilters) {
     var ctx = [];
     if (lodash.isFunction(contextFilters)) {
-      ctx = clean$1(contextFilters());
+      ctx = clean(contextFilters());
     } else {
       ctx = contextFilters;
     }
     if (lodash.isArray(ctx)) {
       ctx.forEach(function (item) {
         if (item) {
-          var v = contextFilterToQueryFilters$1(item);
+          var v = contextFilterToQueryFilters(item);
           if (v) {
             ctxFlt.push(v);
           }
@@ -21879,11 +20523,11 @@ var ContextFiltersToQueryFilters$1 = function ContextFiltersToQueryFilters(conte
   }
   return ctxFlt;
 };
-var _queryFiltersToContextFilter$1 = function queryFiltersToContextFilter(item) {
+var _queryFiltersToContextFilter = function queryFiltersToContextFilter(item) {
   if (lodash.isObject(item) && item !== null && item !== void 0 && item.name) {
     return item;
   } else if (lodash.isFunction(item)) {
-    return _queryFiltersToContextFilter$1(item());
+    return _queryFiltersToContextFilter(item());
   } else if (lodash.isString(item)) {
     var nameValue = item.split("=");
     if (nameValue.length >= 2) {
@@ -21898,19 +20542,19 @@ var _queryFiltersToContextFilter$1 = function queryFiltersToContextFilter(item) 
     }
   }
 };
-var QueryFiltersToContextFilters$1 = function QueryFiltersToContextFilters(queryFilters) {
+var QueryFiltersToContextFilters = function QueryFiltersToContextFilters(queryFilters) {
   var ctxFlt = [];
   if (queryFilters) {
     var ctx = [];
     if (lodash.isFunction(queryFilters)) {
-      ctx = clean$1(queryFilters());
+      ctx = clean(queryFilters());
     } else {
       ctx = queryFilters;
     }
     if (lodash.isArray(ctx)) {
       ctx.forEach(function (item) {
         if (item) {
-          var v = _queryFiltersToContextFilter$1(item);
+          var v = _queryFiltersToContextFilter(item);
           if (v) {
             ctxFlt.push(v);
           }
@@ -21920,7 +20564,7 @@ var QueryFiltersToContextFilters$1 = function QueryFiltersToContextFilters(query
   }
   return ctxFlt;
 };
-var ObjectToContextFilters$1 = function ObjectToContextFilters(obj, method) {
+var ObjectToContextFilters = function ObjectToContextFilters(obj, method) {
   if (!obj) return [];
   var contextFilters = [];
   for (var key in obj) {
@@ -21939,7 +20583,7 @@ var ObjectToContextFilters$1 = function ObjectToContextFilters(obj, method) {
   return contextFilters;
 };
 
-var queryFilterByItem$1 = function queryFilterByItem(item) {
+var queryFilterByItem = function queryFilterByItem(item) {
   if (!item) return [];
   var query = [];
   for (var key in item) {
@@ -21953,7 +20597,7 @@ var queryFilterByItem$1 = function queryFilterByItem(item) {
   }
   return query.join("&");
 };
-var filterByItem$1 = function filterByItem(item, element) {
+var filterByItem = function filterByItem(item, element) {
   for (var key in item) {
     if (Object.hasOwnProperty.call(item, key)) {
       var value = item[key];
@@ -21964,7 +20608,7 @@ var filterByItem$1 = function filterByItem(item, element) {
   }
   return false;
 };
-function FilterToQueryParameters$1(filters, filter, sorting, page, count) {
+function FilterToQueryParameters(filters, filter, sorting, page, count) {
   var flt = {};
   Object.keys(filter).forEach(function (key) {
     var item = filters === null || filters === void 0 ? void 0 : filters.find(function (e) {
@@ -22052,7 +20696,7 @@ function FilterToQueryParameters$1(filters, filter, sorting, page, count) {
   };
   return _extends({}, flt, srt, pc);
 }
-function QueryParametersToFilters$1(urlRequestParameters, filters) {
+function QueryParametersToFilters(urlRequestParameters, filters) {
   var flt = [].concat(filters);
   var _loop = function _loop() {
     var item = flt[i];
@@ -22109,23 +20753,23 @@ function QueryParametersToFilters$1(urlRequestParameters, filters) {
 
 
 var index$3 = {
-	__proto__: null,
-	QueryParams: QueryParams$1,
-	QueryFunc: QueryFunc$1,
-	QueryParam: QueryParam$1,
-	QueryOrder: QueryOrder$1,
-	QueryDetail: QueryDetail$1,
-	ObjectToQueryParam: ObjectToQueryParam$1,
-	contextFilterToObject: contextFilterToObject$1,
-	contextFilterToQueryFilters: contextFilterToQueryFilters$1,
-	ContextFiltersToQueryFilters: ContextFiltersToQueryFilters$1,
-	queryFiltersToContextFilter: _queryFiltersToContextFilter$1,
-	QueryFiltersToContextFilters: QueryFiltersToContextFilters$1,
-	ObjectToContextFilters: ObjectToContextFilters$1,
-	queryFilterByItem: queryFilterByItem$1,
-	filterByItem: filterByItem$1,
-	FilterToQueryParameters: FilterToQueryParameters$1,
-	QueryParametersToFilters: QueryParametersToFilters$1
+  __proto__: null,
+  QueryParams: QueryParams$1,
+  QueryFunc: QueryFunc,
+  QueryParam: QueryParam$1,
+  QueryOrder: QueryOrder,
+  QueryDetail: QueryDetail$1,
+  ObjectToQueryParam: ObjectToQueryParam,
+  contextFilterToObject: contextFilterToObject,
+  contextFilterToQueryFilters: contextFilterToQueryFilters,
+  ContextFiltersToQueryFilters: ContextFiltersToQueryFilters,
+  queryFiltersToContextFilter: _queryFiltersToContextFilter,
+  QueryFiltersToContextFilters: QueryFiltersToContextFilters,
+  ObjectToContextFilters: ObjectToContextFilters,
+  queryFilterByItem: queryFilterByItem,
+  filterByItem: filterByItem,
+  FilterToQueryParameters: FilterToQueryParameters,
+  QueryParametersToFilters: QueryParametersToFilters
 };
 
 var GET$1 = function GET(auth, url, callback, error) {
@@ -22139,7 +20783,7 @@ var GET$1 = function GET(auth, url, callback, error) {
     }
   })["catch"](error || errorCatch);
 };
-var GETWITH$1 = function GETWITH(auth, url, queryParams, callback, error) {
+var GETWITH = function GETWITH(auth, url, queryParams, callback, error) {
   var ext = QueryParams$1(queryParams);
   GET$1(auth, url + (ext ? '?' + ext : ''), callback, error);
 };
@@ -22157,7 +20801,7 @@ var POST$1 = function POST(auth, url, object, callback, error) {
     }
   })["catch"](error || errorCatch);
 };
-var POSTFormData$1 = function POSTFormData(auth, url, formData, callback, error) {
+var POSTFormData = function POSTFormData(auth, url, formData, callback, error) {
   auth.fetchForData(url, {
     method: 'POST',
     body: formData
@@ -22171,7 +20815,7 @@ var POSTFormData$1 = function POSTFormData(auth, url, formData, callback, error)
     }
   })["catch"](error || errorCatch);
 };
-var GETP$1 = function GETP(auth, url) {
+var GETP = function GETP(auth, url) {
   return new Promise(function (resolve, reject) {
     auth.fetch(url).then(function (res) {
       if (res && res.status === true) {
@@ -22182,11 +20826,11 @@ var GETP$1 = function GETP(auth, url) {
     })["catch"](reject);
   });
 };
-var GETWITHP$1 = function GETWITHP(auth, url, queryParams) {
+var GETWITHP = function GETWITHP(auth, url, queryParams) {
   var ext = QueryParams$1(queryParams);
-  return GETP$1(auth, url + (ext ? '?' + ext : ''));
+  return GETP(auth, url + (ext ? '?' + ext : ''));
 };
-var POSTP$1 = function POSTP(auth, url, object) {
+var POSTP = function POSTP(auth, url, object) {
   return new Promise(function (resolve, reject) {
     auth.fetch(url, {
       method: 'POST',
@@ -22200,7 +20844,7 @@ var POSTP$1 = function POSTP(auth, url, object) {
     })["catch"](reject);
   });
 };
-var POSTFormDataP$1 = function POSTFormDataP(auth, url, formData) {
+var POSTFormDataP = function POSTFormDataP(auth, url, formData) {
   return new Promise(function (resolve, reject) {
     auth.fetchForData(url, {
       method: 'POST',
@@ -22215,40 +20859,40 @@ var POSTFormDataP$1 = function POSTFormDataP(auth, url, formData) {
   });
 };
 
-var CREATE$1 = function CREATE(auth, name, object, callback, error) {
+var CREATE = function CREATE(auth, name, object, callback, error) {
   POST$1(auth, '/api/query-create/' + name.toLowerCase(), object, callback, error);
 };
-var READ$1 = function READ(auth, name, callback, error) {
+var READ = function READ(auth, name, callback, error) {
   GET$1(auth, '/api/query/' + name.toLowerCase(), callback, error);
 };
 var READWITH$1 = function READWITH(auth, name, queryParams, callback, error) {
   var ext = QueryParams$1(queryParams);
   GET$1(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''), callback, error);
 };
-var UPDATE$1 = function UPDATE(auth, name, object, callback, error) {
+var UPDATE = function UPDATE(auth, name, object, callback, error) {
   POST$1(auth, '/api/query-update/' + name.toLowerCase(), object, callback, error);
 };
-var DELETE$1 = function DELETE(auth, name, id, callback, error) {
+var DELETE = function DELETE(auth, name, id, callback, error) {
   GET$1(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id, callback, error);
 };
-var CREATEP$1 = function CREATEP(auth, name, object) {
-  return POSTP$1(auth, '/api/query-create/' + name.toLowerCase(), object);
+var CREATEP = function CREATEP(auth, name, object) {
+  return POSTP(auth, '/api/query-create/' + name.toLowerCase(), object);
 };
-var READP$1 = function READP(auth, name) {
-  return GETP$1(auth, '/api/query/' + name.toLowerCase());
+var READP = function READP(auth, name) {
+  return GETP(auth, '/api/query/' + name.toLowerCase());
 };
-var READWITHP$1 = function READWITHP(auth, name, queryParams) {
+var READWITHP = function READWITHP(auth, name, queryParams) {
   var ext = QueryParams$1(queryParams);
-  return GETP$1(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''));
+  return GETP(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''));
 };
-var UPDATEP$1 = function UPDATEP(auth, name, object) {
-  return POSTP$1(auth, '/api/query-update/' + name.toLowerCase(), object);
+var UPDATEP = function UPDATEP(auth, name, object) {
+  return POSTP(auth, '/api/query-update/' + name.toLowerCase(), object);
 };
-var DELETEP$1 = function DELETEP(auth, name, id) {
-  return GETP$1(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id);
+var DELETEP = function DELETEP(auth, name, id) {
+  return GETP(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id);
 };
 
-var Request$1 = function Request(auth, url, options, callback, error) {
+var Request = function Request(auth, url, options, callback, error) {
   auth.fetch(url, options).then(function (res) {
     if (res && res.status === true) {
       if (callback) {
@@ -22274,30 +20918,30 @@ var RequestP = function RequestP(auth, url, options) {
 
 
 var index$4 = {
-	__proto__: null,
-	GET: GET$1,
-	GETWITH: GETWITH$1,
-	POST: POST$1,
-	POSTFormData: POSTFormData$1,
-	GETP: GETP$1,
-	GETWITHP: GETWITHP$1,
-	POSTP: POSTP$1,
-	POSTFormDataP: POSTFormDataP$1,
-	CREATE: CREATE$1,
-	READ: READ$1,
-	READWITH: READWITH$1,
-	UPDATE: UPDATE$1,
-	DELETE: DELETE$1,
-	CREATEP: CREATEP$1,
-	READP: READP$1,
-	READWITHP: READWITHP$1,
-	UPDATEP: UPDATEP$1,
-	DELETEP: DELETEP$1,
-	Request: Request$1,
-	RequestP: RequestP
+  __proto__: null,
+  GET: GET$1,
+  GETWITH: GETWITH,
+  POST: POST$1,
+  POSTFormData: POSTFormData,
+  GETP: GETP,
+  GETWITHP: GETWITHP,
+  POSTP: POSTP,
+  POSTFormDataP: POSTFormDataP,
+  CREATE: CREATE,
+  READ: READ,
+  READWITH: READWITH$1,
+  UPDATE: UPDATE,
+  DELETE: DELETE,
+  CREATEP: CREATEP,
+  READP: READP,
+  READWITHP: READWITHP,
+  UPDATEP: UPDATEP,
+  DELETEP: DELETEP,
+  Request: Request,
+  RequestP: RequestP
 };
 
-var publish$1 = function publish(msg, data) {
+var publish = function publish(msg, data) {
   PubSub.publish(msg, data);
 };
 
@@ -22312,76 +20956,76 @@ var unsubscribe$1 = function unsubscribe(token) {
 
 
 var index$5 = {
-	__proto__: null,
-	publish: publish$1,
-	subscribe: subscribe$1,
-	unsubscribe: unsubscribe$1
+  __proto__: null,
+  publish: publish,
+  subscribe: subscribe$1,
+  unsubscribe: unsubscribe$1
 };
 
 
 
 var index$6 = {
-	__proto__: null,
-	GetMeta: GetMeta$1,
-	GetMetaProperties: GetMetaProperties$1,
-	GetMetaPropertyByPath: GetMetaPropertyByPath$1,
-	formItemRules: formItemRules$1,
-	isRequired: isRequired$1,
-	ContextFiltersToQueryFilters: ContextFiltersToQueryFilters$1,
-	contextFilterToObject: contextFilterToObject$1,
-	QueryParam: QueryParam$1,
-	QueryFunc: QueryFunc$1,
-	QueryDetail: QueryDetail$1,
-	GET: GET$1,
-	GETWITH: GETWITH$1,
-	READWITH: READWITH$1,
-	errorCatch: errorCatch,
-	subscribe: subscribe$1,
-	unsubscribe: unsubscribe$1,
-	getLocator: getLocator$1,
-	LOCATOR_TYPES: LOCATOR_TYPES$1,
-	LOCATOR_ACTIONS: LOCATOR_ACTIONS$1,
-	getAILocator: getAILocator$1,
-	equals: _equals$1,
-	unwrap: _unwrap$1,
-	clean: clean$1,
-	If: If$1,
-	IfElse: IfElse$1,
-	And: And$1,
-	Or: Or$1,
-	uncapitalize: uncapitalize$1,
-	arrayUnpack: arrayUnpack$1,
-	upgradeInArray: upgradeInArray$1,
-	updateInArray: updateInArray$1,
-	createInArray: createInArray$1,
-	deleteInArray: deleteInArray$1,
-	triggerInArray: triggerInArray$1,
-	emptyInArray: emptyInArray$1,
-	undefinedInArray: undefinedInArray$1,
-	updateArrayInArray: updateArrayInArray$1,
-	createArrayInArray: createArrayInArray$1,
-	deleteArrayInArray: deleteArrayInArray$1,
-	triggerArrayInArray: triggerArrayInArray$1,
-	getObjectValue: getObjectValue$1,
-	getObjectValueOrDefault: getObjectValueOrDefault$1,
-	getObjectDisplay: getObjectDisplay$1,
-	getFieldDisplay: getFieldDisplay$1,
-	getDisplay: getDisplay$1,
-	typeIsNumber: typeIsNumber$1,
-	getFormatFieldValueTableView: getFormatFieldValueTableView$1,
-	priceFormat: priceFormat$1,
-	makeFormData: makeFormData$1,
-	unpackFormFields: unpackFormFields$1,
-	preventDefault: preventDefault$1,
-	eventExecution: eventExecution$1,
-	detectMutation: detectMutation$1,
-	JSXMap: JSXMap$1
+  __proto__: null,
+  GetMeta: GetMeta,
+  GetMetaProperties: GetMetaProperties,
+  GetMetaPropertyByPath: GetMetaPropertyByPath,
+  formItemRules: formItemRules,
+  isRequired: isRequired,
+  ContextFiltersToQueryFilters: ContextFiltersToQueryFilters,
+  contextFilterToObject: contextFilterToObject,
+  QueryParam: QueryParam$1,
+  QueryFunc: QueryFunc,
+  QueryDetail: QueryDetail$1,
+  GET: GET$1,
+  GETWITH: GETWITH,
+  READWITH: READWITH$1,
+  errorCatch: errorCatch,
+  subscribe: subscribe$1,
+  unsubscribe: unsubscribe$1,
+  getLocator: getLocator,
+  LOCATOR_TYPES: LOCATOR_TYPES,
+  LOCATOR_ACTIONS: LOCATOR_ACTIONS,
+  getAILocator: getAILocator,
+  equals: _equals,
+  unwrap: _unwrap,
+  clean: clean,
+  If: If,
+  IfElse: IfElse,
+  And: And,
+  Or: Or,
+  uncapitalize: uncapitalize$1,
+  arrayUnpack: arrayUnpack,
+  upgradeInArray: upgradeInArray,
+  updateInArray: updateInArray,
+  createInArray: createInArray,
+  deleteInArray: deleteInArray,
+  triggerInArray: triggerInArray,
+  emptyInArray: emptyInArray,
+  undefinedInArray: undefinedInArray,
+  updateArrayInArray: updateArrayInArray,
+  createArrayInArray: createArrayInArray,
+  deleteArrayInArray: deleteArrayInArray,
+  triggerArrayInArray: triggerArrayInArray,
+  getObjectValue: getObjectValue$1,
+  getObjectValueOrDefault: getObjectValueOrDefault,
+  getObjectDisplay: getObjectDisplay,
+  getFieldDisplay: getFieldDisplay,
+  getDisplay: getDisplay$1,
+  typeIsNumber: typeIsNumber,
+  getFormatFieldValueTableView: getFormatFieldValueTableView$1,
+  priceFormat: priceFormat$1,
+  makeFormData: makeFormData$1,
+  unpackFormFields: unpackFormFields,
+  preventDefault: preventDefault,
+  eventExecution: eventExecution,
+  detectMutation: detectMutation,
+  JSXMap: JSXMap
 };
 
 var ModelCore = /*#__PURE__*/function () {
   function ModelCore(props) {
     this.props = props;
-    this.meta = GetMeta$1(props.meta);
+    this.meta = GetMeta(props.meta);
     this.object = props.object;
     this.contextFilters = props.contextFilters;
     this.scheme = props.scheme;
@@ -22390,7 +21034,7 @@ var ModelCore = /*#__PURE__*/function () {
   var _proto = ModelCore.prototype;
   _proto.getProperties = function getProperties() {
     if (!this.meta) return [];
-    return GetMetaProperties$1(this.meta);
+    return GetMetaProperties(this.meta);
   };
   _proto.getFilteredProperties = function getFilteredProperties() {
     var properties = this.getProperties();
@@ -22466,10 +21110,10 @@ var ModelCore = /*#__PURE__*/function () {
     return excludeFields;
   };
   _proto.getValidationRules = function getValidationRules(property) {
-    return formItemRules$1(property);
+    return formItemRules(property);
   };
-  _proto.isRequired = function isRequired(property) {
-    return isRequired$1(property);
+  _proto.isRequired = function isRequired$1(property) {
+    return isRequired(property);
   };
   _proto.getFieldName = function getFieldName(property) {
     var isObjectType = property.type === 'object' || property.type === 'document';
@@ -22597,7 +21241,7 @@ function ModelRenderer(props) {
       name: modelCore.getFieldName(property),
       label: modelCore.getPropertyLabel(property),
       rules: modelCore.getValidationRules(property),
-      "data-locator": getLocator$1(locator || name || 'model', object)
+      "data-locator": getLocator(locator || name || 'model', object)
     }, /*#__PURE__*/React__default.createElement(Field, {
       mode: "model",
       key: property.name,
@@ -22624,7 +21268,7 @@ function ModelRenderer(props) {
       var relationName = lodash.get(property, 'relation.reference.object');
       if (!relationName) return null;
       return /*#__PURE__*/React__default.createElement(TabPane, {
-        "data-locator": getLocator$1(locator || 'model-collection' + name || 'model-collection', object),
+        "data-locator": getLocator(locator || 'model-collection' + name || 'model-collection', object),
         tab: property.label,
         key: idx
       });
@@ -22639,7 +21283,7 @@ function ModelRenderer(props) {
       style: headerContentStyle
     }, meta.name && visible && /*#__PURE__*/React__default.createElement("div", {
       style: headerLabelStyle
-    }, /*#__PURE__*/React__default.createElement("div", null, meta.label)), /*#__PURE__*/React__default.createElement("div", null, meta.name && visible && getObjectDisplay$1(object, meta.name, gmeta))), /*#__PURE__*/React__default.createElement("div", {
+    }, /*#__PURE__*/React__default.createElement("div", null, meta.label)), /*#__PURE__*/React__default.createElement("div", null, meta.name && visible && getObjectDisplay(object, meta.name, gmeta))), /*#__PURE__*/React__default.createElement("div", {
       style: headerActionsStyle
     }, /*#__PURE__*/React__default.createElement(Tooltip, {
       title: "\u0421\u0432\u044F\u0437\u0438"
@@ -22654,7 +21298,7 @@ function ModelRenderer(props) {
     })))));
   };
   return /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator$1(locator || name || 'model', object),
+    "data-locator": getLocator(locator || name || 'model', object),
     className: rootClassName,
     style: rootStyle
   }, renderHeader(), /*#__PURE__*/React__default.createElement("div", {
@@ -22747,7 +21391,7 @@ function Model(props) {
     maxWidth: 768
   });
   var isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile;
-  var xmeta = GetMeta$1(props.meta);
+  var xmeta = GetMeta(props.meta);
   if (!xmeta) {
     console.warn('Model: Invalid metadata provided');
     return null;
@@ -23791,217 +22435,6 @@ function Action(props) {
   }, rendererProps || {}));
 }
 
-function CollectionMobileRenderer(props) {
-  var collectionCore = props.collectionCore,
-    _props$items = props.items,
-    items = _props$items === void 0 ? [] : _props$items,
-    loading = props.loading,
-    onItemClick = props.onItemClick,
-    displayFunction = props.displayFunction,
-    itemStyle = props.itemStyle,
-    itemClassName = props.itemClassName,
-    itemContentClassName = props.itemContentClassName,
-    itemArrowClassName = props.itemArrowClassName;
-  var ui = useUI();
-  var display = React.useMemo(function () {
-    var _collectionCore$getDi;
-    return displayFunction || ((_collectionCore$getDi = collectionCore.getDisplayFunction) === null || _collectionCore$getDi === void 0 ? void 0 : _collectionCore$getDi.call(collectionCore));
-  }, [collectionCore, displayFunction]);
-  var renderItem = function renderItem(item) {
-    var displayText = display ? display(item) : item.name || item.title || item.ID;
-    return /*#__PURE__*/React__default.createElement("div", {
-      className: itemClassName,
-      onClick: function onClick() {
-        return onItemClick === null || onItemClick === void 0 ? void 0 : onItemClick(item);
-      },
-      style: _extends({
-        cursor: onItemClick ? 'pointer' : 'default'
-      }, itemStyle || {})
-    }, /*#__PURE__*/React__default.createElement("div", {
-      className: itemContentClassName
-    }, displayText), onItemClick && /*#__PURE__*/React__default.createElement("div", {
-      className: itemArrowClassName
-    }, "\u2192"));
-  };
-  return ui.renderList({
-    dataSource: items,
-    loading: loading,
-    renderItem: renderItem
-  });
-}
-
-function Overlay(props) {
-  var open = props.open,
-    setOpen = props.setOpen,
-    overlayStyle = props.overlayStyle,
-    overlayBackdropStyle = props.overlayBackdropStyle,
-    contentStyle = props.contentStyle,
-    contentClassName = props.contentClassName,
-    children = props.children,
-    disableScrollLocker = props.disableScrollLocker;
-  var handleKeyDown = React.useCallback(function (ev) {
-    try {
-      switch (ev.code) {
-        case "Escape":
-          {
-            ev.preventDefault();
-            ev.stopPropagation();
-            setOpen(false);
-            break;
-          }
-      }
-      return Promise.resolve();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }, []);
-  var _useState2 = React.useState(),
-    scrollLocked = _useState2[0],
-    setScrollLocked = _useState2[1];
-  React.useEffect(function () {
-    var randomId = "scrollbar-lock-" + Math.random().toString(36).substring(7);
-    if (!disableScrollLocker && open && !scrollLocked) {
-      setScrollLocked(randomId);
-      var scrollBarSize = getScrollBarSize();
-      var domNode = dynamicCSS.updateCSS("html body { overflow: hidden; width: calc(100% - " + scrollBarSize + "px); }", randomId);
-    }
-    if (!disableScrollLocker && !open) {
-      if (scrollLocked) {
-        dynamicCSS.removeCSS(scrollLocked);
-        setScrollLocked();
-      }
-    }
-    return function () {
-      if (scrollLocked) {
-        dynamicCSS.removeCSS(scrollLocked);
-        setScrollLocked();
-      }
-    };
-  }, [open]);
-  React.useEffect(function () {
-    if (open) {
-      document.addEventListener("keydown", handleKeyDown, true);
-    }
-    return function () {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [open, handleKeyDown]);
-  var contentRef = React.useRef(null);
-  var renderChildren = React.useCallback(function (opened) {
-    if (children) {
-      if (React.isValidElement(children)) {
-        return /*#__PURE__*/React__default.createElement("div", null, React.cloneElement(children, {}));
-      }
-    }
-  }, [children, setOpen]);
-  return /*#__PURE__*/React__default.createElement("div", null, !open && renderChildren(false), open && ReactDOM.createPortal(/*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
-    style: overlayStyle
-  }, /*#__PURE__*/React__default.createElement("div", {
-    style: overlayBackdropStyle
-  }, /*#__PURE__*/React__default.createElement("div", {
-    ref: contentRef,
-    className: contentClassName,
-    style: contentStyle
-  }, renderChildren(true))))), document.body));
-}
-
-var UIAdapter = /*#__PURE__*/function () {
-  function UIAdapter() {
-    this.Input = null;
-    this.TextArea = null;
-    this.InputNumber = null;
-    this.Select = null;
-    this.Checkbox = null;
-    this.Radio = null;
-    this.Switch = null;
-    this.DatePicker = null;
-    this.TimePicker = null;
-    this.RangePicker = null;
-    this.Slider = null;
-    this.Upload = null;
-    this.Dragger = null;
-    this.Rate = null;
-    this.ColorPicker = null;
-    this.Table = null;
-    this.List = null;
-    this.Card = null;
-    this.Image = null;
-    this.Form = null;
-    this.FormItem = null;
-    this.Modal = null;
-    this.Drawer = null;
-    this.Tabs = null;
-    this.TabPane = null;
-    this.Divider = null;
-    this.Space = null;
-    this.Button = null;
-    this.Dropdown = null;
-    this.Tooltip = null;
-    this.Pagination = null;
-    this.Spin = null;
-    this.Empty = null;
-    this.Tag = null;
-    this.Badge = null;
-  }
-  var _proto = UIAdapter.prototype;
-  _proto.transformFormData = function transformFormData(data) {
-    return data;
-  };
-  _proto.transformTableData = function transformTableData(data) {
-    return data;
-  };
-  _proto.createValidator = function createValidator(rules) {
-    return function () {
-      return Promise.resolve();
-    };
-  };
-  _proto.formatDate = function formatDate(value, format) {
-    return value;
-  };
-  _proto.parseDate = function parseDate(value, format) {
-    return value;
-  };
-  _proto.createFormInstance = function createFormInstance() {
-    return {};
-  };
-  _proto.normalizeFiles = function normalizeFiles(fileList) {
-    return fileList;
-  };
-  return UIAdapter;
-}();
-
-var HasRole$1 = function HasRole(user, name) {
-  if (user && user.roleUser) {
-    for (var i = 0; i < user.roleUser.length; i++) {
-      var element = user.roleUser[i];
-      if (element.role.name === name) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-
-var HasRoleID$1 = function HasRoleID(user, roleID) {
-  if (user && user.roleUser) {
-    for (var i = 0; i < user.roleUser.length; i++) {
-      var element = user.roleUser[i];
-      if (element.roleID === roleID) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-
-
-
-var index$7 = {
-	__proto__: null,
-	HasRole: HasRole$1,
-	HasRoleID: HasRoleID$1
-};
-
 var CollectionCore = /*#__PURE__*/function () {
   function CollectionCore(props) {
     this.props = props;
@@ -24042,7 +22475,7 @@ var CollectionCore = /*#__PURE__*/function () {
   };
   _proto.buildQueryParams = function buildQueryParams(filters, contextFilters, filter, sorting, current, count, queryDetail) {
     var _this = this;
-    var ctxFlt = ContextFiltersToQueryFilters$1(contextFilters);
+    var ctxFlt = ContextFiltersToQueryFilters(contextFilters);
     var flt = [];
     Object.keys(filter).forEach(function (key) {
       var item = filters === null || filters === void 0 ? void 0 : filters.find(function (e) {
@@ -24050,7 +22483,7 @@ var CollectionCore = /*#__PURE__*/function () {
       });
       var akey = (item === null || item === void 0 ? void 0 : item.alias) || key;
       if (item !== null && item !== void 0 && item.additionalFilter) {
-        var additionalFlt = ContextFiltersToQueryFilters$1(item === null || item === void 0 ? void 0 : item.additionalFilter);
+        var additionalFlt = ContextFiltersToQueryFilters(item === null || item === void 0 ? void 0 : item.additionalFilter);
         flt.push.apply(flt, additionalFlt);
       }
       if (item) {
@@ -24062,7 +22495,7 @@ var CollectionCore = /*#__PURE__*/function () {
     filters === null || filters === void 0 ? void 0 : filters.forEach(function (item) {
       if (item.func && lodash.isArray(item.func)) {
         item.func.forEach(function (fu) {
-          func.push(QueryFunc$1(fu, item.name));
+          func.push(QueryFunc(fu, item.name));
         });
       }
     });
@@ -24160,21 +22593,21 @@ var CollectionCore = /*#__PURE__*/function () {
   _proto.enrichFiltersWithMetadata = function enrichFiltersWithMetadata(propFilters, meta, mobject) {
     if (!propFilters || !meta || !mobject) return propFilters || [];
     return propFilters.map(function (pf) {
-      var field = GetMetaPropertyByPath$1(meta, mobject, pf.name);
+      var field = GetMetaPropertyByPath(meta, mobject, pf.name);
       return _extends({}, field, pf);
     });
   };
   _proto.updateCollectionItem = function updateCollectionItem(collection, item) {
-    return updateInArray$1(collection, item);
+    return updateInArray(collection, item);
   };
   _proto.removeCollectionItem = function removeCollectionItem(collection, item) {
-    return deleteInArray$1(collection, item);
+    return deleteInArray(collection, item);
   };
   _proto.hasFiltersChanged = function hasFiltersChanged(oldFilter, newFilter) {
     return !lodash.isEqual(oldFilter, newFilter);
   };
   _proto.buildContextFilterObject = function buildContextFilterObject(contextFilters) {
-    return contextFilterToObject$1(contextFilters);
+    return contextFilterToObject(contextFilters);
   };
   _proto.validatePaginationParams = function validatePaginationParams(current, count) {
     return {
@@ -24199,6 +22632,81 @@ var CollectionCore = /*#__PURE__*/function () {
   };
   return CollectionCore;
 }();
+
+function Overlay(props) {
+  var open = props.open,
+    setOpen = props.setOpen,
+    overlayStyle = props.overlayStyle,
+    overlayBackdropStyle = props.overlayBackdropStyle,
+    contentStyle = props.contentStyle,
+    contentClassName = props.contentClassName,
+    children = props.children,
+    disableScrollLocker = props.disableScrollLocker;
+  var handleKeyDown = React.useCallback(function (ev) {
+    try {
+      switch (ev.code) {
+        case "Escape":
+          {
+            ev.preventDefault();
+            ev.stopPropagation();
+            setOpen(false);
+            break;
+          }
+      }
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }, []);
+  var _useState2 = React.useState(),
+    scrollLocked = _useState2[0],
+    setScrollLocked = _useState2[1];
+  React.useEffect(function () {
+    var randomId = "scrollbar-lock-" + Math.random().toString(36).substring(7);
+    if (!disableScrollLocker && open && !scrollLocked) {
+      setScrollLocked(randomId);
+      var scrollBarSize = getScrollBarSize();
+      var domNode = dynamicCSS.updateCSS("html body { overflow: hidden; width: calc(100% - " + scrollBarSize + "px); }", randomId);
+    }
+    if (!disableScrollLocker && !open) {
+      if (scrollLocked) {
+        dynamicCSS.removeCSS(scrollLocked);
+        setScrollLocked();
+      }
+    }
+    return function () {
+      if (scrollLocked) {
+        dynamicCSS.removeCSS(scrollLocked);
+        setScrollLocked();
+      }
+    };
+  }, [open]);
+  React.useEffect(function () {
+    if (open) {
+      document.addEventListener("keydown", handleKeyDown, true);
+    }
+    return function () {
+      document.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [open, handleKeyDown]);
+  var contentRef = React.useRef(null);
+  var renderChildren = React.useCallback(function (opened) {
+    if (children) {
+      if (React.isValidElement(children)) {
+        return /*#__PURE__*/React__default.createElement("div", null, React.cloneElement(children, {}));
+      }
+    }
+  }, [children, setOpen]);
+  return /*#__PURE__*/React__default.createElement("div", null, !open && renderChildren(false), open && ReactDOM.createPortal(/*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
+    style: overlayStyle
+  }, /*#__PURE__*/React__default.createElement("div", {
+    style: overlayBackdropStyle
+  }, /*#__PURE__*/React__default.createElement("div", {
+    ref: contentRef,
+    className: contentClassName,
+    style: contentStyle
+  }, renderChildren(true))))), document.body));
+}
 
 var defaultOverlayStyle = {
   position: 'fixed',
@@ -24291,13 +22799,13 @@ function SortingFieldsUI(props) {
     style: dividerStyle,
     className: dividerClassName
   }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator$1(locator || 'sorting', object),
+    "data-locator": getLocator(locator || 'sorting', object),
     style: contentStyle,
     className: contentClassName
   }, /*#__PURE__*/React__default.createElement("div", {
     style: sortRowStyle
   }, /*#__PURE__*/React__default.createElement(Select, {
-    "data-locator": getLocator$1(locator || 'sortingselect', object),
+    "data-locator": getLocator(locator || 'sortingselect', object),
     allowClear: true,
     value: value.name,
     onChange: function onChange(v) {
@@ -24311,11 +22819,11 @@ function SortingFieldsUI(props) {
       return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
     style: selectStyle
-  }, JSXMap$1(filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
+  }, JSXMap(filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
     return f.sort;
   }), function (item, idx) {
     return /*#__PURE__*/React__default.createElement(Option, {
-      "data-locator": getLocator$1(locator || 'sortingitem', object || idx),
+      "data-locator": getLocator(locator || 'sortingitem', object || idx),
       key: idx,
       value: item.name
     }, item.label);
@@ -24323,7 +22831,7 @@ function SortingFieldsUI(props) {
     title: "\u0412\u043E\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
   }, /*#__PURE__*/React__default.createElement(Button, {
     icon: /*#__PURE__*/React__default.createElement(SortAscIcon, null),
-    "data-locator": getLocator$1(locator || 'sortingasc', object),
+    "data-locator": getLocator(locator || 'sortingasc', object),
     onClick: function onClick() {
       return _onChange({
         name: value.name,
@@ -24334,7 +22842,7 @@ function SortingFieldsUI(props) {
     title: "\u041D\u0438\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
   }, /*#__PURE__*/React__default.createElement(Button, {
     icon: /*#__PURE__*/React__default.createElement(SortDescIcon, null),
-    "data-locator": getLocator$1(locator || 'sortingdesc', object),
+    "data-locator": getLocator(locator || 'sortingdesc', object),
     onClick: function onClick() {
       return _onChange({
         name: value.name,
@@ -24380,15 +22888,15 @@ function FiltersFieldsUI(props) {
     style: dividerStyle,
     className: dividerClassName
   }, "\u0424\u0438\u043B\u044C\u0442\u0440\u044B"), /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator$1(locator || 'filters', object),
+    "data-locator": getLocator(locator || 'filters', object),
     style: contentStyle,
     className: contentClassName
-  }, /*#__PURE__*/React__default.createElement("div", null, JSXMap$1(filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
+  }, /*#__PURE__*/React__default.createElement("div", null, JSXMap(filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
     return i.filter;
   }), function (item, idx) {
     var _item$name;
     return /*#__PURE__*/React__default.createElement("div", {
-      "data-locator": getLocator$1(locator || 'filtersfield', object),
+      "data-locator": getLocator(locator || 'filtersfield', object),
       key: item.name,
       style: fieldWrapperStyle
     }, item.filter && item.type !== 'bool' && item.type !== 'boolean' && /*#__PURE__*/React__default.createElement(Text, null, item.label), /*#__PURE__*/React__default.createElement(Field, {
@@ -24431,7 +22939,7 @@ function FilterButton(props) {
     className: className,
     style: style,
     ref: ref,
-    "data-locator": getLocator$1(locator || 'collectionfilter-' + name || 'collectionfilter-' + fieldName || 'collectionfilter', object),
+    "data-locator": getLocator(locator || 'collectionfilter-' + name || 'collectionfilter-' + fieldName || 'collectionfilter', object),
     onClick: function onClick(e) {
       return setFiltered(function (o) {
         return !o;
@@ -24481,7 +22989,7 @@ function FilterContent(props) {
       return /*#__PURE__*/React__default.createElement(Fragment, null, /*#__PURE__*/React__default.createElement("div", {
         style: applyWrapperStyle
       }, /*#__PURE__*/React__default.createElement(Button, {
-        "data-locator": getLocator$1(locator || 'collectionfilterapply-' + name || 'collectionfilterapply-' + fieldName || 'collectionfilterapply', object),
+        "data-locator": getLocator(locator || 'collectionfilterapply-' + name || 'collectionfilterapply-' + fieldName || 'collectionfilterapply', object),
         style: applyButtonStyle,
         disabled: !state.filterChanged,
         type: "primary",
@@ -24489,7 +22997,7 @@ function FilterContent(props) {
       }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C")), /*#__PURE__*/React__default.createElement("div", {
         style: clearWrapperStyle
       }, /*#__PURE__*/React__default.createElement(Button, {
-        "data-locator": getLocator$1(locator || 'collectionfilterclear-' + name || 'collectionfilterclear-' + fieldName || 'collectionfilterclear', object),
+        "data-locator": getLocator(locator || 'collectionfilterclear-' + name || 'collectionfilterclear-' + fieldName || 'collectionfilterclear', object),
         style: clearButtonStyle,
         disabled: lodash.isEmpty(state.filter),
         onClick: clearFilter
@@ -24760,7 +23268,7 @@ function CollectionRenderer(props) {
         }
       });
     } else {
-      var url = _unwrap$1(source);
+      var url = _unwrap(source);
       if (!url) return;
       lock();
       READWITH$1(auth, url, queryParams, function (data) {
@@ -24834,7 +23342,7 @@ function CollectionRenderer(props) {
       object: mobject,
       name: name,
       fieldName: fieldName,
-      getLocator: getLocator$1,
+      getLocator: getLocator,
       adapter: adapter
     });
   }, [renderContext, hasFilters, filters, sorting, state, filtered, _onFilterChange, applyFilter, clearFilter, bounding, paginationProp, current, total, count, totalPages, setCurrent, allowFullscreen, fullscreen, auth, locator, mobject, name, fieldName, adapter]);
@@ -24947,7 +23455,7 @@ function CollectionRenderer(props) {
     }, shellContext));
   }
   var content = /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator$1(locator || name || fieldName || 'collection', mobject)
+    "data-locator": getLocator(locator || name || fieldName || 'collection', mobject)
   }, renderHeader(), typeof render === 'function' ? render(collection, renderContext) : null, renderPagination());
   if (fullscreen) {
     var defaultOverlayStyle = {
@@ -24992,147 +23500,177 @@ function Collection(props) {
   return /*#__PURE__*/React__default.createElement(CollectionRenderer, props);
 }
 
+var UIAdapter = /*#__PURE__*/function () {
+  function UIAdapter() {
+    this.Input = null;
+    this.TextArea = null;
+    this.InputNumber = null;
+    this.Select = null;
+    this.Checkbox = null;
+    this.Radio = null;
+    this.Switch = null;
+    this.DatePicker = null;
+    this.TimePicker = null;
+    this.RangePicker = null;
+    this.Slider = null;
+    this.Upload = null;
+    this.Dragger = null;
+    this.Rate = null;
+    this.ColorPicker = null;
+    this.Table = null;
+    this.List = null;
+    this.Card = null;
+    this.Image = null;
+    this.Form = null;
+    this.FormItem = null;
+    this.Modal = null;
+    this.Drawer = null;
+    this.Tabs = null;
+    this.TabPane = null;
+    this.Divider = null;
+    this.Space = null;
+    this.Button = null;
+    this.Dropdown = null;
+    this.Tooltip = null;
+    this.Pagination = null;
+    this.Spin = null;
+    this.Empty = null;
+    this.Tag = null;
+    this.Badge = null;
+  }
+  var _proto = UIAdapter.prototype;
+  _proto.transformFormData = function transformFormData(data) {
+    return data;
+  };
+  _proto.transformTableData = function transformTableData(data) {
+    return data;
+  };
+  _proto.createValidator = function createValidator(rules) {
+    return function () {
+      return Promise.resolve();
+    };
+  };
+  _proto.formatDate = function formatDate(value, format) {
+    return value;
+  };
+  _proto.parseDate = function parseDate(value, format) {
+    return value;
+  };
+  _proto.createFormInstance = function createFormInstance() {
+    return {};
+  };
+  _proto.normalizeFiles = function normalizeFiles(fileList) {
+    return fileList;
+  };
+  return UIAdapter;
+}();
+
+var HasRole = function HasRole(user, name) {
+  if (user && user.roleUser) {
+    for (var i = 0; i < user.roleUser.length; i++) {
+      var element = user.roleUser[i];
+      if (element.role.name === name) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+var HasRoleID = function HasRoleID(user, roleID) {
+  if (user && user.roleUser) {
+    for (var i = 0; i < user.roleUser.length; i++) {
+      var element = user.roleUser[i];
+      if (element.roleID === roleID) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+
+
+var index$7 = {
+  __proto__: null,
+  HasRole: HasRole,
+  HasRoleID: HasRoleID
+};
+
+function CollectionMobileRenderer(props) {
+  var collectionCore = props.collectionCore,
+    _props$items = props.items,
+    items = _props$items === void 0 ? [] : _props$items,
+    loading = props.loading,
+    onItemClick = props.onItemClick,
+    displayFunction = props.displayFunction,
+    itemStyle = props.itemStyle,
+    itemClassName = props.itemClassName,
+    itemContentClassName = props.itemContentClassName,
+    itemArrowClassName = props.itemArrowClassName;
+  var ui = useUI();
+  var display = React.useMemo(function () {
+    var _collectionCore$getDi;
+    return displayFunction || ((_collectionCore$getDi = collectionCore.getDisplayFunction) === null || _collectionCore$getDi === void 0 ? void 0 : _collectionCore$getDi.call(collectionCore));
+  }, [collectionCore, displayFunction]);
+  var renderItem = function renderItem(item) {
+    var displayText = display ? display(item) : item.name || item.title || item.ID;
+    return /*#__PURE__*/React__default.createElement("div", {
+      className: itemClassName,
+      onClick: function onClick() {
+        return onItemClick === null || onItemClick === void 0 ? void 0 : onItemClick(item);
+      },
+      style: _extends({
+        cursor: onItemClick ? 'pointer' : 'default'
+      }, itemStyle || {})
+    }, /*#__PURE__*/React__default.createElement("div", {
+      className: itemContentClassName
+    }, displayText), onItemClick && /*#__PURE__*/React__default.createElement("div", {
+      className: itemArrowClassName
+    }, "\u2192"));
+  };
+  return ui.renderList({
+    dataSource: items,
+    loading: loading,
+    renderItem: renderItem
+  });
+}
+
 exports.Action = Action;
 exports.ActionCore = ActionCore;
 exports.ActionFormCore = ActionFormCore;
 exports.ActionMobileRenderer = ActionMobileRenderer;
 exports.ActionModalCore = ActionModalCore;
 exports.ActionWizardCore = ActionWizardCore;
-exports.And = And;
 exports.AuthProvider = AuthProvider;
 exports.AuthService = AuthService;
-exports.CREATE = CREATE;
-exports.CREATEP = CREATEP;
 exports.CRUD = index$4;
 exports.ClipboardContext = ClipboardContext;
 exports.Collection = Collection;
 exports.CollectionMobileRenderer = CollectionMobileRenderer;
-exports.ContextFiltersToQueryFilters = ContextFiltersToQueryFilters;
-exports.DELETE = DELETE;
-exports.DELETEP = DELETEP;
 exports.ErrorHandling = index;
-exports.FennecError = FennecError$1;
 exports.Field = Field;
 exports.FieldMobileRenderer = FieldMobileRenderer;
-exports.FilterToQueryParameters = FilterToQueryParameters;
 exports.FormObserverContext = FormObserverContext;
-exports.GET = GET;
-exports.GETP = GETP;
-exports.GETWITH = GETWITH;
-exports.GETWITHP = GETWITHP;
-exports.GetMeta = GetMeta;
-exports.GetMetaProperties = GetMetaProperties;
-exports.GetMetaPropertyByPath = GetMetaPropertyByPath;
-exports.HasRole = HasRole;
-exports.HasRoleID = HasRoleID;
-exports.If = If;
-exports.IfElse = IfElse;
-exports.JSX = JSX;
-exports.JSXIndex = JSXIndex;
-exports.JSXMap = JSXMap;
-exports.JSXPathMap = JSXPathMap;
-exports.LOCATOR_ACTIONS = LOCATOR_ACTIONS;
-exports.LOCATOR_TYPES = LOCATOR_TYPES;
 exports.Meta = index$2;
-exports.MetaColumns = MetaColumns;
 exports.MetaContext = MetaContext;
 exports.MetaProvider = MetaProvider;
 exports.Model = Model;
 exports.ModelMobileRenderer = ModelMobileRenderer;
-exports.ObjectToContextFilters = ObjectToContextFilters;
-exports.ObjectToQueryParam = ObjectToQueryParam;
-exports.Or = Or;
 exports.Overlay = Overlay;
-exports.POST = POST;
-exports.POSTFormData = POSTFormData;
-exports.POSTFormDataP = POSTFormDataP;
-exports.POSTP = POSTP;
 exports.PubSub = index$5;
 exports.Query = index$3;
-exports.QueryDetail = QueryDetail;
-exports.QueryFiltersToContextFilters = QueryFiltersToContextFilters;
-exports.QueryFunc = QueryFunc;
-exports.QueryOrder = QueryOrder;
-exports.QueryParam = QueryParam;
-exports.QueryParametersToFilters = QueryParametersToFilters;
-exports.QueryParams = QueryParams;
-exports.READ = READ;
-exports.READP = READP;
-exports.READWITH = READWITH;
-exports.READWITHP = READWITHP;
-exports.Request = Request;
 exports.RequireAuth = RequireAuth;
 exports.Roles = index$7;
-exports.SetMetaProperties = SetMetaProperties;
 exports.TranslateContext = TranslateContext;
 exports.TranslateProvider = TranslateProvider;
 exports.UIAdapter = UIAdapter;
 exports.UIProvider = UIProvider;
-exports.UPDATE = UPDATE;
-exports.UPDATEP = UPDATEP;
 exports.UserConfigContext = UserConfigContext;
 exports.UserConfigProvider = UserConfigProvider;
 exports.UserContext = UserContext;
 exports.UtilsCore = index$6;
 exports.Validation = index$1;
-exports.arrayUnpack = arrayUnpack;
-exports.clean = clean;
-exports.contextFilterToObject = contextFilterToObject;
-exports.contextFilterToQueryFilters = contextFilterToQueryFilters;
-exports.createArrayInArray = createArrayInArray;
-exports.createInArray = createInArray;
-exports.deleteArrayInArray = deleteArrayInArray;
-exports.deleteInArray = deleteInArray;
-exports.deleteInProperties = deleteInProperties;
-exports.deleteInPropertiesUUID = deleteInPropertiesUUID;
-exports.deletePropertiesInProperties = deletePropertiesInProperties;
-exports.detectMutation = detectMutation;
-exports.emptyInArray = emptyInArray;
-exports.equals = _equals;
-exports.errorAlert = errorAlert$1;
-exports.errorCatch = errorCatch$1;
-exports.eventExecution = eventExecution;
-exports.filterByItem = filterByItem;
-exports.foreachInProperties = foreachInProperties;
-exports.formItemRules = formItemRules;
-exports.getAILocator = getAILocator;
-exports.getDisplay = getDisplay;
-exports.getFieldDisplay = getFieldDisplay;
-exports.getFormatFieldValueTableView = getFormatFieldValueTableView;
-exports.getLocator = getLocator;
-exports.getObjectDisplay = getObjectDisplay;
-exports.getObjectValue = getObjectValue;
-exports.getObjectValueOrDefault = getObjectValueOrDefault;
-exports.getSortingDisplayFields = getSortingDisplayFields;
-exports.isRequired = isRequired;
-exports.makeFormData = makeFormData;
-exports.messageError = messageError$1;
-exports.metaGetCloneObject = metaGetCloneObject;
-exports.metaGetFieldByName = metaGetFieldByName;
-exports.preventDefault = preventDefault;
-exports.priceFormat = priceFormat;
-exports.publish = publish;
-exports.pushStateHistoryModal = pushStateHistoryModal;
-exports.queryFilterByItem = queryFilterByItem;
-exports.queryFiltersToContextFilter = _queryFiltersToContextFilter;
-exports.subscribe = subscribe;
-exports.triggerArrayInArray = triggerArrayInArray;
-exports.triggerInArray = triggerInArray;
-exports.triggerInProperties = triggerInProperties;
-exports.triggerInPropertiesUUID = triggerInPropertiesUUID;
-exports.triggerPropertiesInProperties = triggerPropertiesInProperties;
-exports.typeIsNumber = typeIsNumber;
-exports.uncapitalize = uncapitalize;
-exports.undefinedInArray = undefinedInArray;
-exports.unpackFormFields = unpackFormFields;
-exports.unsubscribe = unsubscribe;
-exports.unwrap = _unwrap;
-exports.updateArrayInArray = updateArrayInArray;
-exports.updateInArray = updateInArray;
-exports.updateInProperties = updateInProperties;
-exports.updateInPropertiesUUID = updateInPropertiesUUID;
-exports.updatePropertiesInProperties = updatePropertiesInProperties;
-exports.upgradeInArray = upgradeInArray;
 exports.useActionRef = useActionRef;
 exports.useAuth = useAuth;
 exports.useClipboardContext = useClipboardContext;
@@ -25145,6 +23683,4 @@ exports.useUI = useUI;
 exports.useUIOptional = useUIOptional;
 exports.useUserConfigContext = useUserConfigContext;
 exports.useUserContext = useUserContext;
-exports.validator = validator;
-exports.ycStorage = ycStorage;
 //# sourceMappingURL=fennec-core.js.map
