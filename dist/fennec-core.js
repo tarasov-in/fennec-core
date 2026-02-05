@@ -20975,6 +20975,13 @@ var pushStateHistoryModal = function pushStateHistoryModal(setVisible, getStack)
 function ycStorage(auth) {
   return "https://storage.yandexcloud.net/";
 }
+function ycBucket(auth) {
+  var bucketName = "federation";
+  if (auth.appProfile != "prod") {
+    bucketName = "federation-dev";
+  }
+  return bucketName;
+}
 var updateInPropertiesUUID = function updateInPropertiesUUID(properties, item, first) {
   var _$findIndex;
   var key = "uuid";
@@ -23479,5 +23486,6 @@ exports.useUIOptional = useUIOptional;
 exports.useUserConfigContext = useUserConfigContext;
 exports.useUserContext = useUserContext;
 exports.validator = validator;
+exports.ycBucket = ycBucket;
 exports.ycStorage = ycStorage;
 //# sourceMappingURL=fennec-core.js.map

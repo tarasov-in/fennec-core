@@ -146,6 +146,13 @@ export const pushStateHistoryModal = (setVisible, getStack) => {
 export function ycStorage(auth) {
     return "https://storage.yandexcloud.net/"
 }
+export function ycBucket(auth) {
+    var bucketName = "federation"
+    if (auth.appProfile != "prod") {
+        bucketName = "federation-dev"
+    }
+    return bucketName;
+}
 //-------------------------------------------------------------------
 export const updateInPropertiesUUID = (properties, item, first) => {
     let key = "uuid"

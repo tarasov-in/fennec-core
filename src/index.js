@@ -45,7 +45,9 @@ import { Collection } from './Components/Desktop/Collection/Collection'
 import { Overlay } from './Components/Overlay'
 
 import {
-  pushStateHistoryModal, ycStorage,
+  pushStateHistoryModal, 
+  ycStorage,
+  ycBucket,
   updateInPropertiesUUID,
   updateInProperties,
   deleteInPropertiesUUID,
@@ -61,6 +63,7 @@ import {
 // ==================== Context & Providers ====================
 export {
   ycStorage,
+  ycBucket,
   pushStateHistoryModal,
   updateInPropertiesUUID,
   updateInProperties,
