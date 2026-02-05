@@ -44,9 +44,35 @@ import { Action } from './Components/Desktop/Action/Action'
 import { Collection } from './Components/Desktop/Collection/Collection'
 import { Overlay } from './Components/Overlay'
 
+import {
+  pushStateHistoryModal, ycStorage,
+  updateInPropertiesUUID,
+  updateInProperties,
+  deleteInPropertiesUUID,
+  deleteInProperties,
+  triggerInPropertiesUUID,
+  triggerInProperties,
+  foreachInProperties,
+  updatePropertiesInProperties,
+  deletePropertiesInProperties,
+  triggerPropertiesInProperties,
+} from './Tool'
 
 // ==================== Context & Providers ====================
 export {
+  ycStorage,
+  pushStateHistoryModal,
+  updateInPropertiesUUID,
+  updateInProperties,
+  deleteInPropertiesUUID,
+  deleteInProperties,
+  triggerInPropertiesUUID,
+  triggerInProperties,
+  foreachInProperties,
+  updatePropertiesInProperties,
+  deletePropertiesInProperties,
+  triggerPropertiesInProperties,
+
   AuthService,
   AuthProvider,
   UserConfigProvider,
@@ -87,14 +113,14 @@ export { UIAdapter } from './adapters/UIAdapter'
 
 // ==================== Core Modules  ====================
 // Модульные экспорты для tree-shaking и лучшей организации кода
-export * as PubSub from './core/pubsub'
-export * as Roles from './core/roles'
-export * as UtilsCore from './core/utils'
-export * as CRUD from './core/crud'
-export * as ErrorHandling from './core/error'
-export * as Query from './core/query'
-export * as Validation from './core/validation'
-export * as Meta from './core/meta'
+export * from './core/pubsub'
+export * from './core/roles'
+export * from './core/utils'
+export * from './core/crud'
+export * from './core/error'
+export * from './core/query'
+export * from './core/validation'
+export * from './core/meta'
 
 // ==================== Core Component Logic  ====================
 // UI-Agnostic классы бизнес-логики компонентов

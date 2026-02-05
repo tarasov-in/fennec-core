@@ -8,7 +8,7 @@
  */
 
 import React from 'react'
-import { getObjectValue, getDisplay, uncapitalize, getFormatFieldValueTableView } from '../../Tool'
+import { getDisplay, getFormatFieldValueTableView, getObjectValue, uncapitalize } from '../utils'
 
 /**
  * Generates table columns configuration from metadata properties

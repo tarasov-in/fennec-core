@@ -7,7 +7,9 @@
  * @version 2.1.0
  */
 
-import { pushStateHistoryModal } from '../../../Tool'
+import { pushStateHistoryModal } from "../../../Tool"
+
+// import { pushStateHistoryModal } from '../../../Tool'
 
 export class ActionModalCore {
   constructor(props = {}) {

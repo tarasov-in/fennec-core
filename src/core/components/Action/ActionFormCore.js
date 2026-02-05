@@ -7,7 +7,7 @@
  * @version 2.1.0
  */
 
-import { makeFormData } from '../../../Tool'
+import { makeFormData } from '../../../core/utils'
 
 export class ActionFormCore {
   constructor(props = {}) {

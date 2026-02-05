@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Auth';
-import { errorCatch, QueryDetail, READWITH } from '../Tool';
 import { TranslateContext, useUserConfigContext } from '../Components/Context';
+import { QueryDetail } from 'fennec-core/core/query';
+import { READWITH } from 'fennec-core/core/crud';
+import { errorCatch } from 'fennec-core/core/error';
 
 //-------------------------------------------------------------------------------------
 const dict = {};

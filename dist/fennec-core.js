@@ -4,9 +4,13 @@ var React = require('react');
 var React__default = _interopDefault(React);
 var reactRouterDom = require('react-router-dom');
 var decode = _interopDefault(require('jwt-decode'));
-var PubSub = _interopDefault(require('pubsub-js'));
-var uuid = _interopDefault(require('react-uuid'));
+var error$1 = require('fennec-core/core/error');
+var crud = require('fennec-core/core/crud');
+var utils = require('fennec-core/core/utils');
+var query = require('fennec-core/core/query');
+var fuuid = _interopDefault(require('react-uuid'));
 var reactResponsive = require('react-responsive');
+var PubSub = _interopDefault(require('pubsub-js'));
 var ReactDOM = _interopDefault(require('react-dom'));
 var getScrollBarSize = _interopDefault(require('rc-util/lib/getScrollBarSize'));
 var dynamicCSS = require('rc-util/lib/Dom/dynamicCSS');
@@ -395,18 +399,6 @@ var messageError = function messageError(err) {
   setTimeout(function () {
     alertInstance === null || alertInstance === void 0 ? void 0 : alertInstance.close();
   }, 5000);
-};
-
-
-
-var index = {
-  __proto__: null,
-  FennecError: FennecError,
-  errorCatch: errorCatch,
-  errorAlert: errorAlert,
-  messageError: messageError,
-  setNotifier: setNotifier,
-  getNotifier: getNotifier
 };
 
 var AuthService = /*#__PURE__*/function () {
@@ -936,6 +928,190 @@ function configureRefreshFetch(auth) {
     return window.fetch;
   }
   return typeof globalThis !== 'undefined' ? globalThis.fetch : fetch;
+}
+
+var UserContext = React.createContext();
+function useUserContext() {
+  return React__default.useContext(UserContext);
+}
+var UserConfigContext = React.createContext();
+function useUserConfigContext() {
+  return React__default.useContext(UserConfigContext);
+}
+var TranslateContext = React.createContext();
+function useTranslateContext() {
+  return React__default.useContext(TranslateContext);
+}
+var MetaContext = React.createContext();
+function useMetaContext() {
+  return React__default.useContext(MetaContext);
+}
+var ClipboardContext = React.createContext();
+function useClipboardContext() {
+  return React__default.useContext(ClipboardContext);
+}
+function useCollectionRef(initialValue) {
+  return React__default.useState({
+    current: initialValue
+  })[0];
+}
+function useActionRef(initialValue) {
+  return React__default.useState({
+    current: initialValue
+  })[0];
+}
+var FormObserverContext = React.createContext();
+function useFormObserverContext() {
+  var o = React__default.useContext(FormObserverContext);
+  return o ? o : [];
+}
+
+function UserConfigProvider(_ref) {
+  var children = _ref.children;
+  var auth = useAuth();
+  var _useState = React.useState({}),
+    userConfig = _useState[0],
+    _setUserConfig = _useState[1];
+  var _useState2 = React.useState(false),
+    ready = _useState2[0],
+    setReady = _useState2[1];
+  var setUserConfig = function setUserConfig(name, value, onChange) {
+    if (!auth.loggedIn()) return;
+    crud.POST(auth, "/api/setuserconfig", {
+      key: name,
+      value: value
+    }, function (_ref3) {
+      var data = _ref3.data;
+      var arr = [data];
+      var obj = Object.fromEntries(arr.map(function (i) {
+        return [i.key, i.value];
+      }));
+      var i = _extends({}, userConfig, obj);
+      _setUserConfig(i);
+      if (onChange) {
+        onChange(i);
+      }
+    }, error$1.errorCatch);
+  };
+  React.useEffect(function () {
+    if (!auth.loggedIn()) return;
+    crud.READWITH(auth, 'UserConfig', [utils.QueryDetail("model")], function (_ref4) {
+      var data = _ref4.data;
+      if (data.length > 0) {
+        var obj = Object.fromEntries(data.map(function (i) {
+          return [i.key, i.value];
+        }));
+        _setUserConfig(obj);
+      }
+      setReady(true);
+    }, error$1.errorCatch);
+  }, []);
+  return /*#__PURE__*/React__default.createElement(UserConfigContext.Provider, {
+    value: [userConfig, setUserConfig]
+  }, (ready || !auth.loggedIn()) && children);
+}
+
+var dict = {};
+function translate(value) {
+  if (!_.isString(value)) return "";
+  dict[value.toLowerCase().replaceAll(' ', '')] = value;
+  if (this.config && this.translate && value) {
+    var key = value.toLowerCase().replaceAll(' ', '');
+    if (this.translate[key]) {
+      var v = this.translate[key][this.config.lang ? this.config.lang : "ru"];
+      if (!v || v === "") {
+        return value;
+      }
+      return v;
+    }
+  }
+  return value;
+}
+function TranslateProvider(_ref) {
+  var children = _ref.children;
+  var auth = useAuth();
+  var _useState = React.useState({}),
+    translates = _useState[0],
+    setTranslates = _useState[1];
+  var _useUserConfigContext = useUserConfigContext(),
+    userConfig = _useUserConfigContext[0];
+  var t = React__default.useMemo(function () {
+    return _.bind(translate, {
+      translate: translates,
+      config: userConfig
+    });
+  }, [translates, userConfig]);
+  React.useEffect(function () {
+    crud.READWITH(auth, 'Translate', [query.QueryDetail("model")], function (_ref2) {
+      var data = _ref2.data;
+      if (data.length > 0) {
+        var o = Object.fromEntries(data.map(function (i) {
+          return [i.key, {
+            ru: i.ru,
+            en: i.en,
+            es: i.es
+          }];
+        }));
+        setTranslates(o);
+      }
+    }, error$1.errorCatch);
+  }, []);
+  return /*#__PURE__*/React__default.createElement(TranslateContext.Provider, {
+    value: t
+  }, children);
+}
+
+function MetaProvider(_ref) {
+  var children = _ref.children;
+  var auth = useAuth();
+  var _useState = React.useState(false),
+    ready = _useState[0],
+    setReady = _useState[1];
+  var _useState2 = React.useState(),
+    meta = _useState2[0],
+    setMeta = _useState2[1];
+  React.useEffect(function () {
+    auth.fetch('/api/meta').then(function (res) {
+      if (res && res.data) {
+        var arr = Object.values(res.data).map(function (item) {
+          if (!item.uuid) {
+            return _extends({}, item, {
+              uuid: fuuid()
+            });
+          }
+          return item;
+        });
+        var o = {};
+        for (var i = 0; i < arr.length; i++) {
+          var element = arr[i];
+          o[element.name.toLowerCase()] = element;
+        }
+        setMeta(o);
+        setReady(true);
+      }
+    });
+  }, []);
+  return /*#__PURE__*/React__default.createElement(MetaContext.Provider, {
+    value: meta
+  }, (ready || !auth.loggedIn()) && children);
+}
+
+function isRequired(item) {
+  if (item && item.validators) {
+    return item.validators.required || item.required;
+  }
+  return false;
+}
+
+function validator(func, message) {
+  return {
+    validator: function validator(_, value) {
+      if (func(value)) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error(message));
+    }
+  };
 }
 
 var lodash = createCommonjsModule(function (module, exports) {
@@ -18167,499 +18343,6 @@ var lodash = createCommonjsModule(function (module, exports) {
 }.call(commonjsGlobal));
 });
 
-var subscribe = function subscribe(msg, func) {
-  return PubSub.subscribe(msg, func);
-};
-var unsubscribe = function unsubscribe(token) {
-  PubSub.unsubscribe(token);
-};
-var uncapitalize = function uncapitalize(str) {
-  return str.charAt(0).toLowerCase() + str.slice(1);
-};
-var QueryParams = function QueryParams(queryParams) {
-  var ext = "";
-  if (queryParams) {
-    for (var i = 0; i < queryParams.length; i++) {
-      var param = queryParams[i];
-      if (lodash.isString(param)) {
-        ext += !ext ? param : '&' + param;
-      } else if (lodash.isFunction(param)) {
-        ext += !ext ? param() : '&' + param();
-      }
-    }
-  }
-  return ext;
-};
-var QueryParam = function QueryParam(name, value) {
-  return name + "=" + value;
-};
-var QueryDetail = function QueryDetail(value) {
-  return QueryParam("detail", value ? value : "none");
-};
-var READWITH = function READWITH(auth, name, queryParams, callback, error) {
-  var ext = QueryParams(queryParams);
-  GET(auth, '/api/query/' + name.toLowerCase() + (ext ? "?" + ext : ""), callback, error);
-};
-var POST = function POST(auth, url, object, callback, error) {
-  auth.fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(object)
-  }).then(function (res) {
-    if (res && res.status === true) {
-      if (callback) {
-        callback(res);
-      }
-    } else if (res && res.status === false) {
-      throw new FennecError$1(res.message, "", res);
-    }
-  })["catch"](error || errorCatch$1);
-};
-var GET = function GET(auth, url, callback, error) {
-  auth.fetch(url).then(function (res) {
-    if (res && res.status === true) {
-      if (callback) {
-        callback(res);
-      }
-    } else if (res && res.status === false) {
-      throw new FennecError$1(res.message, "", res);
-    }
-  })["catch"](error || errorCatch$1);
-};
-function FennecError$1(message, name, object) {
-  if (message === void 0) {
-    message = "";
-  }
-  if (name === void 0) {
-    name = "";
-  }
-  if (object === void 0) {
-    object = {};
-  }
-  this.name = "Error" + (name ? ": " + name : "");
-  this.message = message;
-  this.object = object;
-}
-FennecError$1.prototype = Error.prototype;
-var errorCatch$1 = function errorCatch(err, callback) {
-  if (err) {
-    try {
-      var notifier = getNotifier();
-      if (notifier !== null && notifier !== void 0 && notifier.error) notifier.error("" + err);else console.error("" + err);
-    } catch (_) {
-      console.error("" + err);
-    }
-    if (callback) callback();
-  }
-};
-var makeFormData = function makeFormData(values) {
-  var formData = new FormData();
-  var _loop2 = function _loop2(key) {
-    if (Object.hasOwnProperty.call(values, key)) {
-      var value = values[key];
-      if (lodash.isArray(value)) {
-        value.forEach(function (item) {
-          if (item) {
-            formData.append(key, item);
-          }
-        });
-      } else {
-        if (value) {
-          formData.append(key, value);
-        }
-      }
-    }
-  };
-  for (var key in values) {
-    _loop2(key);
-  }
-  return formData;
-};
-var historyCallbackFunctions = {};
-var pushStateHistoryModal = function pushStateHistoryModal(setVisible, getStack) {
-  if (typeof window === 'undefined') return;
-  var cbFuncName = 'modal_' + uuid();
-  window.history.replaceState(_extends({}, window.history.state, {
-    cb: cbFuncName
-  }), '');
-  window.history.pushState(null, null, '');
-  if (typeof window.historyCallbackFunctions === 'undefined') window.historyCallbackFunctions = historyCallbackFunctions;
-  window.historyCallbackFunctions[cbFuncName] = function (e) {
-    delete window.historyCallbackFunctions[cbFuncName];
-    setVisible(false);
-    window.history.replaceState(_extends({}, window.history.state, {
-      cb: undefined
-    }), '');
-    if (getStack) {
-      var stack = getStack();
-      while (stack.length > 0) {
-        var fun = stack.pop();
-        if (fun) {
-          fun();
-        }
-      }
-    }
-  };
-};
-function getObjectValue(object, subObject) {
-  if (object && subObject) {
-    var _subObject$replace$sp;
-    var subObjects = (_subObject$replace$sp = subObject.replace(/\[[\wа-яА-ЯёЁ\d\."']*\]/g, function (item) {
-      return item.replace(".", "<<8>>");
-    }).split(".")) === null || _subObject$replace$sp === void 0 ? void 0 : _subObject$replace$sp.map(function (item) {
-      return item.replace(/<<8>>/g, ".");
-    });
-    for (var i = 0; i < subObjects.length; i++) {
-      var index = subObjects[i].match(/\[.*\]/);
-      var subObj = subObjects[i].replace(/\[.*\]/, "");
-      if (subObj) {
-        var lastObj = subObj;
-        if (object === null) {
-          console.debug("Ошибка получения объекта: " + subObject + "; Не удается найти свойство: " + "\"" + subObj + "\"");
-          return;
-        }
-        object = object[subObj];
-        if (object === undefined) {
-          console.debug("Ошибка получения объекта: " + subObject + "; Не удается найти свойство: " + "\"" + subObj + "\"");
-          return;
-        }
-        if (index) {
-          var rexp = /\[([\wа-яА-ЯёЁ\d\.]+)\]|\[["|']([\wа-яА-ЯёЁ\d\.]+)["|']\]/g;
-          var matchArray;
-          while (matchArray = rexp.exec(index)) {
-            var matchIndex = matchArray[1] || matchArray[2];
-            if (matchIndex) {
-              object = object[matchIndex];
-              if (object === undefined) {
-                console.debug("Ошибка получения объекта: " + subObject + "; Не существует элемента с индексом: \"" + matchIndex + "\" в объекте: " + lastObj);
-                return;
-              }
-            } else {
-              console.debug("Ошибка получения объекта: " + subObject + "; Не могу получить указанный объект. Ошибка получения индекса элемента.");
-              return;
-            }
-          }
-        }
-      } else {
-        console.debug("Ошибка получения объекта: " + subObject + "; Не могу получить указанный объект.");
-        return;
-      }
-    }
-  }
-  return object;
-}
-function getDisplay(data, display, metaObject, meta) {
-  var result = "";
-  if (!data) {
-    return result;
-  }
-  if (!display || !display.fields) {
-    return result;
-  }
-  var sep = "";
-  if (display.sep) {
-    sep = display.sep;
-  }
-  for (var i = 0; i < display.fields.length; i++) {
-    var _field$value$split;
-    var field = display.fields[i];
-    var name_field = (_field$value$split = field.value.split(".")) === null || _field$value$split === void 0 ? void 0 : _field$value$split.map(function (e) {
-      return uncapitalize(e);
-    }).join(".");
-    var value_field = getObjectValue(data, name_field);
-    if (lodash.isObject(value_field)) {
-      var _metaGetFieldByName, _metaGetFieldByName$r;
-      value_field = getDisplay(value_field, (_metaGetFieldByName = metaGetFieldByName(metaObject, meta, name_field)) === null || _metaGetFieldByName === void 0 ? void 0 : (_metaGetFieldByName$r = _metaGetFieldByName.relation) === null || _metaGetFieldByName$r === void 0 ? void 0 : _metaGetFieldByName$r.display, metaObject, meta);
-      if (!value_field) {
-        var _metaGetFieldByName2, _metaGetFieldByName2$, _metaGetFieldByName2$2, _subMeta;
-        var subMeta = meta[(_metaGetFieldByName2 = metaGetFieldByName(metaObject, meta, name_field)) === null || _metaGetFieldByName2 === void 0 ? void 0 : (_metaGetFieldByName2$ = _metaGetFieldByName2.relation) === null || _metaGetFieldByName2$ === void 0 ? void 0 : (_metaGetFieldByName2$2 = _metaGetFieldByName2$.reference) === null || _metaGetFieldByName2$2 === void 0 ? void 0 : _metaGetFieldByName2$2.object];
-        value_field = getDisplay(getObjectValue(data, name_field), (_subMeta = subMeta) === null || _subMeta === void 0 ? void 0 : _subMeta.display, subMeta, meta);
-      }
-    }
-    var metaField = metaGetFieldByName(metaObject, meta, name_field);
-    if (metaField && metaField.type) {
-      value_field = getFormatFieldValueTableView(value_field, metaField.type, metaField);
-    }
-    if (value_field) {
-      result += (field.prefix || "") + value_field + (field.suffix || "");
-      if (i < display.fields.length - 1) {
-        result += sep;
-      }
-    }
-  }
-  return result;
-}
-function metaGetCloneObject(objectName, meta) {
-  return lodash.cloneDeep(meta[objectName]);
-}
-function metaGetFieldByName(metaObject, meta, fieldName) {
-  if (typeof metaObject === "string") {
-    var metaObject = metaGetCloneObject(metaObject, meta);
-  } else if (typeof metaObject !== "object") {
-    return;
-  }
-  if (!getObjectValue(metaObject, "properties.length") || !fieldName) {
-    return;
-  }
-  if (typeof fieldName === "string") {
-    fieldName = fieldName.split(".");
-  }
-  if (!fieldName.length || fieldName.length < 1) {
-    return;
-  }
-  for (var tag in metaObject.properties) {
-    var _metaObject$propertie;
-    if (((_metaObject$propertie = metaObject.properties[tag].name) === null || _metaObject$propertie === void 0 ? void 0 : _metaObject$propertie.toLowerCase()) === fieldName[0].toLowerCase()) {
-      if (fieldName.length > 1) {
-        var subObjectName = getObjectValue(metaObject, "properties[" + tag + "].relation.reference.object");
-        if (subObjectName) {
-          return metaGetFieldByName(meta[subObjectName], meta, fieldName.slice(1));
-        } else {
-          console.error("metaGetFieldByName. Не удалось найти " + fieldName + " в объекте " + metaObject.name, metaObject);
-          return;
-        }
-      } else {
-        return metaObject.properties[tag];
-      }
-    }
-  }
-}
-function getFormatFieldValueTableView(data, type, meta) {
-  if (type === "boolean" || type === "bool") {
-    var trueValue = getObjectValue(meta, "booleanPresenter.trueValue") || "Да";
-    var falseValue = getObjectValue(meta, "booleanPresenter.falseValue") || "Нет";
-    return data ? trueValue : falseValue;
-  }
-  if (!data) {
-    return '';
-  }
-  if (type === "timestamp" || type === "datetime" || type == "localdatetime") {
-    var mDate = dayjs_min(data);
-    if (mDate && mDate.isValid()) {
-      return mDate.format("DD.MM.YYYY HH:mm:ss");
-    }
-  } else if (type === "date" || type == "localdate") {
-    var mDate = dayjs_min(data);
-    if (mDate && mDate.isValid()) {
-      return mDate.format("DD.MM.YYYY");
-    }
-  } else if (type === "time" || type === "localtime") {
-    var mDate = '';
-    if (data.length <= 8) {
-      mDate = dayjs_min(data, "HH:mm:ss");
-    } else if (data.length > 8) {
-      mDate = dayjs_min(data);
-    }
-    if (mDate && mDate.isValid()) {
-      return mDate.format("HH:mm:ss");
-    }
-  } else if (type === "int" || type === "uint" || type === "integer" || type === "long") {
-    return priceFormat(data);
-  } else if (type === "double" || type === "bigdecimal" || type === "float") {
-    return priceFormat(data, 2);
-  } else {
-    return data;
-  }
-  return '';
-}
-function priceFormat(price, precision) {
-  if (!price) {
-    price = 0;
-  }
-  if (typeof price === "string") {
-    price = Number.parseFloat(price.trim().replace(" ", "").replace(",", "."));
-  }
-  if (!precision) {
-    precision = 0;
-  }
-  return Number(price.toFixed(precision)).toLocaleString('ru', {
-    minimumFractionDigits: precision
-  });
-}
-
-var UserContext = React.createContext();
-function useUserContext() {
-  return React__default.useContext(UserContext);
-}
-var UserConfigContext = React.createContext();
-function useUserConfigContext() {
-  return React__default.useContext(UserConfigContext);
-}
-var TranslateContext = React.createContext();
-function useTranslateContext() {
-  return React__default.useContext(TranslateContext);
-}
-var MetaContext = React.createContext();
-function useMetaContext() {
-  return React__default.useContext(MetaContext);
-}
-var ClipboardContext = React.createContext();
-function useClipboardContext() {
-  return React__default.useContext(ClipboardContext);
-}
-function useCollectionRef(initialValue) {
-  return React__default.useState({
-    current: initialValue
-  })[0];
-}
-function useActionRef(initialValue) {
-  return React__default.useState({
-    current: initialValue
-  })[0];
-}
-var FormObserverContext = React.createContext();
-function useFormObserverContext() {
-  var o = React__default.useContext(FormObserverContext);
-  return o ? o : [];
-}
-
-function UserConfigProvider(_ref) {
-  var children = _ref.children;
-  var auth = useAuth();
-  var _useState = React.useState({}),
-    userConfig = _useState[0],
-    _setUserConfig = _useState[1];
-  var _useState2 = React.useState(false),
-    ready = _useState2[0],
-    setReady = _useState2[1];
-  var setUserConfig = function setUserConfig(name, value, onChange) {
-    if (!auth.loggedIn()) return;
-    POST(auth, "/api/setuserconfig", {
-      key: name,
-      value: value
-    }, function (_ref3) {
-      var data = _ref3.data;
-      var arr = [data];
-      var obj = Object.fromEntries(arr.map(function (i) {
-        return [i.key, i.value];
-      }));
-      var i = _extends({}, userConfig, obj);
-      _setUserConfig(i);
-      if (onChange) {
-        onChange(i);
-      }
-    }, errorCatch$1);
-  };
-  React.useEffect(function () {
-    if (!auth.loggedIn()) return;
-    READWITH(auth, 'UserConfig', [QueryDetail("model")], function (_ref4) {
-      var data = _ref4.data;
-      if (data.length > 0) {
-        var obj = Object.fromEntries(data.map(function (i) {
-          return [i.key, i.value];
-        }));
-        _setUserConfig(obj);
-      }
-      setReady(true);
-    }, errorCatch$1);
-  }, []);
-  return /*#__PURE__*/React__default.createElement(UserConfigContext.Provider, {
-    value: [userConfig, setUserConfig]
-  }, (ready || !auth.loggedIn()) && children);
-}
-
-var dict = {};
-function translate(value) {
-  if (!_.isString(value)) return "";
-  dict[value.toLowerCase().replaceAll(' ', '')] = value;
-  if (this.config && this.translate && value) {
-    var key = value.toLowerCase().replaceAll(' ', '');
-    if (this.translate[key]) {
-      var v = this.translate[key][this.config.lang ? this.config.lang : "ru"];
-      if (!v || v === "") {
-        return value;
-      }
-      return v;
-    }
-  }
-  return value;
-}
-function TranslateProvider(_ref) {
-  var children = _ref.children;
-  var auth = useAuth();
-  var _useState = React.useState({}),
-    translates = _useState[0],
-    setTranslates = _useState[1];
-  var _useUserConfigContext = useUserConfigContext(),
-    userConfig = _useUserConfigContext[0];
-  var t = React__default.useMemo(function () {
-    return _.bind(translate, {
-      translate: translates,
-      config: userConfig
-    });
-  }, [translates, userConfig]);
-  React.useEffect(function () {
-    READWITH(auth, 'Translate', [QueryDetail("model")], function (_ref2) {
-      var data = _ref2.data;
-      if (data.length > 0) {
-        var o = Object.fromEntries(data.map(function (i) {
-          return [i.key, {
-            ru: i.ru,
-            en: i.en,
-            es: i.es
-          }];
-        }));
-        setTranslates(o);
-      }
-    }, errorCatch$1);
-  }, []);
-  return /*#__PURE__*/React__default.createElement(TranslateContext.Provider, {
-    value: t
-  }, children);
-}
-
-function MetaProvider(_ref) {
-  var children = _ref.children;
-  var auth = useAuth();
-  var _useState = React.useState(false),
-    ready = _useState[0],
-    setReady = _useState[1];
-  var _useState2 = React.useState(),
-    meta = _useState2[0],
-    setMeta = _useState2[1];
-  React.useEffect(function () {
-    auth.fetch('/api/meta').then(function (res) {
-      if (res && res.data) {
-        var arr = Object.values(res.data).map(function (item) {
-          if (!item.uuid) {
-            return _extends({}, item, {
-              uuid: uuid()
-            });
-          }
-          return item;
-        });
-        var o = {};
-        for (var i = 0; i < arr.length; i++) {
-          var element = arr[i];
-          o[element.name.toLowerCase()] = element;
-        }
-        setMeta(o);
-        setReady(true);
-      }
-    });
-  }, []);
-  return /*#__PURE__*/React__default.createElement(MetaContext.Provider, {
-    value: meta
-  }, (ready || !auth.loggedIn()) && children);
-}
-
-function isRequired(item) {
-  if (item && item.validators) {
-    return item.validators.required || item.required;
-  }
-  return false;
-}
-
-function validator(func, message) {
-  return {
-    validator: function validator(_, value) {
-      if (func(value)) {
-        return Promise.resolve();
-      }
-      return Promise.reject(new Error(message));
-    }
-  };
-}
-
 function formItemRules(item) {
   var res = [];
   if (item && item.validators) {
@@ -18719,15 +18402,6 @@ function formItemRules(item) {
   }
   return res;
 }
-
-
-
-var index$1 = {
-  __proto__: null,
-  isRequired: isRequired,
-  validator: validator,
-  formItemRules: formItemRules
-};
 
 var FieldCore = /*#__PURE__*/function () {
   function FieldCore(props, meta, adapter) {
@@ -19665,12 +19339,12 @@ function GetMetaPropertyByPath(meta, obj, path) {
   }
 }
 
-function metaGetCloneObject$1(objectName, meta) {
+function metaGetCloneObject(objectName, meta) {
   return lodash.cloneDeep(meta[objectName]);
 }
-function metaGetFieldByName$1(metaObject, meta, fieldName) {
+function metaGetFieldByName(metaObject, meta, fieldName) {
   if (typeof metaObject === "string") {
-    var metaObject = metaGetCloneObject$1(metaObject, meta);
+    var metaObject = metaGetCloneObject(metaObject, meta);
   } else if (typeof metaObject !== "object") {
     return;
   }
@@ -19689,7 +19363,7 @@ function metaGetFieldByName$1(metaObject, meta, fieldName) {
       if (fieldName.length > 1) {
         var subObjectName = lodash.get(metaObject, "properties[" + tag + "].relation.reference.object");
         if (subObjectName) {
-          return metaGetFieldByName$1(meta[subObjectName], meta, fieldName.slice(1));
+          return metaGetFieldByName(meta[subObjectName], meta, fieldName.slice(1));
         } else {
           console.error("metaGetFieldByName. Не удалось найти " + fieldName + " в объекте " + metaObject.name, metaObject);
           return;
@@ -19718,7 +19392,7 @@ function getSortingDisplayFields(display, metaObject, meta, parent, result) {
       name_field = (_field$value$split = field.value.split(".")) === null || _field$value$split === void 0 ? void 0 : _field$value$split.map(function (e) {
         return uncapitalize(e);
       }).join(".");
-      metaField = metaGetFieldByName$1(metaObject, meta, name_field);
+      metaField = metaGetFieldByName(metaObject, meta, name_field);
       if (parent) {
         name_field = parent + "." + name_field;
       }
@@ -19738,127 +19412,6 @@ function getSortingDisplayFields(display, metaObject, meta, parent, result) {
   }
   return result;
 }
-
-function MetaColumns(properties, meta, onColumnClick) {
-  return function (_ref) {
-    var request = _ref.request;
-    var click = function click(record, item) {
-      if (onColumnClick && item && onColumnClick[item.name]) {
-        request(record, {
-          action: onColumnClick[item.name]
-        });
-      }
-    };
-    return properties === null || properties === void 0 ? void 0 : properties.map(function (item, idx) {
-      if (item.type === "object" || item.type === "document") {
-        var fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
-        var display = function display(_display) {
-          if (_display.fields) {
-            return _display;
-          }
-        };
-        return {
-          title: item.label,
-          render: function render(text, record, index) {
-            return /*#__PURE__*/React__default.createElement("div", {
-              style: onColumnClick && onColumnClick[item.name] ? {
-                cursor: "pointer",
-                color: "#1890ff"
-              } : {},
-              onClick: function onClick() {
-                return click(record, item);
-              }
-            }, getDisplay(record[uncapitalize(item.name)], display(item.relation.display) || display(fieldMeta.display), fieldMeta, meta));
-          }
-        };
-      }
-      return {
-        title: item.label,
-        render: function render(text, record, index) {
-          return /*#__PURE__*/React__default.createElement("div", {
-            style: onColumnClick && onColumnClick[item.name] ? {
-              cursor: "pointer",
-              color: "#1890ff"
-            } : {},
-            onClick: function onClick() {
-              return click(record, item);
-            }
-          }, getFormatFieldValueTableView(record[item.name.charAt(0).toLowerCase() + item.name.slice(1)], item.type, item));
-        }
-      };
-    });
-  };
-}
-
-
-
-var index$2 = {
-  __proto__: null,
-  GetMeta: GetMeta,
-  GetMetaProperties: GetMetaProperties,
-  SetMetaProperties: SetMetaProperties,
-  GetMetaPropertyByPath: GetMetaPropertyByPath,
-  metaGetCloneObject: metaGetCloneObject$1,
-  metaGetFieldByName: metaGetFieldByName$1,
-  getSortingDisplayFields: getSortingDisplayFields,
-  MetaColumns: MetaColumns
-};
-
-var _excluded = ["meta", "value", "onChange", "disabled", "readOnly", "placeholder", "label", "help", "tooltip", "className", "style", "forceMobile"];
-var FieldComponent = function FieldComponent(props) {
-  var meta = props.meta,
-    value = props.value,
-    onChange = props.onChange,
-    disabled = props.disabled,
-    readOnly = props.readOnly,
-    placeholder = props.placeholder,
-    className = props.className,
-    style = props.style,
-    forceMobile = props.forceMobile,
-    restProps = _objectWithoutPropertiesLoose(props, _excluded);
-  var adapter = useUIAdapter();
-  var isSystemMobile = reactResponsive.useMediaQuery({
-    maxWidth: 768
-  });
-  var isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile;
-  var resolvedMeta = GetMeta(meta);
-  var fieldCore = React.useMemo(function () {
-    return new FieldCore(_extends({
-      value: value,
-      onChange: onChange,
-      disabled: disabled,
-      readOnly: readOnly,
-      placeholder: placeholder
-    }, restProps), resolvedMeta, adapter);
-  }, [value, onChange, disabled, readOnly, placeholder, resolvedMeta, adapter, restProps]);
-  var Renderer = isMobile ? FieldMobileRenderer : FieldRenderer;
-  return /*#__PURE__*/React__default.createElement(Renderer, _extends({
-    fieldCore: fieldCore,
-    className: className,
-    style: style
-  }, props));
-};
-var arePropsEqual = function arePropsEqual(prevProps, nextProps) {
-  if (prevProps.value !== nextProps.value) return false;
-  if (prevProps.onChange !== nextProps.onChange) return false;
-  if (prevProps.disabled !== nextProps.disabled) return false;
-  if (prevProps.readOnly !== nextProps.readOnly) return false;
-  if (prevProps.forceMobile !== nextProps.forceMobile) return false;
-  if (prevProps.meta !== nextProps.meta) {
-    if (typeof prevProps.meta === 'object' && typeof nextProps.meta === 'object') {
-      var _prevProps$meta, _nextProps$meta, _prevProps$meta2, _nextProps$meta2;
-      var prevType = (_prevProps$meta = prevProps.meta) === null || _prevProps$meta === void 0 ? void 0 : _prevProps$meta.type;
-      var nextType = (_nextProps$meta = nextProps.meta) === null || _nextProps$meta === void 0 ? void 0 : _nextProps$meta.type;
-      var prevRequired = (_prevProps$meta2 = prevProps.meta) === null || _prevProps$meta2 === void 0 ? void 0 : _prevProps$meta2.required;
-      var nextRequired = (_nextProps$meta2 = nextProps.meta) === null || _nextProps$meta2 === void 0 ? void 0 : _nextProps$meta2.required;
-      if (prevType !== nextType || prevRequired !== nextRequired) return false;
-    } else {
-      return false;
-    }
-  }
-  return true;
-};
-var Field = React.memo(FieldComponent, arePropsEqual);
 
 function getLocator(locator, obj) {
   if (lodash.isObject(obj)) {
@@ -20053,12 +19606,12 @@ var clean = function clean(value, element) {
   }) : value;
 };
 var If = function If(equations, truthful) {
-  return And(equations) ? _unwrap(truthful, true) : undefined;
+  return And$1(equations) ? _unwrap(truthful, true) : undefined;
 };
-var IfElse = function IfElse(equations, truthful, untruthful) {
-  return And(equations) ? _unwrap(truthful, true) : _unwrap(untruthful, true);
+var IfElse$1 = function IfElse(equations, truthful, untruthful) {
+  return And$1(equations) ? _unwrap(truthful, true) : _unwrap(untruthful, true);
 };
-var And = function And(args) {
+var And$1 = function And(args) {
   var acc = true;
   var unwraped = _unwrap(args);
   for (var i = 0; i < unwraped.length; i++) {
@@ -20077,7 +19630,7 @@ var Or = function Or(args) {
   }
   return acc;
 };
-var uncapitalize$1 = function uncapitalize(str) {
+var uncapitalize = function uncapitalize(str) {
   return str.charAt(0).toLowerCase() + str.slice(1);
 };
 
@@ -20098,7 +19651,7 @@ var upgradeInArray = function upgradeInArray(array, item) {
   }
   return [item];
 };
-var updateInArray = function updateInArray(array, item, first) {
+var updateInArray$1 = function updateInArray(array, item, first) {
   if (!array) array = [];
   if (!item || !item.ID) return array;
   if (lodash.findIndex(array, {
@@ -20106,16 +19659,16 @@ var updateInArray = function updateInArray(array, item, first) {
   }) >= 0) {
     var _array;
     return (_array = array) === null || _array === void 0 ? void 0 : _array.map(function (e) {
-      return IfElse(e.ID === item.ID, item, e);
+      return IfElse$1(e.ID === item.ID, item, e);
     });
   } else {
     return first ? [item].concat(array) : [].concat(array, [item]);
   }
 };
 var createInArray = function createInArray(array, item) {
-  return updateInArray(array, item);
+  return updateInArray$1(array, item);
 };
-var deleteInArray = function deleteInArray(array, item) {
+var deleteInArray$1 = function deleteInArray(array, item) {
   var _array2;
   if (!array) array = [];
   if (!item || !item.ID) return array;
@@ -20127,9 +19680,9 @@ var triggerInArray = function triggerInArray(array, item) {
   if (array.find(function (x) {
     return x.ID === item.ID;
   }) !== undefined) {
-    return deleteInArray(array, item);
+    return deleteInArray$1(array, item);
   } else {
-    return updateInArray(array, item);
+    return updateInArray$1(array, item);
   }
 };
 var emptyInArray = function emptyInArray(array, item) {
@@ -20144,11 +19697,11 @@ var updateArrayInArray = function updateArrayInArray(array, item) {
     var tmp = [].concat(array);
     for (var i = 0; i < item.length; i++) {
       var it = item[i];
-      tmp = updateInArray(tmp, it);
+      tmp = updateInArray$1(tmp, it);
     }
     return tmp;
   } else {
-    return updateInArray(array, item);
+    return updateInArray$1(array, item);
   }
 };
 var createArrayInArray = function createArrayInArray(array, item) {
@@ -20160,11 +19713,11 @@ var deleteArrayInArray = function deleteArrayInArray(array, item) {
     var tmp = [].concat(array);
     for (var i = 0; i < item.length; i++) {
       var it = item[i];
-      tmp = deleteInArray(tmp, it);
+      tmp = deleteInArray$1(tmp, it);
     }
     return tmp;
   } else {
-    return deleteInArray(array, item);
+    return deleteInArray$1(array, item);
   }
 };
 var triggerArrayInArray = function triggerArrayInArray(array, item) {
@@ -20181,7 +19734,7 @@ var triggerArrayInArray = function triggerArrayInArray(array, item) {
   }
 };
 
-function getObjectValue$1(object, subObject) {
+function getObjectValue(object, subObject) {
   if (object && subObject) {
     var _subObject$replace$sp;
     var subObjects = (_subObject$replace$sp = subObject.replace(/\[[\wа-яА-ЯёЁ\d\."']*\]/g, function (item) {
@@ -20229,7 +19782,7 @@ function getObjectValue$1(object, subObject) {
   return object;
 }
 function getObjectValueOrDefault(object, subObject, defValue) {
-  var result = getObjectValue$1(object, subObject);
+  var result = getObjectValue(object, subObject);
   if (result === undefined || result === null) {
     if (defValue !== undefined) {
       return defValue;
@@ -20246,7 +19799,7 @@ function getObjectDisplay(data, name, meta) {
     }
   };
   var metaObject = meta[name];
-  return getDisplay$1(data, display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
+  return getDisplay(data, display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
 }
 function getFieldDisplay(data, propertyMeta, meta) {
   var _propertyMeta$relatio;
@@ -20256,10 +19809,10 @@ function getFieldDisplay(data, propertyMeta, meta) {
       return _display2;
     }
   };
-  var metaObject = meta[getObjectValue$1(propertyMeta, "relation.reference.object")];
-  return getDisplay$1(data, display(propertyMeta === null || propertyMeta === void 0 ? void 0 : (_propertyMeta$relatio = propertyMeta.relation) === null || _propertyMeta$relatio === void 0 ? void 0 : _propertyMeta$relatio.display) || display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
+  var metaObject = meta[getObjectValue(propertyMeta, "relation.reference.object")];
+  return getDisplay(data, display(propertyMeta === null || propertyMeta === void 0 ? void 0 : (_propertyMeta$relatio = propertyMeta.relation) === null || _propertyMeta$relatio === void 0 ? void 0 : _propertyMeta$relatio.display) || display(metaObject === null || metaObject === void 0 ? void 0 : metaObject.display), metaObject, meta);
 }
-function getDisplay$1(data, display, metaObject, meta) {
+function getDisplay(data, display, metaObject, meta) {
   var result = "";
   if (!data) {
     return result;
@@ -20275,21 +19828,21 @@ function getDisplay$1(data, display, metaObject, meta) {
     var _field$value$split;
     var field = display.fields[i];
     var name_field = (_field$value$split = field.value.split(".")) === null || _field$value$split === void 0 ? void 0 : _field$value$split.map(function (e) {
-      return uncapitalize$1(e);
+      return uncapitalize(e);
     }).join(".");
-    var value_field = getObjectValue$1(data, name_field);
+    var value_field = getObjectValue(data, name_field);
     if (lodash.isObject(value_field)) {
       var _metaGetFieldByName, _metaGetFieldByName$r;
-      value_field = getDisplay$1(value_field, (_metaGetFieldByName = metaGetFieldByName$1(metaObject, meta, name_field)) === null || _metaGetFieldByName === void 0 ? void 0 : (_metaGetFieldByName$r = _metaGetFieldByName.relation) === null || _metaGetFieldByName$r === void 0 ? void 0 : _metaGetFieldByName$r.display, metaObject, meta);
+      value_field = getDisplay(value_field, (_metaGetFieldByName = metaGetFieldByName(metaObject, meta, name_field)) === null || _metaGetFieldByName === void 0 ? void 0 : (_metaGetFieldByName$r = _metaGetFieldByName.relation) === null || _metaGetFieldByName$r === void 0 ? void 0 : _metaGetFieldByName$r.display, metaObject, meta);
       if (!value_field) {
         var _metaGetFieldByName2, _metaGetFieldByName2$, _metaGetFieldByName2$2, _subMeta;
-        var subMeta = meta[(_metaGetFieldByName2 = metaGetFieldByName$1(metaObject, meta, name_field)) === null || _metaGetFieldByName2 === void 0 ? void 0 : (_metaGetFieldByName2$ = _metaGetFieldByName2.relation) === null || _metaGetFieldByName2$ === void 0 ? void 0 : (_metaGetFieldByName2$2 = _metaGetFieldByName2$.reference) === null || _metaGetFieldByName2$2 === void 0 ? void 0 : _metaGetFieldByName2$2.object];
-        value_field = getDisplay$1(getObjectValue$1(data, name_field), (_subMeta = subMeta) === null || _subMeta === void 0 ? void 0 : _subMeta.display, subMeta, meta);
+        var subMeta = meta[(_metaGetFieldByName2 = metaGetFieldByName(metaObject, meta, name_field)) === null || _metaGetFieldByName2 === void 0 ? void 0 : (_metaGetFieldByName2$ = _metaGetFieldByName2.relation) === null || _metaGetFieldByName2$ === void 0 ? void 0 : (_metaGetFieldByName2$2 = _metaGetFieldByName2$.reference) === null || _metaGetFieldByName2$2 === void 0 ? void 0 : _metaGetFieldByName2$2.object];
+        value_field = getDisplay(getObjectValue(data, name_field), (_subMeta = subMeta) === null || _subMeta === void 0 ? void 0 : _subMeta.display, subMeta, meta);
       }
     }
-    var metaField = metaGetFieldByName$1(metaObject, meta, name_field);
+    var metaField = metaGetFieldByName(metaObject, meta, name_field);
     if (metaField && metaField.type) {
-      value_field = getFormatFieldValueTableView$1(value_field, metaField.type, metaField);
+      value_field = getFormatFieldValueTableView(value_field, metaField.type, metaField);
     }
     if (value_field) {
       result += (field.prefix || "") + value_field + (field.suffix || "");
@@ -20303,10 +19856,10 @@ function getDisplay$1(data, display, metaObject, meta) {
 function typeIsNumber(type) {
   return type === "int" || type === "integer" || type === "long" || type === "double" || type === "bigdecimal";
 }
-function getFormatFieldValueTableView$1(data, type, meta) {
+function getFormatFieldValueTableView(data, type, meta) {
   if (type === "boolean" || type === "bool") {
-    var trueValue = getObjectValue$1(meta, "booleanPresenter.trueValue") || "Да";
-    var falseValue = getObjectValue$1(meta, "booleanPresenter.falseValue") || "Нет";
+    var trueValue = getObjectValue(meta, "booleanPresenter.trueValue") || "Да";
+    var falseValue = getObjectValue(meta, "booleanPresenter.falseValue") || "Нет";
     return data ? trueValue : falseValue;
   }
   if (!data) {
@@ -20333,15 +19886,15 @@ function getFormatFieldValueTableView$1(data, type, meta) {
       return mDate.format("HH:mm:ss");
     }
   } else if (type === "int" || type === "uint" || type === "integer" || type === "long") {
-    return priceFormat$1(data);
+    return priceFormat(data);
   } else if (type === "double" || type === "bigdecimal" || type === "float") {
-    return priceFormat$1(data, 2);
+    return priceFormat(data, 2);
   } else {
     return data;
   }
   return '';
 }
-function priceFormat$1(price, precision) {
+function priceFormat(price, precision) {
   if (!price) {
     price = 0;
   }
@@ -20356,7 +19909,7 @@ function priceFormat$1(price, precision) {
   });
 }
 
-var makeFormData$1 = function makeFormData(values) {
+var makeFormData = function makeFormData(values) {
   var formData = new FormData();
   var _loop = function _loop(key) {
     if (Object.hasOwnProperty.call(values, key)) {
@@ -20409,18 +19962,18 @@ var detectMutation = function detectMutation(mutation) {
       case "create":
         return createInArray;
       case "update":
-        return updateInArray;
+        return updateInArray$1;
       case "delete":
-        return deleteInArray;
+        return deleteInArray$1;
       case "empty":
         return emptyInArray;
       case "undefined":
         return undefinedInArray;
       default:
-        return updateInArray;
+        return updateInArray$1;
     }
   }
-  return updateInArray;
+  return updateInArray$1;
 };
 
 function JSXMap(array, render) {
@@ -20430,7 +19983,7 @@ function JSXMap(array, render) {
   });
 }
 
-var QueryParams$1 = function QueryParams(queryParams) {
+var QueryParams = function QueryParams(queryParams) {
   var ext = "";
   if (queryParams) {
     for (var i = 0; i < queryParams.length; i++) {
@@ -20447,14 +20000,14 @@ var QueryParams$1 = function QueryParams(queryParams) {
 var QueryFunc = function QueryFunc(func, name) {
   return "f-" + func + "-" + name;
 };
-var QueryParam$1 = function QueryParam(name, value) {
+var QueryParam = function QueryParam(name, value) {
   return name + "=" + value;
 };
 var QueryOrder = function QueryOrder(name, value) {
   return "s-" + name + "=" + value;
 };
-var QueryDetail$1 = function QueryDetail(value) {
-  return QueryParam$1("detail", value ? value : "none");
+var QueryDetail = function QueryDetail(value) {
+  return QueryParam("detail", value ? value : "none");
 };
 var ObjectToQueryParam = function ObjectToQueryParam(object, method) {
   var f = [];
@@ -20463,7 +20016,7 @@ var ObjectToQueryParam = function ObjectToQueryParam(object, method) {
     var element = array[i];
     if (element) {
       var keyName = element[0].endsWith('ID') === true && element[0].endsWith('.ID') !== true ? element[0].slice(0, -2) + ".ID" : element[0];
-      f.push(QueryParam$1("w-" + keyName, element[1]));
+      f.push(QueryParam("w-" + keyName, element[1]));
     }
   }
   return f;
@@ -20495,7 +20048,7 @@ var contextFilterToObject = function contextFilterToObject(contextFilters) {
 var contextFilterToQueryFilters = function contextFilterToQueryFilters(item) {
   if (lodash.isObject(item)) {
     var keyName = item.name.endsWith('ID') === true && item.name.endsWith('.ID') !== true ? item.name.slice(0, -2) + ".ID" : item.name;
-    return QueryParam$1("w-" + (item.method ? item.method + "-" : "eq-") + keyName, item.value);
+    return QueryParam("w-" + (item.method ? item.method + "-" : "eq-") + keyName, item.value);
   } else if (lodash.isFunction(item)) {
     return item();
   } else if (lodash.isString(item)) {
@@ -20751,29 +20304,7 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
   return flt;
 }
 
-
-
-var index$3 = {
-  __proto__: null,
-  QueryParams: QueryParams$1,
-  QueryFunc: QueryFunc,
-  QueryParam: QueryParam$1,
-  QueryOrder: QueryOrder,
-  QueryDetail: QueryDetail$1,
-  ObjectToQueryParam: ObjectToQueryParam,
-  contextFilterToObject: contextFilterToObject,
-  contextFilterToQueryFilters: contextFilterToQueryFilters,
-  ContextFiltersToQueryFilters: ContextFiltersToQueryFilters,
-  queryFiltersToContextFilter: _queryFiltersToContextFilter,
-  QueryFiltersToContextFilters: QueryFiltersToContextFilters,
-  ObjectToContextFilters: ObjectToContextFilters,
-  queryFilterByItem: queryFilterByItem,
-  filterByItem: filterByItem,
-  FilterToQueryParameters: FilterToQueryParameters,
-  QueryParametersToFilters: QueryParametersToFilters
-};
-
-var GET$1 = function GET(auth, url, callback, error) {
+var GET = function GET(auth, url, callback, error) {
   auth.fetch(url).then(function (res) {
     if (res && res.status === true) {
       if (callback) {
@@ -20785,10 +20316,10 @@ var GET$1 = function GET(auth, url, callback, error) {
   })["catch"](error || errorCatch);
 };
 var GETWITH = function GETWITH(auth, url, queryParams, callback, error) {
-  var ext = QueryParams$1(queryParams);
-  GET$1(auth, url + (ext ? '?' + ext : ''), callback, error);
+  var ext = QueryParams(queryParams);
+  GET(auth, url + (ext ? '?' + ext : ''), callback, error);
 };
-var POST$1 = function POST(auth, url, object, callback, error) {
+var POST = function POST(auth, url, object, callback, error) {
   auth.fetch(url, {
     method: 'POST',
     body: JSON.stringify(object)
@@ -20828,7 +20359,7 @@ var GETP = function GETP(auth, url) {
   });
 };
 var GETWITHP = function GETWITHP(auth, url, queryParams) {
-  var ext = QueryParams$1(queryParams);
+  var ext = QueryParams(queryParams);
   return GETP(auth, url + (ext ? '?' + ext : ''));
 };
 var POSTP = function POSTP(auth, url, object) {
@@ -20861,20 +20392,20 @@ var POSTFormDataP = function POSTFormDataP(auth, url, formData) {
 };
 
 var CREATE = function CREATE(auth, name, object, callback, error) {
-  POST$1(auth, '/api/query-create/' + name.toLowerCase(), object, callback, error);
+  POST(auth, '/api/query-create/' + name.toLowerCase(), object, callback, error);
 };
 var READ = function READ(auth, name, callback, error) {
-  GET$1(auth, '/api/query/' + name.toLowerCase(), callback, error);
+  GET(auth, '/api/query/' + name.toLowerCase(), callback, error);
 };
-var READWITH$1 = function READWITH(auth, name, queryParams, callback, error) {
-  var ext = QueryParams$1(queryParams);
-  GET$1(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''), callback, error);
+var READWITH = function READWITH(auth, name, queryParams, callback, error) {
+  var ext = QueryParams(queryParams);
+  GET(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''), callback, error);
 };
 var UPDATE = function UPDATE(auth, name, object, callback, error) {
-  POST$1(auth, '/api/query-update/' + name.toLowerCase(), object, callback, error);
+  POST(auth, '/api/query-update/' + name.toLowerCase(), object, callback, error);
 };
 var DELETE = function DELETE(auth, name, id, callback, error) {
-  GET$1(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id, callback, error);
+  GET(auth, '/api/query-delete/' + name.toLowerCase() + '/' + id, callback, error);
 };
 var CREATEP = function CREATEP(auth, name, object) {
   return POSTP(auth, '/api/query-create/' + name.toLowerCase(), object);
@@ -20883,7 +20414,7 @@ var READP = function READP(auth, name) {
   return GETP(auth, '/api/query/' + name.toLowerCase());
 };
 var READWITHP = function READWITHP(auth, name, queryParams) {
-  var ext = QueryParams$1(queryParams);
+  var ext = QueryParams(queryParams);
   return GETP(auth, '/api/query/' + name.toLowerCase() + (ext ? '?' + ext : ''));
 };
 var UPDATEP = function UPDATEP(auth, name, object) {
@@ -20916,112 +20447,124 @@ var RequestP = function RequestP(auth, url, options) {
   });
 };
 
-
-
-var index$4 = {
-  __proto__: null,
-  GET: GET$1,
-  GETWITH: GETWITH,
-  POST: POST$1,
-  POSTFormData: POSTFormData,
-  GETP: GETP,
-  GETWITHP: GETWITHP,
-  POSTP: POSTP,
-  POSTFormDataP: POSTFormDataP,
-  CREATE: CREATE,
-  READ: READ,
-  READWITH: READWITH$1,
-  UPDATE: UPDATE,
-  DELETE: DELETE,
-  CREATEP: CREATEP,
-  READP: READP,
-  READWITHP: READWITHP,
-  UPDATEP: UPDATEP,
-  DELETEP: DELETEP,
-  Request: Request,
-  RequestP: RequestP
-};
-
 var publish = function publish(msg, data) {
   PubSub.publish(msg, data);
 };
 
-var subscribe$1 = function subscribe(msg, func) {
+var subscribe = function subscribe(msg, func) {
   return PubSub.subscribe(msg, func);
 };
 
-var unsubscribe$1 = function unsubscribe(token) {
+var unsubscribe = function unsubscribe(token) {
   PubSub.unsubscribe(token);
 };
 
+function MetaColumns(properties, meta, onColumnClick) {
+  return function (_ref) {
+    var request = _ref.request;
+    var click = function click(record, item) {
+      if (onColumnClick && item && onColumnClick[item.name]) {
+        request(record, {
+          action: onColumnClick[item.name]
+        });
+      }
+    };
+    return properties === null || properties === void 0 ? void 0 : properties.map(function (item, idx) {
+      if (item.type === "object" || item.type === "document") {
+        var fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
+        var display = function display(_display) {
+          if (_display.fields) {
+            return _display;
+          }
+        };
+        return {
+          title: item.label,
+          render: function render(text, record, index) {
+            return /*#__PURE__*/React__default.createElement("div", {
+              style: onColumnClick && onColumnClick[item.name] ? {
+                cursor: "pointer",
+                color: "#1890ff"
+              } : {},
+              onClick: function onClick() {
+                return click(record, item);
+              }
+            }, getDisplay(record[uncapitalize(item.name)], display(item.relation.display) || display(fieldMeta.display), fieldMeta, meta));
+          }
+        };
+      }
+      return {
+        title: item.label,
+        render: function render(text, record, index) {
+          return /*#__PURE__*/React__default.createElement("div", {
+            style: onColumnClick && onColumnClick[item.name] ? {
+              cursor: "pointer",
+              color: "#1890ff"
+            } : {},
+            onClick: function onClick() {
+              return click(record, item);
+            }
+          }, getFormatFieldValueTableView(record[item.name.charAt(0).toLowerCase() + item.name.slice(1)], item.type, item));
+        }
+      };
+    });
+  };
+}
 
-
-var index$5 = {
-  __proto__: null,
-  publish: publish,
-  subscribe: subscribe$1,
-  unsubscribe: unsubscribe$1
+var _excluded = ["meta", "value", "onChange", "disabled", "readOnly", "placeholder", "label", "help", "tooltip", "className", "style", "forceMobile"];
+var FieldComponent = function FieldComponent(props) {
+  var meta = props.meta,
+    value = props.value,
+    onChange = props.onChange,
+    disabled = props.disabled,
+    readOnly = props.readOnly,
+    placeholder = props.placeholder,
+    className = props.className,
+    style = props.style,
+    forceMobile = props.forceMobile,
+    restProps = _objectWithoutPropertiesLoose(props, _excluded);
+  var adapter = useUIAdapter();
+  var isSystemMobile = reactResponsive.useMediaQuery({
+    maxWidth: 768
+  });
+  var isMobile = forceMobile !== undefined ? forceMobile : isSystemMobile;
+  var resolvedMeta = GetMeta(meta);
+  var fieldCore = React.useMemo(function () {
+    return new FieldCore(_extends({
+      value: value,
+      onChange: onChange,
+      disabled: disabled,
+      readOnly: readOnly,
+      placeholder: placeholder
+    }, restProps), resolvedMeta, adapter);
+  }, [value, onChange, disabled, readOnly, placeholder, resolvedMeta, adapter, restProps]);
+  var Renderer = isMobile ? FieldMobileRenderer : FieldRenderer;
+  return /*#__PURE__*/React__default.createElement(Renderer, _extends({
+    fieldCore: fieldCore,
+    className: className,
+    style: style
+  }, props));
 };
-
-
-
-var index$6 = {
-  __proto__: null,
-  GetMeta: GetMeta,
-  GetMetaProperties: GetMetaProperties,
-  GetMetaPropertyByPath: GetMetaPropertyByPath,
-  formItemRules: formItemRules,
-  isRequired: isRequired,
-  ContextFiltersToQueryFilters: ContextFiltersToQueryFilters,
-  contextFilterToObject: contextFilterToObject,
-  QueryParam: QueryParam$1,
-  QueryFunc: QueryFunc,
-  QueryDetail: QueryDetail$1,
-  GET: GET$1,
-  GETWITH: GETWITH,
-  READWITH: READWITH$1,
-  errorCatch: errorCatch,
-  subscribe: subscribe$1,
-  unsubscribe: unsubscribe$1,
-  getLocator: getLocator,
-  LOCATOR_TYPES: LOCATOR_TYPES,
-  LOCATOR_ACTIONS: LOCATOR_ACTIONS,
-  getAILocator: getAILocator,
-  equals: _equals,
-  unwrap: _unwrap,
-  clean: clean,
-  If: If,
-  IfElse: IfElse,
-  And: And,
-  Or: Or,
-  uncapitalize: uncapitalize$1,
-  arrayUnpack: arrayUnpack,
-  upgradeInArray: upgradeInArray,
-  updateInArray: updateInArray,
-  createInArray: createInArray,
-  deleteInArray: deleteInArray,
-  triggerInArray: triggerInArray,
-  emptyInArray: emptyInArray,
-  undefinedInArray: undefinedInArray,
-  updateArrayInArray: updateArrayInArray,
-  createArrayInArray: createArrayInArray,
-  deleteArrayInArray: deleteArrayInArray,
-  triggerArrayInArray: triggerArrayInArray,
-  getObjectValue: getObjectValue$1,
-  getObjectValueOrDefault: getObjectValueOrDefault,
-  getObjectDisplay: getObjectDisplay,
-  getFieldDisplay: getFieldDisplay,
-  getDisplay: getDisplay$1,
-  typeIsNumber: typeIsNumber,
-  getFormatFieldValueTableView: getFormatFieldValueTableView$1,
-  priceFormat: priceFormat$1,
-  makeFormData: makeFormData$1,
-  unpackFormFields: unpackFormFields,
-  preventDefault: preventDefault,
-  eventExecution: eventExecution,
-  detectMutation: detectMutation,
-  JSXMap: JSXMap
+var arePropsEqual = function arePropsEqual(prevProps, nextProps) {
+  if (prevProps.value !== nextProps.value) return false;
+  if (prevProps.onChange !== nextProps.onChange) return false;
+  if (prevProps.disabled !== nextProps.disabled) return false;
+  if (prevProps.readOnly !== nextProps.readOnly) return false;
+  if (prevProps.forceMobile !== nextProps.forceMobile) return false;
+  if (prevProps.meta !== nextProps.meta) {
+    if (typeof prevProps.meta === 'object' && typeof nextProps.meta === 'object') {
+      var _prevProps$meta, _nextProps$meta, _prevProps$meta2, _nextProps$meta2;
+      var prevType = (_prevProps$meta = prevProps.meta) === null || _prevProps$meta === void 0 ? void 0 : _prevProps$meta.type;
+      var nextType = (_nextProps$meta = nextProps.meta) === null || _nextProps$meta === void 0 ? void 0 : _nextProps$meta.type;
+      var prevRequired = (_prevProps$meta2 = prevProps.meta) === null || _prevProps$meta2 === void 0 ? void 0 : _prevProps$meta2.required;
+      var nextRequired = (_nextProps$meta2 = nextProps.meta) === null || _nextProps$meta2 === void 0 ? void 0 : _nextProps$meta2.required;
+      if (prevType !== nextType || prevRequired !== nextRequired) return false;
+    } else {
+      return false;
+    }
+  }
+  return true;
 };
+var Field = React.memo(FieldComponent, arePropsEqual);
 
 var ModelCore = /*#__PURE__*/function () {
   function ModelCore(props) {
@@ -21118,7 +20661,7 @@ var ModelCore = /*#__PURE__*/function () {
   };
   _proto.getFieldName = function getFieldName(property) {
     var isObjectType = property.type === 'object' || property.type === 'document';
-    var baseName = uncapitalize$1(property.name);
+    var baseName = uncapitalize(property.name);
     return isObjectType ? baseName + 'ID' : baseName;
   };
   _proto.getInitialValues = function getInitialValues() {
@@ -21402,6 +20945,166 @@ function Model(props) {
   }, [isMobile]);
   return /*#__PURE__*/React__default.createElement(Fragment, null, subheader || null, /*#__PURE__*/React__default.createElement(Renderer, props));
 }
+
+var historyCallbackFunctions = {};
+var pushStateHistoryModal = function pushStateHistoryModal(setVisible, getStack) {
+  if (typeof window === 'undefined') return;
+  var cbFuncName = 'modal_' + fuuid();
+  window.history.replaceState(_extends({}, window.history.state, {
+    cb: cbFuncName
+  }), '');
+  window.history.pushState(null, null, '');
+  if (typeof window.historyCallbackFunctions === 'undefined') window.historyCallbackFunctions = historyCallbackFunctions;
+  window.historyCallbackFunctions[cbFuncName] = function (e) {
+    delete window.historyCallbackFunctions[cbFuncName];
+    setVisible(false);
+    window.history.replaceState(_extends({}, window.history.state, {
+      cb: undefined
+    }), '');
+    if (getStack) {
+      var stack = getStack();
+      while (stack.length > 0) {
+        var fun = stack.pop();
+        if (fun) {
+          fun();
+        }
+      }
+    }
+  };
+};
+function ycStorage(auth) {
+  return "https://storage.yandexcloud.net/";
+}
+var updateInPropertiesUUID = function updateInPropertiesUUID(properties, item, first) {
+  var _$findIndex;
+  var key = "uuid";
+  if (!properties) properties = [];
+  if (!item || !item[key]) return properties;
+  if (lodash.findIndex(properties, (_$findIndex = {}, _$findIndex[key] = item[key], _$findIndex)) >= 0) {
+    var _properties;
+    return (_properties = properties) === null || _properties === void 0 ? void 0 : _properties.map(function (e) {
+      return IfElse(e[key] === item[key], _extends({}, e, item), e);
+    });
+  } else {
+    return first ? [item].concat(properties) : [].concat(properties, [item]);
+  }
+};
+var updateInProperties = function updateInProperties(properties, item, first) {
+  var _$findIndex2;
+  var key = "name";
+  if (!properties) properties = [];
+  if (!item || !item[key]) return properties;
+  if (lodash.findIndex(properties, (_$findIndex2 = {}, _$findIndex2[key] = item[key], _$findIndex2)) >= 0) {
+    var _properties2;
+    return (_properties2 = properties) === null || _properties2 === void 0 ? void 0 : _properties2.map(function (e) {
+      return IfElse(e[key] === item[key], _extends({}, e, item), e);
+    });
+  } else {
+    return first ? [item].concat(properties) : [].concat(properties, [item]);
+  }
+};
+var deleteInPropertiesUUID = function deleteInPropertiesUUID(properties, item) {
+  var _properties4;
+  var key = "uuid";
+  if (!properties) properties = [];
+  if (!item || !lodash.isArray(item) && lodash.isObject(item) && !item[key]) return properties;
+  var i = unwrap(item);
+  if (lodash.isArray(i)) {
+    var _properties3;
+    return (_properties3 = properties) === null || _properties3 === void 0 ? void 0 : _properties3.filter(function (e) {
+      return And(i.map(function (c) {
+        return e[key] !== (lodash.isObject(c) ? c[key] : c);
+      }));
+    });
+  }
+  return (_properties4 = properties) === null || _properties4 === void 0 ? void 0 : _properties4.filter(function (e) {
+    return e[key] !== item[key];
+  });
+};
+var deleteInProperties = function deleteInProperties(properties, item) {
+  var _properties6;
+  var key = "name";
+  if (!properties) properties = [];
+  if (!item || !lodash.isArray(item) && lodash.isObject(item) && !item[key]) return properties;
+  var i = unwrap(item);
+  if (lodash.isArray(i)) {
+    var _properties5;
+    return (_properties5 = properties) === null || _properties5 === void 0 ? void 0 : _properties5.filter(function (e) {
+      return And(i.map(function (c) {
+        return e[key] !== (lodash.isObject(c) ? c[key] : c);
+      }));
+    });
+  }
+  return (_properties6 = properties) === null || _properties6 === void 0 ? void 0 : _properties6.filter(function (e) {
+    return e[key] !== item[key];
+  });
+};
+var triggerInPropertiesUUID = function triggerInPropertiesUUID(properties, item) {
+  var key = "uuid";
+  if (properties.find(function (x) {
+    return x[key] === item[key];
+  }) !== undefined) {
+    return deleteInArray(properties, item);
+  } else {
+    return updateInArray(properties, item);
+  }
+};
+var triggerInProperties = function triggerInProperties(properties, item) {
+  var key = "name";
+  if (properties.find(function (x) {
+    return x[key] === item[key];
+  }) !== undefined) {
+    return deleteInArray(properties, item);
+  } else {
+    return updateInArray(properties, item);
+  }
+};
+var foreachInProperties = function foreachInProperties(properties, func, item) {
+  if (!properties) properties = [];
+  if (!item) return properties;
+  return properties.map(function (n) {
+    return And(func(n)) ? _extends({}, n, lodash.isFunction(item) ? item(n) : item) : n;
+  });
+};
+var updatePropertiesInProperties = function updatePropertiesInProperties(properties, items) {
+  if (!properties) properties = [];
+  if (lodash.isArray(items)) {
+    var tmp = [].concat(properties);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      tmp = updateInProperties(tmp, it);
+    }
+    return tmp;
+  } else {
+    return updateInProperties(properties, items);
+  }
+};
+var deletePropertiesInProperties = function deletePropertiesInProperties(properties, items) {
+  if (!properties) properties = [];
+  if (lodash.isArray(items)) {
+    var tmp = [].concat(properties);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      tmp = deleteInProperties(tmp, it);
+    }
+    return tmp;
+  } else {
+    return deleteInProperties(properties, items);
+  }
+};
+var triggerPropertiesInProperties = function triggerPropertiesInProperties(properties, items) {
+  if (!properties) properties = [];
+  if (lodash.isArray(items)) {
+    var tmp = [].concat(properties);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      tmp = triggerInProperties(tmp, it);
+    }
+    return tmp;
+  } else {
+    return triggerInProperties(properties, items);
+  }
+};
 
 var ActionModalCore = /*#__PURE__*/function () {
   function ActionModalCore(props) {
@@ -22502,16 +22205,16 @@ var CollectionCore = /*#__PURE__*/function () {
     });
     var sort = [];
     if (sorting && sorting !== null && sorting !== void 0 && sorting.name) {
-      sort.push(QueryParam$1("s-" + sorting.name, sorting.order));
+      sort.push(QueryParam("s-" + sorting.name, sorting.order));
     }
-    var params = [QueryDetail$1(queryDetail || 'model'), QueryParam$1("page", current), QueryParam$1("count", count)].concat(sort, flt, func, ctxFlt);
+    var params = [QueryDetail(queryDetail || 'model'), QueryParam("page", current), QueryParam("count", count)].concat(sort, flt, func, ctxFlt);
     return params;
   };
   _proto.buildFilterByType = function buildFilterByType(item, akey, filterByKey) {
     var flt = [];
     switch (item === null || item === void 0 ? void 0 : item.filterType) {
       case 'group':
-        flt.push(QueryParam$1('w-in-' + akey, filterByKey));
+        flt.push(QueryParam('w-in-' + akey, filterByKey));
         break;
       case 'range':
         flt.push.apply(flt, this.buildRangeFilter(item, akey, filterByKey));
@@ -22539,28 +22242,28 @@ var CollectionCore = /*#__PURE__*/function () {
       case 'float':
       case 'float64':
       case 'float32':
-        flt.push(QueryParam$1('w-lge-' + akey, filterByKey[0]));
-        flt.push(QueryParam$1('w-lwe-' + akey, filterByKey[1]));
+        flt.push(QueryParam('w-lge-' + akey, filterByKey[0]));
+        flt.push(QueryParam('w-lwe-' + akey, filterByKey[1]));
         break;
       case 'time':
-        flt.push(QueryParam$1('w-lge-' + akey, filterByKey[0].format('HH:mm:ss')));
-        flt.push(QueryParam$1('w-lwe-' + akey, filterByKey[1].format('HH:mm:ss')));
+        flt.push(QueryParam('w-lge-' + akey, filterByKey[0].format('HH:mm:ss')));
+        flt.push(QueryParam('w-lwe-' + akey, filterByKey[1].format('HH:mm:ss')));
         break;
       case 'date':
-        flt.push(QueryParam$1('w-lge-' + akey, filterByKey[0].format('YYYY-MM-DD')));
-        flt.push(QueryParam$1('w-lwe-' + akey, filterByKey[1].format('YYYY-MM-DD')));
+        flt.push(QueryParam('w-lge-' + akey, filterByKey[0].format('YYYY-MM-DD')));
+        flt.push(QueryParam('w-lwe-' + akey, filterByKey[1].format('YYYY-MM-DD')));
         break;
       case 'datetime':
       case 'time.Time':
-        flt.push(QueryParam$1('w-lge-' + akey, filterByKey[0].format('YYYY-MM-DD HH:mm')));
-        flt.push(QueryParam$1('w-lwe-' + akey, filterByKey[1].format('YYYY-MM-DD HH:mm')));
+        flt.push(QueryParam('w-lge-' + akey, filterByKey[0].format('YYYY-MM-DD HH:mm')));
+        flt.push(QueryParam('w-lwe-' + akey, filterByKey[1].format('YYYY-MM-DD HH:mm')));
         break;
       default:
         if (item !== null && item !== void 0 && item.queryComparer) {
           var comparer = lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer) ? item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item) : item === null || item === void 0 ? void 0 : item.queryComparer;
-          flt.push(QueryParam$1("w-" + comparer + "-" + akey, filterByKey));
+          flt.push(QueryParam("w-" + comparer + "-" + akey, filterByKey));
         } else {
-          flt.push(QueryParam$1('w-' + akey, filterByKey));
+          flt.push(QueryParam('w-' + akey, filterByKey));
         }
         break;
     }
@@ -22571,11 +22274,11 @@ var CollectionCore = /*#__PURE__*/function () {
     switch (item === null || item === void 0 ? void 0 : item.type) {
       case 'string':
         var comparer = lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer) ? (item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item)) || 'co' : (item === null || item === void 0 ? void 0 : item.queryComparer) || 'co';
-        flt.push(QueryParam$1("w-" + comparer + "-" + akey, filterByKey));
+        flt.push(QueryParam("w-" + comparer + "-" + akey, filterByKey));
         break;
       case 'func':
         var prefix = lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryPrefix) ? (item === null || item === void 0 ? void 0 : item.queryPrefix(filterByKey, item)) || '' : (item === null || item === void 0 ? void 0 : item.queryPrefix) || '';
-        flt.push(QueryParam$1("" + prefix + akey, filterByKey));
+        flt.push(QueryParam("" + prefix + akey, filterByKey));
         break;
       default:
         if (item !== null && item !== void 0 && item.queryRaw) {
@@ -22583,9 +22286,9 @@ var CollectionCore = /*#__PURE__*/function () {
           flt.push(raw);
         } else if (item !== null && item !== void 0 && item.queryComparer) {
           var _comparer = lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer) ? item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item) : item === null || item === void 0 ? void 0 : item.queryComparer;
-          flt.push(QueryParam$1("w-" + _comparer + "-" + akey, filterByKey));
+          flt.push(QueryParam("w-" + _comparer + "-" + akey, filterByKey));
         } else {
-          flt.push(QueryParam$1('w-' + akey, filterByKey));
+          flt.push(QueryParam('w-' + akey, filterByKey));
         }
         break;
     }
@@ -22599,10 +22302,10 @@ var CollectionCore = /*#__PURE__*/function () {
     });
   };
   _proto.updateCollectionItem = function updateCollectionItem(collection, item) {
-    return updateInArray(collection, item);
+    return updateInArray$1(collection, item);
   };
   _proto.removeCollectionItem = function removeCollectionItem(collection, item) {
-    return deleteInArray(collection, item);
+    return deleteInArray$1(collection, item);
   };
   _proto.hasFiltersChanged = function hasFiltersChanged(oldFilter, newFilter) {
     return !lodash.isEqual(oldFilter, newFilter);
@@ -23273,7 +22976,7 @@ function CollectionRenderer(props) {
       var url = _unwrap(source);
       if (!url) return;
       lock();
-      READWITH$1(auth, url, queryParams, function (data) {
+      READWITH(auth, url, queryParams, function (data) {
         if (data !== null && data !== void 0 && data.stat) {
           setFuncStat(data === null || data === void 0 ? void 0 : data.stat);
         }
@@ -23591,14 +23294,6 @@ var HasRoleID = function HasRoleID(user, roleID) {
   return false;
 };
 
-
-
-var index$7 = {
-  __proto__: null,
-  HasRole: HasRole,
-  HasRoleID: HasRoleID
-};
-
 function CollectionMobileRenderer(props) {
   var collectionCore = props.collectionCore,
     _props$items = props.items,
@@ -23644,35 +23339,133 @@ exports.ActionFormCore = ActionFormCore;
 exports.ActionMobileRenderer = ActionMobileRenderer;
 exports.ActionModalCore = ActionModalCore;
 exports.ActionWizardCore = ActionWizardCore;
+exports.And = And$1;
 exports.AuthProvider = AuthProvider;
 exports.AuthService = AuthService;
-exports.CRUD = index$4;
+exports.CREATE = CREATE;
+exports.CREATEP = CREATEP;
 exports.ClipboardContext = ClipboardContext;
 exports.Collection = Collection;
 exports.CollectionMobileRenderer = CollectionMobileRenderer;
-exports.ErrorHandling = index;
+exports.ContextFiltersToQueryFilters = ContextFiltersToQueryFilters;
+exports.DELETE = DELETE;
+exports.DELETEP = DELETEP;
+exports.FennecError = FennecError;
 exports.Field = Field;
 exports.FieldMobileRenderer = FieldMobileRenderer;
+exports.FilterToQueryParameters = FilterToQueryParameters;
 exports.FormObserverContext = FormObserverContext;
-exports.Meta = index$2;
+exports.GET = GET;
+exports.GETP = GETP;
+exports.GETWITH = GETWITH;
+exports.GETWITHP = GETWITHP;
+exports.GetMeta = GetMeta;
+exports.GetMetaProperties = GetMetaProperties;
+exports.GetMetaPropertyByPath = GetMetaPropertyByPath;
+exports.HasRole = HasRole;
+exports.HasRoleID = HasRoleID;
+exports.If = If;
+exports.IfElse = IfElse$1;
+exports.JSXMap = JSXMap;
+exports.LOCATOR_ACTIONS = LOCATOR_ACTIONS;
+exports.LOCATOR_TYPES = LOCATOR_TYPES;
+exports.MetaColumns = MetaColumns;
 exports.MetaContext = MetaContext;
 exports.MetaProvider = MetaProvider;
 exports.Model = Model;
 exports.ModelMobileRenderer = ModelMobileRenderer;
+exports.ObjectToContextFilters = ObjectToContextFilters;
+exports.ObjectToQueryParam = ObjectToQueryParam;
+exports.Or = Or;
 exports.Overlay = Overlay;
-exports.PubSub = index$5;
-exports.Query = index$3;
+exports.POST = POST;
+exports.POSTFormData = POSTFormData;
+exports.POSTFormDataP = POSTFormDataP;
+exports.POSTP = POSTP;
+exports.QueryDetail = QueryDetail;
+exports.QueryFiltersToContextFilters = QueryFiltersToContextFilters;
+exports.QueryFunc = QueryFunc;
+exports.QueryOrder = QueryOrder;
+exports.QueryParam = QueryParam;
+exports.QueryParametersToFilters = QueryParametersToFilters;
+exports.QueryParams = QueryParams;
+exports.READ = READ;
+exports.READP = READP;
+exports.READWITH = READWITH;
+exports.READWITHP = READWITHP;
+exports.Request = Request;
+exports.RequestP = RequestP;
 exports.RequireAuth = RequireAuth;
-exports.Roles = index$7;
+exports.SetMetaProperties = SetMetaProperties;
 exports.TranslateContext = TranslateContext;
 exports.TranslateProvider = TranslateProvider;
 exports.UIAdapter = UIAdapter;
 exports.UIProvider = UIProvider;
+exports.UPDATE = UPDATE;
+exports.UPDATEP = UPDATEP;
 exports.UserConfigContext = UserConfigContext;
 exports.UserConfigProvider = UserConfigProvider;
 exports.UserContext = UserContext;
-exports.UtilsCore = index$6;
-exports.Validation = index$1;
+exports.arrayUnpack = arrayUnpack;
+exports.clean = clean;
+exports.contextFilterToObject = contextFilterToObject;
+exports.contextFilterToQueryFilters = contextFilterToQueryFilters;
+exports.createArrayInArray = createArrayInArray;
+exports.createInArray = createInArray;
+exports.deleteArrayInArray = deleteArrayInArray;
+exports.deleteInArray = deleteInArray$1;
+exports.deleteInProperties = deleteInProperties;
+exports.deleteInPropertiesUUID = deleteInPropertiesUUID;
+exports.deletePropertiesInProperties = deletePropertiesInProperties;
+exports.detectMutation = detectMutation;
+exports.emptyInArray = emptyInArray;
+exports.equals = _equals;
+exports.errorAlert = errorAlert;
+exports.errorCatch = errorCatch;
+exports.eventExecution = eventExecution;
+exports.filterByItem = filterByItem;
+exports.foreachInProperties = foreachInProperties;
+exports.formItemRules = formItemRules;
+exports.getAILocator = getAILocator;
+exports.getDisplay = getDisplay;
+exports.getFieldDisplay = getFieldDisplay;
+exports.getFormatFieldValueTableView = getFormatFieldValueTableView;
+exports.getLocator = getLocator;
+exports.getNotifier = getNotifier;
+exports.getObjectDisplay = getObjectDisplay;
+exports.getObjectValue = getObjectValue;
+exports.getObjectValueOrDefault = getObjectValueOrDefault;
+exports.getSortingDisplayFields = getSortingDisplayFields;
+exports.isRequired = isRequired;
+exports.makeFormData = makeFormData;
+exports.messageError = messageError;
+exports.metaGetCloneObject = metaGetCloneObject;
+exports.metaGetFieldByName = metaGetFieldByName;
+exports.preventDefault = preventDefault;
+exports.priceFormat = priceFormat;
+exports.publish = publish;
+exports.pushStateHistoryModal = pushStateHistoryModal;
+exports.queryFilterByItem = queryFilterByItem;
+exports.queryFiltersToContextFilter = _queryFiltersToContextFilter;
+exports.setNotifier = setNotifier;
+exports.subscribe = subscribe;
+exports.triggerArrayInArray = triggerArrayInArray;
+exports.triggerInArray = triggerInArray;
+exports.triggerInProperties = triggerInProperties;
+exports.triggerInPropertiesUUID = triggerInPropertiesUUID;
+exports.triggerPropertiesInProperties = triggerPropertiesInProperties;
+exports.typeIsNumber = typeIsNumber;
+exports.uncapitalize = uncapitalize;
+exports.undefinedInArray = undefinedInArray;
+exports.unpackFormFields = unpackFormFields;
+exports.unsubscribe = unsubscribe;
+exports.unwrap = _unwrap;
+exports.updateArrayInArray = updateArrayInArray;
+exports.updateInArray = updateInArray$1;
+exports.updateInProperties = updateInProperties;
+exports.updateInPropertiesUUID = updateInPropertiesUUID;
+exports.updatePropertiesInProperties = updatePropertiesInProperties;
+exports.upgradeInArray = upgradeInArray;
 exports.useActionRef = useActionRef;
 exports.useAuth = useAuth;
 exports.useClipboardContext = useClipboardContext;
@@ -23685,4 +23478,6 @@ exports.useUI = useUI;
 exports.useUIOptional = useUIOptional;
 exports.useUserConfigContext = useUserConfigContext;
 exports.useUserContext = useUserContext;
+exports.validator = validator;
+exports.ycStorage = ycStorage;
 //# sourceMappingURL=fennec-core.js.map
