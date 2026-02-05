@@ -284,6 +284,7 @@ export function Overlay(props) {
     }, [open]);
 
     useEffect(() => {
+        if (typeof document === 'undefined') return;
         if (open) {
             document.addEventListener("keydown", handleKeyDown, true);
         }
@@ -321,7 +322,7 @@ export function Overlay(props) {
     return (
         <div>
             {!open && renderChildren(false)}
-            {open &&
+            {open && typeof document !== 'undefined' &&
                 ReactDOM.createPortal(
                     <React.Fragment>
                         <div

@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 export default class RenderToLayer extends React.Component {
     stop = e => e.stopPropagation();
     render() {
+        if (typeof document === 'undefined') {
+            return <div>{this.props.children}</div>;
+        }
         return ReactDOM.createPortal(
             <div
                 ref={this.handleLayer}

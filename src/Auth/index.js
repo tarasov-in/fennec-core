@@ -90,6 +90,7 @@ export class AuthService {
     }
     getCookies() {
         var result = {}
+        if (typeof document === 'undefined') return result
         var cookies = document.cookie.split("; ");
         for (var i = 0; i < cookies.length; i++) {
             var spl = cookies[i].split("=");
@@ -381,7 +382,7 @@ export class AuthService {
                     })
                 } else {
                     res.blob().then(blob => {
-                        if (typeof window === 'undefined') return;
+                        if (typeof window === 'undefined' || typeof document === 'undefined') return;
                         let url = window.URL.createObjectURL(blob);
                         let a = document.createElement('a');
                         a.href = url;

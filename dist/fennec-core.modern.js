@@ -481,6 +481,7 @@ var AuthService = /*#__PURE__*/function () {
   };
   _proto.getCookies = function getCookies() {
     var result = {};
+    if (typeof document === 'undefined') return result;
     var cookies = document.cookie.split("; ");
     for (var i = 0; i < cookies.length; i++) {
       var spl = cookies[i].split("=");
@@ -697,7 +698,7 @@ var AuthService = /*#__PURE__*/function () {
         });
       } else {
         res.blob().then(function (blob) {
-          if (typeof window === 'undefined') return;
+          if (typeof window === 'undefined' || typeof document === 'undefined') return;
           var url = window.URL.createObjectURL(blob);
           var a = document.createElement('a');
           a.href = url;
@@ -22679,6 +22680,7 @@ function Overlay(props) {
     };
   }, [open]);
   useEffect(function () {
+    if (typeof document === 'undefined') return;
     if (open) {
       document.addEventListener("keydown", handleKeyDown, true);
     }
@@ -22694,7 +22696,7 @@ function Overlay(props) {
       }
     }
   }, [children, setOpen]);
-  return /*#__PURE__*/React.createElement("div", null, !open && renderChildren(false), open && ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement("div", null, !open && renderChildren(false), open && typeof document !== 'undefined' && ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: overlayStyle
   }, /*#__PURE__*/React.createElement("div", {
     style: overlayBackdropStyle
