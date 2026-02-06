@@ -37,6 +37,17 @@ function bumpPatchVersion() {
   console.log('Bumped version to', newVersion)
 }
 
+/** Diff до любых операций скрипта (рабочая копия + индекс), для сообщения коммита */
+function getWorkingDiff() {
+  try {
+    const staged = run('git diff --cached')
+    const unstaged = run('git diff')
+    return (staged + '\n' + unstaged).trim()
+  } catch (e) {
+    return ''
+  }
+}
+
 function getStagedDiff() {
   try {
     return run('git diff --cached')
@@ -116,13 +127,15 @@ async function main() {
   console.log('Running npm run build...')
   run('npm run build', { stdio: 'inherit' })
 
+  const diffForMessage = getWorkingDiff()
+
   bumpPatchVersion()
 
   console.log('Running git add .')
   run('git add .')
 
-  const diff = getStagedDiff()
-  if (!diff || !diff.trim()) {
+  const staged = getStagedDiff()
+  if (!staged || !staged.trim()) {
     console.log('No staged changes. Nothing to commit.')
     process.exit(0)
   }
@@ -130,7 +143,9 @@ async function main() {
   console.log('Generating commit message via Ollama...')
   let message
   try {
-    message = await generateCommitMessage(diff)
+    message = diffForMessage.trim()
+      ? await generateCommitMessage(diffForMessage)
+      : 'Bump patch version'
   } catch (err) {
     console.error('Ollama error:', err.message)
     process.exit(1)
