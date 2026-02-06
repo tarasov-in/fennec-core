@@ -126,9 +126,7 @@ export class AuthService {
         };
         return endCallback
     }
-    // setHandle(options) {
-    //     this.ShowMessage = options.ShowMessage
-    // }
+
     openSocket(path, name, onmessage, onopen, onclose, onerror) {
         if (this.ws.state.ws[name]) {
             this.ws.close(name, false);
@@ -269,26 +267,12 @@ export class AuthService {
         // localStorage.removeItem('id_token');
         if (typeof window === 'undefined') return;
         window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logout?service=" + window.location.href;
-        // this.fetch(`/api/logout`).then(res => {
-        //     if (res) {               
-        //         if(cb) {
-        //             cb();
-        //         }
-        //     }
-        // })
     }
     logoutall(cb) {
         // Clear user token and profile data from localStorage
         // localStorage.removeItem('id_token');
         if (typeof window === 'undefined') return;
         window.location.href = this.authschemhttp + "://auth." + this.getDomainWithoutSubdomain(window.location.href) + "/logoutall?service=" + window.location.href;
-        // this.fetch(`/api/logout`).then(res => {
-        //     if (res) {               
-        //         if(cb) {
-        //             cb();
-        //         }
-        //     }
-        // })
     }
 
     refresh(location) {
@@ -418,11 +402,6 @@ export class AuthService {
                 return response.json();
             })
             .then(res => {
-                // if (res && !res.status) {
-                //     if (this.ShowMessage) {
-                //         this.ShowMessage(res.message, "danger")
-                //     }
-                // }
                 return Promise.resolve(res);
             })
     }
@@ -452,11 +431,6 @@ export class AuthService {
                 return response.json();
             })
             .then(res => {
-                // if (res && !res.status) {
-                //     if (this.ShowMessage) {
-                //         this.ShowMessage(res.message, "danger")
-                //     }
-                // }
                 return Promise.resolve(res);
             })
     }
@@ -484,9 +458,6 @@ export class AuthService {
             console.error(response.status, "Доступ запрещен", response.url);
             return response;
         } else {
-            // if(this.ShowMessage) {
-            //     this.ShowMessage(response.statusText, "danger")
-            // }
             var error = new Error(response.statusText)
             error.response = response
             throw error
