@@ -68,7 +68,7 @@ export { CollectionMobileRenderer } from './Components/Desktop/Collection/Collec
 export { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRenderer';
 
 // ==================== Context & Providers ====================
-export { AuthService, AuthProvider, useAuth, useNavigation, RequireAuth } from './Auth';
+export { AuthService, AuthProvider, useAuth, RequireAuth } from './Auth';
 export { UserConfigProvider } from './UserConfig';
 export { TranslateProvider } from './Translate';
 export { MetaProvider } from './Meta';

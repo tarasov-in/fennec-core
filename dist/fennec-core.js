@@ -2,7 +2,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var reactRouterDom = require('react-router-dom');
+require('react-router-dom');
 var decode = _interopDefault(require('jwt-decode'));
 var error$1 = require('fennec-core/core/error');
 var crud = require('fennec-core/core/crud');
@@ -790,7 +790,6 @@ var AuthService = /*#__PURE__*/function () {
   }]);
 }();
 var XAuthContext = React.createContext(null);
-var NavigationContext = React.createContext(null);
 function AuthProvider(_ref) {
   var children = _ref.children,
     publicMode = _ref.publicMode,
@@ -806,16 +805,11 @@ function useAuth() {
   var auth = React.useContext(XAuthContext);
   return auth;
 }
-function useNavigation() {
-  var navigation = React.useContext(NavigationContext);
-  return navigation;
-}
 function RequireAuth(_ref2) {
   var children = _ref2.children,
     inline = _ref2.inline;
   var auth = useAuth();
   auth.setPublicMode(true);
-  var navigate = reactRouterDom.useNavigate();
   if (!auth.loggedIn()) {
     if (inline) {
       return inline;
@@ -824,9 +818,7 @@ function RequireAuth(_ref2) {
       window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
     }
   }
-  return /*#__PURE__*/React__default.createElement(NavigationContext.Provider, {
-    value: navigate
-  }, children);
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, children);
 }
 function configureRefreshFetch(auth) {
   var refreshingTokenPromise = null;
@@ -23500,7 +23492,6 @@ exports.useClipboardContext = useClipboardContext;
 exports.useCollectionRef = useCollectionRef;
 exports.useFormObserverContext = useFormObserverContext;
 exports.useMetaContext = useMetaContext;
-exports.useNavigation = useNavigation;
 exports.useTranslateContext = useTranslateContext;
 exports.useUI = useUI;
 exports.useUIOptional = useUIOptional;

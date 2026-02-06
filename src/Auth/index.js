@@ -496,7 +496,6 @@ export class AuthService {
 
 //-------------------------------------------------------------------------------------
 let XAuthContext = createContext(null);
-let NavigationContext = createContext(null);
 
 //Свойство publicMode указывать провайдеру аутентификации, 
 //что при невозможности обновить токен, не нужно кидать на сервер аутентификации, 
@@ -505,8 +504,6 @@ export function AuthProvider({ children, publicMode, keepAlive }) {
     const auth = new AuthService();
     auth.setPublicMode(publicMode);
 
-    // console.log("AuthProvider");
-    
     auth.setKeepAlive(keepAlive);
     return <XAuthContext.Provider value={auth}>{children}</XAuthContext.Provider>;
 }
@@ -514,15 +511,10 @@ export function useAuth() {
     let auth = useContext(XAuthContext);
     return auth;
 }
-export function useNavigation() {
-    let navigation = useContext(NavigationContext);
-    return navigation;
-}
+
 export function RequireAuth({ children, inline }) {
     let auth = useAuth();
     auth.setPublicMode(true);
-    // let location = useLocation();
-    let navigate = useNavigate();
 
     if (!auth.loggedIn()) {
         // Redirect them to the /login page, but save the current location they were
@@ -536,7 +528,7 @@ export function RequireAuth({ children, inline }) {
             window.location.href = auth.authschemhttp + "://auth." + auth.getDomainWithoutSubdomain(window.location.href) + "/login?service=" + window.location.href;
         }
     }
-    return <NavigationContext.Provider value={navigate}>{children}</NavigationContext.Provider>;
+    return <React.Fragment>{children}</React.Fragment>;
 }
 //-------------------------------------------------------------------------------------
 
