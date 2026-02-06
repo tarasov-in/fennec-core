@@ -4,6 +4,7 @@
  * Сообщение коммита формируется локальной Ollama (qwen3:4b) по diff.
  */
 const { execSync } = require('child_process')
+const fs = require('fs')
 const http = require('http')
 const path = require('path')
 
@@ -19,6 +20,21 @@ const root = path.join(__dirname, '..')
 
 function run(cmd, options = {}) {
   return execSync(cmd, { encoding: 'utf8', cwd: root, ...options })
+}
+
+/** Инкрементирует номер патча в package.json (например 2.3.0 → 2.3.1) */
+function bumpPatchVersion() {
+  const pkgPath = path.join(root, 'package.json')
+  const raw = fs.readFileSync(pkgPath, 'utf8')
+  const versionMatch = raw.match(/"version":\s*"([^"]+)"/)
+  if (!versionMatch) return
+  const parts = versionMatch[1].split('.')
+  const patch = parseInt(parts[parts.length - 1], 10) || 0
+  parts[parts.length - 1] = String(patch + 1)
+  const newVersion = parts.join('.')
+  const newRaw = raw.replace(/"version":\s*"[^"]+"/, `"version": "${newVersion}"`)
+  fs.writeFileSync(pkgPath, newRaw, 'utf8')
+  console.log('Bumped version to', newVersion)
 }
 
 function getStagedDiff() {
@@ -99,6 +115,8 @@ async function generateCommitMessage(diff) {
 async function main() {
   console.log('Running npm run build...')
   run('npm run build', { stdio: 'inherit' })
+
+  bumpPatchVersion()
 
   console.log('Running git add .')
   run('git add .')
