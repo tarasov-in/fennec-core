@@ -98,6 +98,7 @@
     "build": "npm run build:main && node scripts/build-subpaths.js",
     "build:main": "microbundle-crl -o ./dist --no-css-modules --no-compress --format modern,cjs --external antd,antd-mobile,@ant-design/icons,@ant-design",
     "build:subpaths": "node scripts/build-subpaths.js",
+    "deploy": "node scripts/deploy.js",
     "prestart": "mkdir -p ../fennec-core-dev && cp -r ./package.json ../fennec-core-dev/",
     "start": "microbundle-crl watch -o ../fennec-core-dev/dist --no-css-modules --no-compress --format modern,cjs",
     "buildorigin": "microbundle-crl --no-compress --format modern,cjs",
@@ -107,7 +108,6 @@
     "test:lint": "eslint .",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "predeploy": "cd example && npm install && npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "analyze": "microbundle-crl -o ./dist --no-css-modules --no-compress --format modern,cjs --visualize"
