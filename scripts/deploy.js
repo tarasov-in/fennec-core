@@ -18,6 +18,40 @@ const MAX_DIFF_CHARS = 20000
 
 const root = path.join(__dirname, '..')
 
+const Reset = "\x1b[0m"
+const Bright = "\x1b[1m"
+const Dim = "\x1b[2m"
+const Underscore = "\x1b[4m"
+const Blink = "\x1b[5m"
+const Reverse = "\x1b[7m"
+const Hidden = "\x1b[8m"
+
+const FgBlack = "\x1b[30m"
+const FgRed = "\x1b[31m"
+const FgGreen = "\x1b[32m"
+const FgYellow = "\x1b[33m"
+const FgBlue = "\x1b[34m"
+const FgMagenta = "\x1b[35m"
+const FgCyan = "\x1b[36m"
+const FgWhite = "\x1b[37m"
+const FgGray = "\x1b[90m"
+
+const BgBlack = "\x1b[40m"
+const BgRed = "\x1b[41m"
+const BgGreen = "\x1b[42m"
+const BgYellow = "\x1b[43m"
+const BgBlue = "\x1b[44m"
+const BgMagenta = "\x1b[45m"
+const BgCyan = "\x1b[46m"
+const BgWhite = "\x1b[47m"
+const BgGray = "\x1b[100m"
+
+function color(color, text) {
+  return `${color}${text}${Reset}`
+}
+// console.log('\x1b[36m%s\x1b[0m', 'I am cyan');  //cyan
+// console.log('\x1b[33m%s\x1b[0m', stringToMakeYellow);  //yellow
+
 function run(cmd, options = {}) {
   return execSync(cmd, { encoding: 'utf8', cwd: root, ...options })
 }
@@ -34,7 +68,7 @@ function bumpPatchVersion() {
   const newVersion = parts.join('.')
   const newRaw = raw.replace(/"version":\s*"[^"]+"/, `"version": "${newVersion}"`)
   fs.writeFileSync(pkgPath, newRaw, 'utf8')
-  console.log('Bumped version to', newVersion)
+  console.log('Bumped version to', color(FgCyan, newVersion))
 }
 
 /** Diff до любых операций скрипта (рабочая копия + индекс), для сообщения коммита */
@@ -61,12 +95,41 @@ function truncate(str, maxChars) {
   return str.slice(0, maxChars) + '\n\n... [truncated]\n'
 }
 
-/** Удаляет блоки <think>...</think> из ответа модели, оставляя только финальный ответ */
-function stripThinkBlocks(text) {
-  if (typeof text !== 'string') return text
-  return text
-    .replace(/\s*<think>[\s\S]*?<\/think>\s*/gi, ' ')
-    .trim()
+/**
+ * Утилиты для работы с блоками размышлений (thinking blocks).
+ * Поддерживает удаление различных форматов:
+ * - <think>...</think> (Qwen, Claude)
+ * - <thinking>...</thinking>
+ * - <reasoning>...</reasoning>
+ * - [thinking]...[/thinking]
+ * - <thought>...</thought>
+ * - <internal_reasoning>...</internal_reasoning>
+ */
+const THINKING_BLOCK_PATTERNS = [
+  /<think>[\s\S]*?<\/think>/gi,
+  /<thinking>[\s\S]*?<\/thinking>/gi,
+  /<reasoning>[\s\S]*?<\/reasoning>/gi,
+  /\[thinking][\s\S]*?\[\/thinking]/gi,
+  /<thought>[\s\S]*?<\/thought>/gi,
+  /<internal_reasoning>[\s\S]*?<\/internal_reasoning>/gi
+]
+
+function removeThinkingBlocks(text) {
+  if (text == null) return ''
+  if (typeof text !== 'string') text = String(text)
+  if (!text) return ''
+  let result = text
+  for (const pattern of THINKING_BLOCK_PATTERNS) {
+    result = result.replace(pattern, ' ')
+  }
+  return result.replace(/\s+/g, ' ').trim()
+}
+
+function hasThinkingBlocks(text) {
+  if (text == null) return false
+  if (typeof text !== 'string') text = String(text)
+  if (!text) return false
+  return /<think>|<thinking>|<reasoning>|\[thinking]|<thought>|<internal_reasoning>/i.test(text)
 }
 
 function sanitizeCommitMessage(msg) {
@@ -119,19 +182,19 @@ async function generateCommitMessage(diff) {
   })
 
   let raw = (data.response || '').trim()
-  raw = stripThinkBlocks(raw)
+  raw = removeThinkingBlocks(raw)
   return sanitizeCommitMessage(raw)
 }
 
 async function main() {
-  console.log('Running npm run build...')
+  console.log(color(FgGray,'Running npm run build...'))
   run('npm run build', { stdio: 'inherit' })
 
   const diffForMessage = getWorkingDiff()
 
   bumpPatchVersion()
 
-  console.log('Running git add .')
+  console.log(color(FgGray,'Running git add .'))
   run('git add .')
 
   const staged = getStagedDiff()
@@ -140,7 +203,7 @@ async function main() {
     process.exit(0)
   }
 
-  console.log('Generating commit message via Ollama...')
+  console.log(color(FgGray,'Generating commit message via Ollama...'))
   let message
   try {
     message = diffForMessage.trim()
@@ -151,14 +214,14 @@ async function main() {
     process.exit(1)
   }
 
-  console.log('Commit message:', message)
+  console.log('Commit message:', color(FgCyan, message))
   const escaped = message.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
   run(`git commit -m "${escaped}"`, { stdio: 'inherit' })
 
-  console.log('Running git push...')
+  console.log(color(FgGray,'Running git push...'))
   run('git push', { stdio: 'inherit' })
 
-  console.log('Deploy done.')
+  console.log(color(FgGreen,'Deploy done.'))
 }
 
 main().catch((err) => {
