@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Auth';
-import { UserConfigContext } from '../Components/Context';
-import { errorCatch } from 'fennec-core/core/error';
-import { POST, READWITH } from 'fennec-core/core/crud';
-import { QueryDetail } from 'fennec-core/core/utils';
+import { UserConfigContext } from '../Context';
+import { errorCatch } from '../core/error';
+import { POST, READWITH } from '../core/crud';
+import { QueryDetail } from '../core/utils';
 
 
 //-------------------------------------------------------------------------------------

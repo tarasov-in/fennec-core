@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Auth';
-import { MetaContext } from '../Components/Context';
+import { MetaContext } from '../Context';
 import fuuid from 'react-uuid'
 
 //-------------------------------------------------------------------------------------

@@ -20,53 +20,6 @@ export { UIAdapter } from './adapters/UIAdapter';
 // Adapters are not re-exported from main entry. Import from subpaths when needed:
 // fennec-core/adapters/antd, fennec-core/adapters/chakra-ui, etc.
 
-// ==================== Core Component Logic ====================
-export { FieldCore } from './core/components/Field/FieldCore';
-export type { FieldMeta, FieldCoreProps } from './core/components/Field/FieldCore';
-
-export { ModelCore } from './core/components/Model/ModelCore';
-export type {
-  ModelMeta,
-  MetaProperty,
-  ContextFilter,
-  ModelCoreProps
-} from './core/components/Model/ModelCore';
-
-export { CollectionCore } from './core/components/Collection/CollectionCore';
-export type {
-  FilterDefinition,
-  SortingState,
-  QueryParameter,
-  CollectionCoreProps
-} from './core/components/Collection/CollectionCore';
-
-export {
-  ActionCore,
-  ActionModalCore,
-  ActionWizardCore,
-  ActionFormCore
-} from './core/components/Action/ActionCore';
-export type { ActionStep, ActionCoreProps } from './core/components/Action/ActionCore';
-
-// ==================== Components ====================
-export { Field } from './Components/Desktop/Field/Field';
-export type { FieldProps } from './Components/Desktop/Field/Field';
-
-export { Model } from './Components/Desktop/Model/Model';
-export type { ModelProps } from './Components/Desktop/Model/Model';
-
-export { Collection } from './Components/Desktop/Collection/Collection';
-export type { CollectionProps } from './Components/Desktop/Collection/Collection';
-
-export { Action } from './Components/Desktop/Action/Action';
-export type { ActionProps } from './Components/Desktop/Action/Action';
-
-// ==================== Mobile Renderers ====================
-export { FieldMobileRenderer } from './Components/Desktop/Field/FieldMobileRenderer';
-export { ModelMobileRenderer } from './Components/Desktop/Model/ModelMobileRenderer';
-export { CollectionMobileRenderer } from './Components/Desktop/Collection/CollectionMobileRenderer';
-export { ActionMobileRenderer } from './Components/Desktop/Action/ActionMobileRenderer';
-
 // ==================== Context & Providers ====================
 export { AuthService, AuthProvider, useAuth, RequireAuth } from './Auth';
 export { UserConfigProvider } from './UserConfig';
@@ -88,7 +41,7 @@ export {
   useFormObserverContext,
   ClipboardContext,
   useClipboardContext
-} from './Components/Context';
+} from './Context';
 
 // ==================== Utility Functions ====================
 
