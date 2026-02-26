@@ -53,6 +53,7 @@ export default defineConfig({
   resolve: {
     alias: [
       // Специфичные пути первыми, иначе "fennec-core" съедает "fennec-core/components/..."
+      { find: 'fennec-core/adapters/antd', replacement: path.resolve(__dirname, '../../src/adapters/antd/index.js') },
       { find: 'fennec-core/components/Action', replacement: path.resolve(__dirname, '../../src/components/Action/index.js') },
       { find: 'fennec-core/components/Collection', replacement: path.resolve(__dirname, '../../src/components/Collection/index.js') },
       { find: 'fennec-core/components/Field', replacement: path.resolve(__dirname, '../../src/components/Field/index.js') },

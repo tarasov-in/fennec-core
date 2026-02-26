@@ -8,6 +8,15 @@ import DemoModelForm from './demos/DemoModelForm';
 const { Title, Paragraph } = Typography;
 
 export default function App() {
+  
+  React.useEffect(() => {
+    window.addEventListener('popstate', function (e) {
+      if (e.state && e.state.cb && window.historyCallbackFunctions && window.historyCallbackFunctions[e.state.cb]) {
+        window.historyCallbackFunctions[e.state.cb].apply(this, arguments);
+      }
+    }, false);
+  }, []);
+
   const [key, setKey] = useState('1');
   const items = [
     {

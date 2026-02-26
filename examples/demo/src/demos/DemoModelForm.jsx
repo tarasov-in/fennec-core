@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'antd';
-import { useAuth, GetMetaProperties, formItemRules, uncapitalize } from 'fennec-core';
+import { useAuth } from 'fennec-core';
 import { Model } from 'fennec-core/components/Model';
 import { Field } from 'fennec-core/components/Field';
 
@@ -24,45 +24,55 @@ export default function DemoModelForm() {
     setSaved(values);
   };
 
-  const properties = GetMetaProperties(META)?.filter(
-    (e) => e.name && e.name.toUpperCase() !== 'ID'
-  );
+  const initialObject = {
+    title: 'Пример',
+    amount: 100,
+    active: true,
+    createdAt: undefined,
+  };
 
   return (
     <div>
-      <Form
+      <Model
+        auth={auth}
+        name="demo"
+        meta={META}
+        options={{ labelAlign: 'left', layout: 'vertical' }}
+        object={initialObject}
+        data={{}}
         form={form}
-        onFinish={submit}
-        layout="vertical"
-        initialValues={{
-          title: 'Пример',
-          amount: 100,
-          active: true,
-          createdAt: undefined,
-        }}
-      >
-        {properties?.map((item) => (
-          <Form.Item
-            key={item.name}
-            name={uncapitalize(item.name)}
-            label={item.type !== 'bool' && item.type !== 'boolean' ? item.label : undefined}
-            rules={formItemRules(item)}
+        submit={submit}
+        render={(ctx) => (
+          <Form
+            form={ctx.form}
+            onFinish={ctx.submit}
+            onValuesChange={ctx.onValuesChange}
+            initialValues={ctx.initialValues}
+            {...ctx.options}
           >
-            <Field
-              mode="model"
-              objectName="demo"
-              auth={auth}
-              formItem
-              item={{ ...item, filterType: undefined }}
-            />
-          </Form.Item>
-        ))}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Сохранить
-          </Button>
-        </Form.Item>
-      </Form>
+            {ctx.getFormFields().map((item, idx) => {
+              if (!item?.name && item.type === 'func' && item.render) {
+                const args = ctx.getFuncRenderArgs(item, idx);
+                return (
+                  <div key={'func_' + idx}>
+                    {item.render(args.auth, args.item, args.context)}
+                  </div>
+                );
+              }
+              return (
+                <Form.Item key={item?.name} {...ctx.getFieldFormItemProps(item)}>
+                  <Field {...ctx.getFieldProps(item)} />
+                </Form.Item>
+              );
+            })}
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Сохранить
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      />
       {saved && (
         <pre style={{ marginTop: 16, padding: 12, background: '#f5f5f5', borderRadius: 4 }}>
           {JSON.stringify(saved, null, 2)}

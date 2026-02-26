@@ -6,9 +6,11 @@ import {
   MetaProvider,
   MetaContext,
   FormObserverContext,
+  UIProvider,
 } from 'fennec-core';
+import { AntdAdapter } from 'fennec-core/adapters/antd';
 
-// Мок-мета для демо: одна сущность "product" с полями
+// Мок-мета для демо: product, orderLine (подчинённая таблица), demo (форма с подчинённой таблицей)
 const MOCK_META = {
   product: {
     name: 'product',
@@ -18,6 +20,30 @@ const MOCK_META = {
       { name: 'Title', type: 'string', label: 'Название', filter: true, sort: true },
       { name: 'Price', type: 'float', label: 'Цена', filter: true, sort: true },
       { name: 'CreatedAt', type: 'datetime', label: 'Создан', filter: true, sort: true },
+    ],
+  },
+  orderLine: {
+    name: 'orderLine',
+    label: 'Строка заказа',
+    properties: [
+      { name: 'ID', type: 'uint', label: 'ID', hidden: true },
+      { name: 'ProductName', type: 'string', label: 'Товар' },
+      { name: 'Qty', type: 'float', label: 'Кол-во' },
+      { name: 'Price', type: 'float', label: 'Цена' },
+    ],
+  },
+  demo: {
+    name: 'demo',
+    label: 'Демо (форма со строками)',
+    properties: [
+      { name: 'Title', type: 'string', label: 'Название' },
+      { name: 'Amount', type: 'float', label: 'Сумма' },
+      {
+        name: 'Lines',
+        label: 'Строки',
+        type: 'object',
+        relation: { type: 'one-many', reference: { object: 'orderLine' } },
+      },
     ],
   },
 };
@@ -92,19 +118,23 @@ if (typeof document !== 'undefined') {
 
 const formObserverDefault = [false, () => false, () => {}];
 
+const uiAdapter = new AntdAdapter();
+
 export function DemoProviders({ children }) {
   return (
-    <AuthProvider>
-      <UserConfigProvider>
-        <TranslateProvider>
-          <MetaProvider>
-            <FormObserverContext.Provider value={formObserverDefault}>
-              {children}
-            </FormObserverContext.Provider>
-          </MetaProvider>
-        </TranslateProvider>
-      </UserConfigProvider>
-    </AuthProvider>
+    <UIProvider adapter={uiAdapter}>
+      <AuthProvider>
+        <UserConfigProvider>
+          <TranslateProvider>
+            <MetaProvider>
+              <FormObserverContext.Provider value={formObserverDefault}>
+                {children}
+              </FormObserverContext.Provider>
+            </MetaProvider>
+          </TranslateProvider>
+        </UserConfigProvider>
+      </AuthProvider>
+    </UIProvider>
   );
 }
 
