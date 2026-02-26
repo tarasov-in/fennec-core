@@ -1,7 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import decode from 'jwt-decode';
 import PubSub from 'pubsub-js';
 import uuid from 'react-uuid';
+import { useMediaQuery } from 'react-responsive';
+import { Dropdown, Menu, Button, Space, Divider, Select, Tooltip, Modal, Typography } from 'antd';
+import { MenuOutlined, SortAscendingOutlined, SortDescendingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 function _defineProperties(e, r) {
   for (var t = 0; t < r.length; t++) {
@@ -25,6 +28,15 @@ function _extends() {
 }
 function _inheritsLoose(t, o) {
   t.prototype = Object.create(o.prototype), t.prototype.constructor = t, _setPrototypeOf(t, o);
+}
+function _objectWithoutPropertiesLoose(r, e) {
+  if (null == r) return {};
+  var t = {};
+  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
+    if (-1 !== e.indexOf(n)) continue;
+    t[n] = r[n];
+  }
+  return t;
 }
 function _setPrototypeOf(t, e) {
   return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
@@ -19897,6 +19909,2232 @@ function useUIOptional() {
   return useContext(UIContext);
 }
 
+var _excluded = ["ui"],
+  _excluded2 = ["formInstance", "ui"];
+var CurrentForm = function CurrentForm(props) {
+  var current = props.current,
+    steps = props.steps,
+    object = props.object,
+    action = props.action,
+    setSubmit = props.setSubmit,
+    FormComponent = props.Form;
+  var _ref = FormComponent ? FormComponent.useForm() : [null],
+    frm = _ref[0];
+  var item = React.useMemo(function () {
+    return steps[current];
+  }, [steps, current]);
+  var F = React.useMemo(function () {
+    return item.form;
+  }, [item]);
+  useEffect(function () {
+    if (setSubmit) {
+      if (item.noAntForm) {
+        setSubmit(action, current);
+      } else {
+        setSubmit(frm.submit, current);
+      }
+    }
+  }, [item, setSubmit, action, current, frm]);
+  var newData = React.useMemo(function () {
+    return _extends({}, item.object, object[steps[current].key]);
+  }, [item, object, steps, current]);
+  var cstep = React.useMemo(function () {
+    return item.steps || steps;
+  }, [item, steps]);
+  var csubheader = React.useMemo(function () {
+    return item.titles && item.titles.subheader ? item.titles.subheader : "";
+  }, [item]);
+  return /*#__PURE__*/React.createElement(F, {
+    idx: current,
+    submit: action,
+    object: newData,
+    data: object,
+    auth: props.auth,
+    meta: item.meta,
+    options: item.options,
+    steps: cstep,
+    subheader: csubheader,
+    form: frm
+  });
+};
+var FooterButton = function FooterButton(_ref2) {
+  var key = _ref2.key,
+    name = _ref2.name,
+    callback = _ref2.callback,
+    options = _ref2.options,
+    locator = _ref2.locator,
+    object = _ref2.object;
+  var btn = {
+    key: key,
+    text: name,
+    onPress: callback,
+    options: _extends({}, options, {
+      key: getLocator(locator || key, object)
+    })
+  };
+  return btn;
+};
+function ActionWithFormInstance(_ref3) {
+  var ui = _ref3.ui,
+    props = _objectWithoutPropertiesLoose(_ref3, _excluded);
+  var _ui$createFormInstanc = ui.createFormInstance(),
+    form = _ui$createFormInstanc[0];
+  return /*#__PURE__*/React.createElement(ActionContent, _extends({
+    formInstance: form,
+    ui: ui
+  }, props));
+}
+function Action(props) {
+  var ui = useUIOptional();
+  if ((props.steps || props.form) && ui !== null && ui !== void 0 && ui.Form && ui.createFormInstance) {
+    return /*#__PURE__*/React.createElement(ActionWithFormInstance, _extends({
+      ui: ui
+    }, props));
+  }
+  return /*#__PURE__*/React.createElement(ActionContent, _extends({
+    form: null,
+    ui: null
+  }, props));
+}
+function ActionContent(incomingProps) {
+  var formInstance = incomingProps.formInstance,
+    ui = incomingProps.ui,
+    rest = _objectWithoutPropertiesLoose(incomingProps, _excluded2);
+  var props = _extends({}, rest, {
+    formInstance: formInstance,
+    ui: ui
+  });
+  var isDesktopOrLaptop = useMediaQuery({
+    minWidth: 1224
+  });
+  var callback = props.callback,
+    excludeKeyPressed = props.excludeKeyPressed,
+    hideMenu = props.hideMenu,
+    isFormData = props.isFormData,
+    steps = props.steps,
+    modify = props.modify,
+    visible = props.visible,
+    readonly = props.readonly,
+    disabled = props.disabled,
+    formWraperStyle = props.formWraperStyle,
+    triggerStyle = props.triggerStyle,
+    triggerOptions = props.triggerOptions,
+    titles = props.titles,
+    object = props.object,
+    okText = props.okText,
+    dismissText = props.dismissText,
+    nextText = props.nextText,
+    backText = props.backText,
+    uuid = props.uuid,
+    actionRef = props.actionRef,
+    disabledOkOnUncahngedForm = props.disabledOkOnUncahngedForm,
+    contextFilters = props.contextFilters;
+  var _useState = useState({}),
+    values = _useState[0],
+    setValues = _useState[1];
+  useEffect(function () {
+    setValues(object);
+  }, [object]);
+  var isChangedField = React.useCallback(function (name) {
+    return lodash.get(values, name) !== lodash.get(object, name);
+  }, [values, object]);
+  var isChangedForm = React.useMemo(function () {
+    var f = false;
+    for (var key in values) {
+      if (lodash.get(values, key) !== lodash.get(object, key)) {
+        f = true;
+        break;
+      }
+    }
+    return f;
+  }, [values, object]);
+  var onValuesChange = React.useCallback(function (changed, all) {
+    setValues(all);
+  }, [values, setValues]);
+  var _useState2 = useState(false),
+    loading = _useState2[0],
+    setLoading = _useState2[1];
+  var _useState3 = useState(false),
+    opened = _useState3[0],
+    setOpened = _useState3[1];
+  var _useState4 = useState({}),
+    stepObject = _useState4[0],
+    setStepObject = _useState4[1];
+  var _useState5 = useState(0),
+    currentStep = _useState5[0],
+    setCurrentStep = _useState5[1];
+  var closePopup = useCallback(function () {
+    if (formInstance !== null && formInstance !== void 0 && formInstance.resetFields) formInstance.resetFields();
+    close();
+  }, [formInstance]);
+  var ContentForm = props.form;
+  var stack = [];
+  var getStack = useCallback(function () {
+    return stack;
+  }, []);
+  useEffect(function () {
+    if (uuid) {
+      var token_click = subscribe("action." + uuid + ".click", function (msg, data) {
+        click();
+      });
+    }
+    return function () {
+      if (uuid) {
+        unsubscribe("action." + uuid);
+      }
+    };
+  }, [uuid]);
+  var submitCache = React.useMemo(function () {
+    return {};
+  }, []);
+  var execStep = React.useCallback(function (current) {
+    if (submitCache[current]) {
+      submitCache[current]();
+    }
+  }, [submitCache]);
+  var setSubmit = function setSubmit(submit, current) {
+    submitCache[current] = submit;
+  };
+  var lock = React.useCallback(function () {
+    setLoading(true);
+  }, []);
+  var unlock = React.useCallback(function () {
+    setLoading(false);
+  }, []);
+  var close = React.useCallback(function () {
+    setCurrentStep(0);
+    setLoading(false);
+    if (props.onClose) {
+      props.onClose();
+    }
+    window.history.back();
+  }, [props.onClose]);
+  var action = React.useCallback(function (_values) {
+    var values = eventExecution(modify, _values, {});
+    values = IfElse(formInstance, unpackFormFields(formInstance, values), values);
+    values = IfElse(isFormData, makeFormData(values), values);
+    setLoading(true);
+    Request(values, IfElse(!!props.action, props, {
+      action: {
+        method: !isFormData ? "POST" : "POSTFormData",
+        path: "/api/" + props.document,
+        onClose: function onClose(_ref4, context) {
+          var close = _ref4.close;
+          return close();
+        },
+        onDispatch: function onDispatch(values, context) {
+          return function () {
+            return callback;
+          };
+        },
+        onError: function onError(err, _ref5) {
+          var unlock = _ref5.unlock;
+          unlock();
+          errorCatch(err);
+        }
+      }
+    }), {
+      auth: props.auth,
+      collection: props.collection || [],
+      collectionRef: props === null || props === void 0 ? void 0 : props.collectionRef,
+      updateCollection: props === null || props === void 0 ? void 0 : props.updateCollection,
+      setCollection: props.setCollection || function () {},
+      contextFilters: contextFilters,
+      property: props.property || function () {},
+      label: props.label || function () {},
+      itemByProperty: props.itemByProperty || function () {},
+      apply: props.apply || function () {},
+      plock: (props === null || props === void 0 ? void 0 : props.lock) || function () {},
+      punlock: (props === null || props === void 0 ? void 0 : props.unlock) || function () {},
+      onData: function onData(values, context) {
+        return values.data;
+      },
+      lock: lock,
+      unlock: unlock,
+      close: close
+    });
+  }, [modify, formInstance, isFormData, callback, props.action, props.document, props.collection, props.collectionRef, props.updateCollection, props.setCollection, props.contextFilters, props.auth]);
+  var click = React.useCallback(function (e) {
+    if (excludeKeyPressed && excludeKeyPressed(e)) {
+      return;
+    }
+    if (!steps && ContentForm || steps) {
+      pushStateHistoryModal(setOpened, getStack);
+      setOpened(true);
+    } else {
+      action({});
+    }
+    if (hideMenu) {
+      hideMenu();
+    }
+  }, [action, steps, excludeKeyPressed, hideMenu, props.collection]);
+  var prev = React.useCallback(function () {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      closePopup();
+    }
+  }, [currentStep, closePopup]);
+  var next = React.useCallback(function (values, item, currentStep) {
+    if (currentStep < steps.length - 1) {
+      if (item && item.action) {
+        setLoading(true);
+        item.action(values, function (v) {
+          if (v) {
+            setStepObject(function (x) {
+              var _extends2;
+              return _extends({}, x, (_extends2 = {}, _extends2[steps[currentStep].key] = _extends({}, steps[currentStep].object, v), _extends2));
+            });
+          }
+          setLoading(false);
+        }, function (v) {
+          setStepObject(function (x) {
+            var _extends3;
+            return _extends({}, x, (_extends3 = {}, _extends3[steps[currentStep].key] = _extends({}, steps[currentStep].object, v), _extends3));
+          });
+          setCurrentStep(currentStep + 1);
+          setLoading(false);
+        }, {
+          state: stepObject
+        });
+      } else {
+        setStepObject(values);
+        setCurrentStep(currentStep + 1);
+      }
+    } else {
+      var _extends4;
+      var o = _extends({}, stepObject, (_extends4 = {}, _extends4[steps[currentStep].key] = _extends({}, steps[currentStep].object, values), _extends4));
+      action(o);
+    }
+  }, [steps, stepObject]);
+  var FooterDismissFunction = function FooterDismissFunction() {
+    if (steps && currentStep > 0) {
+      return prev;
+    } else {
+      return closePopup;
+    }
+  };
+  var FooterOkFunction = function FooterOkFunction() {
+    if (steps) {
+      return function () {
+        execStep(currentStep);
+      };
+    } else {
+      return formInstance.submit;
+    }
+  };
+  var FooterDismissButtons = function FooterDismissButtons() {
+    if (steps && currentStep > 0) {
+      var _steps$currentStep;
+      return [FooterButton({
+        key: "dismiss",
+        name: ((_steps$currentStep = steps[currentStep]) === null || _steps$currentStep === void 0 ? void 0 : _steps$currentStep.dismissText) || backText || 'Назад',
+        callback: FooterDismissFunction(),
+        options: {
+          type: "ghost"
+        },
+        isDesktopOrLaptop: isDesktopOrLaptop
+      })];
+    } else {
+      return [FooterButton({
+        key: "dismiss",
+        name: dismissText || 'Закрыть',
+        callback: FooterDismissFunction(),
+        options: {
+          type: "ghost"
+        },
+        isDesktopOrLaptop: isDesktopOrLaptop
+      })];
+    }
+  };
+  var FooterOkButtons = useCallback(function () {
+    if (steps) {
+      var _steps$currentStep2, _steps$currentStep3;
+      return [IfElse(currentStep < steps.length - 1, FooterButton({
+        key: "next",
+        name: ((_steps$currentStep2 = steps[currentStep]) === null || _steps$currentStep2 === void 0 ? void 0 : _steps$currentStep2.okText) || nextText || 'Далее',
+        callback: FooterOkFunction(),
+        options: {
+          type: "primary",
+          disabled: disabledOkOnUncahngedForm && !isChangedForm
+        },
+        isDesktopOrLaptop: isDesktopOrLaptop
+      }), FooterButton({
+        key: "ok",
+        name: ((_steps$currentStep3 = steps[currentStep]) === null || _steps$currentStep3 === void 0 ? void 0 : _steps$currentStep3.okText) || okText || 'Отправить',
+        callback: FooterOkFunction(),
+        options: {
+          type: "primary",
+          disabled: disabledOkOnUncahngedForm && !isChangedForm
+        },
+        isDesktopOrLaptop: isDesktopOrLaptop
+      }))];
+    } else {
+      return [FooterButton({
+        key: "ok",
+        name: okText || 'Отправить',
+        callback: FooterOkFunction(),
+        options: {
+          type: "primary",
+          disabled: disabledOkOnUncahngedForm && !isChangedForm
+        },
+        isDesktopOrLaptop: isDesktopOrLaptop
+      })];
+    }
+  }, [isChangedForm, disabledOkOnUncahngedForm, currentStep, steps, FooterOkFunction]);
+  var FooterExtendedButtons = function FooterExtendedButtons(parameters) {
+    if (props.footerExtendedButtons) {
+      var btns = props.footerExtendedButtons(parameters);
+      if (btns) {
+        return btns === null || btns === void 0 ? void 0 : btns.map(function (e) {
+          return FooterButton(_extends({
+            isDesktopOrLaptop: isDesktopOrLaptop
+          }, e));
+        });
+      }
+    }
+    return [];
+  };
+  var footer = React.useCallback(function () {
+    var ctx = {
+      DismissFunction: FooterDismissFunction(),
+      OkFunction: FooterOkFunction(),
+      form: formInstance,
+      object: object,
+      lock: lock,
+      unlock: unlock,
+      close: close,
+      readonly: readonly,
+      loading: loading,
+      isChangedForm: isChangedForm
+    };
+    if (props.footer) {
+      var btns = props.footer(ctx);
+      if (btns) {
+        var a = btns === null || btns === void 0 ? void 0 : btns.map(function (e) {
+          return FooterButton(_extends({
+            isDesktopOrLaptop: isDesktopOrLaptop
+          }, e));
+        });
+        return a;
+      }
+    }
+    if (readonly || loading) {
+      return [].concat(FooterExtendedButtons(ctx), FooterDismissButtons());
+    }
+    return [].concat(FooterExtendedButtons(ctx), FooterDismissButtons(), FooterOkButtons());
+  }, [isChangedForm, props.footer, isDesktopOrLaptop, currentStep, formInstance, object, unlock, close, readonly, loading]);
+  var trigger = React.useCallback(function () {
+    return props.trigger ? props.trigger(click) : /*#__PURE__*/React.createElement(React.Fragment, null);
+  }, [object, props.action, isDesktopOrLaptop, props.title, props.trigger, loading, disabled, triggerOptions, triggerStyle, props.closable]);
+  var FormRenderer = React.useCallback(function () {
+    return /*#__PURE__*/React.createElement(React.Fragment, null, steps && (ui === null || ui === void 0 ? void 0 : ui.Form) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CurrentForm, {
+      Form: ui.Form,
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "actionform", stepObject),
+      setSubmit: setSubmit,
+      auth: props.auth,
+      current: currentStep,
+      steps: steps,
+      object: stepObject,
+      action: function action(values) {
+        var _extends5;
+        var o = _extends({}, stepObject, (_extends5 = {}, _extends5[steps[currentStep].key] = _extends({}, steps[currentStep].object, values), _extends5));
+        next(values, steps[currentStep], currentStep);
+      }
+    })), !steps && props.form && /*#__PURE__*/React.createElement(ContentForm, _extends({}, props, {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "actionform", props === null || props === void 0 ? void 0 : props.object),
+      subheader: props.titles && props.titles.subheader ? props.titles.subheader : "",
+      submit: action,
+      form: formInstance
+    })));
+  }, [steps, stepObject, currentStep, props.form, props.auth, props.object, props.locator, props.titles, formInstance, ui]);
+  var content = React.useCallback(function () {
+    return props !== null && props !== void 0 && props.render ? props.render({
+      FormRenderer: FormRenderer,
+      footer: footer,
+      trigger: trigger,
+      opened: opened,
+      loading: loading,
+      object: object,
+      close: close,
+      readonly: readonly,
+      disabled: disabled,
+      isChangedField: isChangedField,
+      isChangedForm: isChangedForm,
+      onValuesChange: onValuesChange,
+      DismissFunction: FooterDismissFunction(),
+      OkFunction: FooterOkFunction(),
+      formInstance: formInstance,
+      lock: lock,
+      unlock: unlock
+    }) : undefined;
+  }, [props.render, isChangedForm, isChangedField, onValuesChange, props.action, steps, stepObject, currentStep, stepObject, props.auth, loading, titles, opened, visible, formWraperStyle, next, action, formInstance]);
+  React.useEffect(function () {
+    if (actionRef) {
+      actionRef.current = {
+        click: click,
+        opened: opened,
+        loading: loading
+      };
+    }
+  }, [actionRef, opened, visible, loading]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, content && content());
+}
+
+function Field(props) {
+  var _props$item;
+  var auth = props.auth,
+    item = props.item,
+    value = props.value,
+    onChange = props.onChange,
+    mode = props.mode,
+    disabled = props.disabled,
+    placeholder = props.placeholder;
+  if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
+    return props.item.render(auth, item, value, onChange, props);
+  }
+  var ui = useUIOptional();
+  if (!ui || !ui.renderField) {
+    return null;
+  }
+  return ui.renderField({
+    type: item === null || item === void 0 ? void 0 : item.type,
+    value: value,
+    onChange: onChange,
+    mode: mode,
+    item: item != null ? item : {},
+    disabled: disabled,
+    placeholder: placeholder
+  });
+}
+
+function FieldLayout(_ref) {
+  var formItem = _ref.formItem,
+    item = _ref.item,
+    children = _ref.children,
+    style = _ref.style;
+  return /*#__PURE__*/React.createElement("div", {
+    style: style
+  }, /*#__PURE__*/React.createElement("div", null, (item === null || item === void 0 ? void 0 : item.label) && !formItem && /*#__PURE__*/React.createElement("div", {
+    style: {}
+  }, item === null || item === void 0 ? void 0 : item.label), (item === null || item === void 0 ? void 0 : item.description) && (item === null || item === void 0 ? void 0 : item.description) !== (item === null || item === void 0 ? void 0 : item.label) && /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: "rgb(140, 152, 164)",
+      fontSize: "12px"
+    }
+  }, item === null || item === void 0 ? void 0 : item.description)), children);
+}
+
+function DropdownAction(props) {
+  var button = props.button,
+    menuOptions = props.menuOptions,
+    items = props.items,
+    style = props.style,
+    icon = props.icon;
+  var auth = useAuth();
+  var _useState = useState([]),
+    actions = _useState[0],
+    setActions = _useState[1];
+  useEffect(function () {
+    if (items) {
+      var _items$filter$map, _items$filter;
+      setActions((_items$filter$map = items === null || items === void 0 ? void 0 : (_items$filter = items.filter(function (e) {
+        return !!e;
+      })) === null || _items$filter === void 0 ? void 0 : _items$filter.map(function (e, idx) {
+        var _e$key;
+        return _extends({}, e, {
+          _menuKey: (_e$key = e.key) != null ? _e$key : "action-" + idx
+        });
+      })) != null ? _items$filter$map : []);
+    }
+  }, [items]);
+  var renderTrigger = function renderTrigger() {
+    if (button) {
+      return button();
+    }
+    return /*#__PURE__*/React.createElement(Button, {
+      size: "small",
+      style: {
+        padding: "0 6px"
+      },
+      type: "default",
+      "aria-label": "\u041C\u0435\u043D\u044E \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439",
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "menu", props === null || props === void 0 ? void 0 : props.object)
+    }, icon || /*#__PURE__*/React.createElement(MenuOutlined, null));
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "dropdownaction", props === null || props === void 0 ? void 0 : props.object),
+    style: style
+  }, JSXMap(actions === null || actions === void 0 ? void 0 : actions.filter(function (e) {
+    return !!e.action || !!e.document;
+  }), function (e, idx) {
+    var _ref, _e$_menuKey;
+    var key = (_ref = (_e$_menuKey = e._menuKey) != null ? _e$_menuKey : e.key) != null ? _ref : idx;
+    return /*#__PURE__*/React.createElement("div", {
+      key: key
+    }, /*#__PURE__*/React.createElement(Action, _extends({
+      key: key,
+      auth: auth,
+      object: e
+    }, e)));
+  }), /*#__PURE__*/React.createElement(Dropdown, _extends({
+    placement: "bottomRight",
+    trigger: ['click']
+  }, props, {
+    overlay: /*#__PURE__*/React.createElement(Menu, _extends({}, menuOptions, {
+      selectable: false,
+      items: actions !== null && actions !== void 0 && actions.length ? actions === null || actions === void 0 ? void 0 : actions.map(function (e) {
+        var _e$_menuKey2;
+        if (e.type === 'divider') return e;
+        return {
+          key: (_e$_menuKey2 = e._menuKey) != null ? _e$_menuKey2 : e.key,
+          label: e.title || (e.modal ? e.modal.title : ""),
+          danger: e.danger || false
+        };
+      }) : [],
+      onClick: function onClick(e) {
+        if (e.key) publish("action." + e.key + ".click", e.key);
+      }
+    }))
+  }), renderTrigger()));
+}
+
+function ActionsSpace(props) {
+  var className = props.className,
+    children = props.children,
+    item = props.item,
+    data = props.data,
+    setData = props.setData,
+    objectName = props.objectName,
+    auth = props.auth,
+    contextObject = props.contextObject,
+    value = props.value,
+    onChange = props.onChange,
+    loading = props.loading,
+    setLoading = props.setLoading,
+    _property = props.property,
+    _label = props.label,
+    _itemByProperty = props.itemByProperty;
+  var meta = useMetaContext();
+  var _property2 = _property || function (item, value) {
+    if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
+      if (item && lodash.get(item, "relation.reference.property") && value) {
+        return value[item.relation.reference.property];
+      }
+      if (value) return value.ID;
+    } else {
+      return value;
+    }
+    return undefined;
+  };
+  var _itemByProperty2 = _itemByProperty || function (item, value) {
+    if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
+      if (lodash.get(item, "relation.reference.property")) {
+        return data === null || data === void 0 ? void 0 : data.find(function (e) {
+          return e[item.relation.reference.property] === value;
+        });
+      }
+      if (data !== null && data !== void 0 && data.length) return data.find(function (e) {
+        return e.ID === value;
+      });
+    } else {
+      return value;
+    }
+  };
+  var _label2 = _label || function (item, value) {
+    if (item && value) {
+      var _item$relation;
+      if (item.display && lodash.isFunction(item.display)) return item.display(value);
+      if ((_item$relation = item.relation) !== null && _item$relation !== void 0 && _item$relation.display && lodash.isFunction(item.relation.display)) return item.relation.display(value);
+      if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
+        var _item$relation2, _item$relation2$displ, _item$relation3, _fieldMeta$display;
+        var fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
+        var _display = (item !== null && item !== void 0 && (_item$relation2 = item.relation) !== null && _item$relation2 !== void 0 && (_item$relation2$displ = _item$relation2.display) !== null && _item$relation2$displ !== void 0 && _item$relation2$displ.fields ? item === null || item === void 0 ? void 0 : (_item$relation3 = item.relation) === null || _item$relation3 === void 0 ? void 0 : _item$relation3.display : undefined) || (fieldMeta !== null && fieldMeta !== void 0 && (_fieldMeta$display = fieldMeta.display) !== null && _fieldMeta$display !== void 0 && _fieldMeta$display.fields ? fieldMeta === null || fieldMeta === void 0 ? void 0 : fieldMeta.display : undefined);
+        return getDisplay(value, _display, fieldMeta, meta);
+      }
+      return "" + value;
+    }
+    return "";
+  };
+  var RenderActions = useCallback(function () {
+    if (!(item !== null && item !== void 0 && item.actions)) return null;
+    var values = clean(_unwrap(item === null || item === void 0 ? void 0 : item.actions(value, item, meta)));
+    if (!(values !== null && values !== void 0 && values.length)) return null;
+    return values === null || values === void 0 ? void 0 : values.map(function (e, idx) {
+      var _item$view;
+      if (lodash.isFunction(e)) {
+        return e({
+          collection: data,
+          setCollection: setData,
+          objectName: objectName,
+          contextObject: contextObject,
+          setCollectionItem: function setCollectionItem(item, first) {
+            return setData === null || setData === void 0 ? void 0 : setData(function (o) {
+              return updateInArray(o, item, first);
+            });
+          },
+          removeCollectionItem: function removeCollectionItem(item) {
+            return setData === null || setData === void 0 ? void 0 : setData(function (o) {
+              return deleteInArray(o, item);
+            });
+          },
+          lock: function lock() {
+            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
+          },
+          unlock: function unlock() {
+            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
+          },
+          loading: loading,
+          property: function property(obj) {
+            return _property2(item, obj);
+          },
+          label: function label(obj) {
+            return _label2(item, obj);
+          },
+          itemByProperty: function itemByProperty(val) {
+            return _itemByProperty2(item, val);
+          },
+          apply: function apply(obj) {
+            return onChange(value, item, _itemByProperty2(item, value));
+          }
+        }, idx);
+      }
+      return /*#__PURE__*/React.createElement(Action, _extends({
+        key: e.key || idx,
+        auth: auth,
+        disabled: loading || (item === null || item === void 0 ? void 0 : (_item$view = item.view) === null || _item$view === void 0 ? void 0 : _item$view.disabled),
+        item: item,
+        locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
+        object: e.object || _itemByProperty2(item, value),
+        objectName: objectName,
+        contextObject: contextObject,
+        collection: data,
+        setCollection: setData,
+        property: function property(obj) {
+          return _property2(item, obj);
+        },
+        label: function label(obj) {
+          return _label2(item, obj);
+        },
+        itemByProperty: function itemByProperty(val) {
+          return _itemByProperty2(item, val);
+        },
+        apply: function apply(obj) {
+          return onChange(_property2(item, obj), item, obj);
+        },
+        lock: function lock() {
+          return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
+        },
+        unlock: function unlock() {
+          return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
+        }
+      }, e));
+    });
+  }, [item, data, loading, value, meta, contextObject, objectName]);
+  var RenderDropdownActions = useCallback(function () {
+    if (!(item !== null && item !== void 0 && item.dropdownActions)) return null;
+    var values = clean(_unwrap(item === null || item === void 0 ? void 0 : item.dropdownActions(value, item, meta)));
+    if (!(values !== null && values !== void 0 && values.length)) return null;
+    return /*#__PURE__*/React.createElement(DropdownAction, {
+      button: function button() {
+        return /*#__PURE__*/React.createElement(Button, {
+          type: "default",
+          "aria-label": "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F"
+        }, /*#__PURE__*/React.createElement("i", {
+          className: "fa fa-ellipsis-v"
+        }));
+      },
+      locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
+      object: _itemByProperty2(item, value),
+      items: values === null || values === void 0 ? void 0 : values.map(function (e, idx) {
+        var _item$view2;
+        return _extends({
+          key: e.key || idx,
+          auth: auth,
+          disabled: loading || (item === null || item === void 0 ? void 0 : (_item$view2 = item.view) === null || _item$view2 === void 0 ? void 0 : _item$view2.disabled),
+          item: item,
+          locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
+          object: e.object || _itemByProperty2(item, value),
+          objectName: objectName,
+          contextObject: contextObject,
+          collection: data,
+          setCollection: setData,
+          property: function property(obj) {
+            return _property2(item, obj);
+          },
+          label: function label(obj) {
+            return _label2(item, obj);
+          },
+          itemByProperty: function itemByProperty(val) {
+            return _itemByProperty2(item, val);
+          },
+          apply: function apply(obj) {
+            return onChange(_property2(item, obj), item, obj);
+          },
+          lock: function lock() {
+            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
+          },
+          unlock: function unlock() {
+            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
+          }
+        }, e);
+      })
+    });
+  }, [item, data, loading, value, meta, contextObject, objectName]);
+  return /*#__PURE__*/React.createElement(Space.Compact, {
+    className: className,
+    style: {
+      width: '100%'
+    }
+  }, children, (item === null || item === void 0 ? void 0 : item.actions) && /*#__PURE__*/React.createElement(Fragment, null, RenderActions()), (item === null || item === void 0 ? void 0 : item.dropdownActions) && /*#__PURE__*/React.createElement(Fragment, null, RenderDropdownActions()));
+}
+
+function FieldWrapper(_ref) {
+  var wrapperProps = _ref.wrapperProps,
+    formItem = _ref.formItem,
+    auth = _ref.auth,
+    item = _ref.item,
+    value = _ref.value,
+    onChange = _ref.onChange,
+    children = _ref.children;
+  var _useState = useState(false),
+    loading = _useState[0],
+    setLoading = _useState[1];
+  return /*#__PURE__*/React.createElement(FieldLayout, {
+    formItem: formItem,
+    item: item,
+    style: (item === null || item === void 0 ? void 0 : item.fieldLayoutStyle) || {
+      width: "100%"
+    }
+  }, /*#__PURE__*/React.createElement(ActionsSpace, _extends({
+    auth: auth,
+    item: item,
+    value: value,
+    onChange: onChange,
+    loading: loading,
+    setLoading: setLoading
+  }, wrapperProps), children));
+}
+
+function CollectionByProperty(props) {
+  var auth = props.auth,
+    item = props.item,
+    object = props.object,
+    linksCompareFunction = props.linksCompareFunction,
+    linksModelActions = props.linksModelActions,
+    scheme = props.scheme,
+    queryDetail = props.queryDetail,
+    modelActions = props.modelActions,
+    collectionActions = props.collectionActions;
+  var uif = useMemo(function () {
+    return lodash.get(item, "relation.uiFilter");
+  }, [item]);
+  var count = useMemo(function () {
+    return (item === null || item === void 0 ? void 0 : item.count) || lodash.get(item, "relation.reference.count") || function () {
+      return 20;
+    };
+  }, [item]);
+  var url = useMemo(function () {
+    return (item === null || item === void 0 ? void 0 : item.source) || getObjectValue(item, "relation.reference.url") || getObjectValue(item, "relation.reference.source");
+  }, [item]);
+  var n = useMemo(function () {
+    return getObjectValue(item, "relation.reference.object");
+  }, [item]);
+  var f = useMemo(function () {
+    return getObjectValue(item, "name");
+  }, [item]);
+  var p = useMemo(function () {
+    return getObjectValue(item, "relation.reference.property");
+  }, [item]);
+  var queryFilter = useMemo(function () {
+    return (item === null || item === void 0 ? void 0 : item.queryFilter) || lodash.get(item, "relation.reference.queryFilter") || lodash.get(item, "relation.reference.filter");
+  }, [item]);
+  var floatingFilter = useMemo(function () {
+    return (item === null || item === void 0 ? void 0 : item.floatingFilter) || lodash.get(item, "relation.floatingFilter");
+  }, [item]);
+  var gmeta = useMetaContext();
+  var filtersFromMeta = React.useCallback(function (name) {
+    var prop = [];
+    var p = lodash.get(gmeta[name], "properties");
+    if (p) {
+      var _p$filter;
+      prop = p === null || p === void 0 ? void 0 : (_p$filter = p.filter(function (e) {
+        return lodash.get(e, "relation.type") !== "one-many";
+      })) === null || _p$filter === void 0 ? void 0 : _p$filter.map(function (e) {
+        return _extends({}, e, {
+          sort: true,
+          filter: true,
+          func: e.filterType == "range" ? ["min", "max"] : undefined
+        });
+      });
+    }
+    return prop;
+  }, [gmeta]);
+  var schemeProcessing = function schemeProcessing(scheme) {
+    var tailScheme = undefined;
+    if (scheme !== null && scheme !== void 0 && scheme.length) {
+      var headScheme = {};
+      tailScheme = [];
+      for (var i = 0; i < scheme.length; i++) {
+        var element = scheme[i].toLowerCase();
+        var arr = element.split(".");
+        if (arr && arr.length && arr[0]) {
+          headScheme[arr[0]] = true;
+          arr.splice(0, 1);
+          if (arr && arr.length) {
+            var c = arr.join(".");
+            tailScheme.push(c);
+          }
+        }
+      }
+      return tailScheme;
+    }
+  };
+  var display = useCallback(function (item, value) {
+    if (item && value) {
+      if (item.display && lodash.isFunction(item.display)) {
+        return item.display(value);
+      } else if (item.relation && item.relation.display && lodash.isFunction(item.relation.display)) {
+        return item.relation.display(value);
+      } else {
+        var _item$relation, _item$relation$displa, _item$relation2, _fieldMeta$display;
+        var fieldMeta = gmeta[getObjectValue(item, "relation.reference.object")];
+        var _display = (item !== null && item !== void 0 && (_item$relation = item.relation) !== null && _item$relation !== void 0 && (_item$relation$displa = _item$relation.display) !== null && _item$relation$displa !== void 0 && _item$relation$displa.fields ? item === null || item === void 0 ? void 0 : (_item$relation2 = item.relation) === null || _item$relation2 === void 0 ? void 0 : _item$relation2.display : undefined) || (fieldMeta !== null && fieldMeta !== void 0 && (_fieldMeta$display = fieldMeta.display) !== null && _fieldMeta$display !== void 0 && _fieldMeta$display.fields ? fieldMeta === null || fieldMeta === void 0 ? void 0 : fieldMeta.display : undefined);
+        return getDisplay(value, _display, fieldMeta, gmeta);
+      }
+    }
+    return "";
+  }, [gmeta]);
+  var queryFiltersToContextFilters = useMemo(function () {
+    return QueryFiltersToContextFilters(queryFilter);
+  }, [queryFilter]);
+  var FilterFromContextFilter = React.useCallback(function () {
+    return [object ? {
+      name: p,
+      value: object.ID
+    } : {}].concat(queryFiltersToContextFilters);
+  }, [object, p, queryFiltersToContextFilters]);
+  var collectionRender = useCallback(function (context) {
+    return props !== null && props !== void 0 && props.render ? props.render(context) : null;
+  }, [props === null || props === void 0 ? void 0 : props.render]);
+  if (!n) return null;
+  return /*#__PURE__*/React.createElement(Collection, {
+    auth: auth,
+    name: n,
+    source: url,
+    count: count,
+    field: item,
+    fieldName: f,
+    contextObject: object,
+    contextFilters: FilterFromContextFilter,
+    filters: function filters() {
+      return uif ? uif() : filtersFromMeta(n);
+    },
+    floatingFilter: floatingFilter,
+    mode: "list",
+    render: collectionRender,
+    linksCompareFunction: linksCompareFunction,
+    linksModelActions: linksModelActions,
+    scheme: schemeProcessing(scheme),
+    queryDetail: queryDetail || (item === null || item === void 0 ? void 0 : item.queryDetail),
+    modelActions: modelActions,
+    collectionActions: collectionActions
+  });
+}
+function Frm(props) {
+  var _properties$filter, _propertiesOneMany2, _propertiesOneMany3;
+  var auth = props.auth,
+    formInstance = props.form,
+    name = props.name,
+    meta = props.meta,
+    options = props.options,
+    object = props.object,
+    data = props.data,
+    locator = props.locator,
+    submit = props.submit,
+    funcStat = props.funcStat,
+    contextFilters = props.contextFilters,
+    links = props.links,
+    scheme = props.scheme,
+    linksCompareFunction = props.linksCompareFunction,
+    contextObject = props.contextObject,
+    queryDetail = props.queryDetail,
+    modelActions = props.modelActions,
+    collectionActions = props.collectionActions,
+    render = props.render;
+  var _useState = useState(false),
+    visible = _useState[0],
+    setVisible = _useState[1];
+  var _useState2 = useState(),
+    excludeFields = _useState2[0],
+    setExcludeFields = _useState2[1];
+  useEffect(function () {
+    if (!formInstance) return;
+    try {
+      formInstance.resetFields();
+      if (object && typeof formInstance.setFieldsValue === 'function') formInstance.setFieldsValue(object);
+    } catch (_) {}
+  }, [object, formInstance]);
+  useEffect(function () {
+    var ctxFlt = contextFilterToObject(contextFilters);
+    setExcludeFields(ctxFlt);
+  }, [contextFilters]);
+  var gmeta = useMetaContext();
+  var properties = GetMetaProperties(meta);
+  if (!properties) return null;
+  var propertiesFiltered = properties === null || properties === void 0 ? void 0 : (_properties$filter = properties.filter(function (e) {
+    return !e.name || e.name && e.name.toUpperCase() !== "ID";
+  })) === null || _properties$filter === void 0 ? void 0 : _properties$filter.filter(function (e) {
+    return !e.relation || e.relation && e.relation.type !== "one-many";
+  });
+  var propertiesOneMany = properties === null || properties === void 0 ? void 0 : properties.filter(function (e) {
+    return e.relation && e.relation.type === "one-many";
+  });
+  var tailScheme = undefined;
+  if (scheme && !scheme.length) {
+    propertiesOneMany = [];
+  }
+  if (scheme !== null && scheme !== void 0 && scheme.length) {
+    var _propertiesOneMany;
+    var headScheme = {};
+    tailScheme = [];
+    for (var i = 0; i < scheme.length; i++) {
+      var element = scheme[i].toLowerCase();
+      var arr = element.split(".");
+      if (arr && arr.length && arr[0]) {
+        headScheme[arr[0]] = true;
+        arr.splice(0, 1);
+        if (arr && arr.length) {
+          tailScheme.push(arr.join("."));
+        }
+      }
+    }
+    var func = linksCompareFunction ? linksCompareFunction : function (e) {
+      return lodash.get(e, "name");
+    };
+    propertiesOneMany = (_propertiesOneMany = propertiesOneMany) === null || _propertiesOneMany === void 0 ? void 0 : _propertiesOneMany.filter(function (e) {
+      var _func;
+      return func(e) && headScheme[(_func = func(e)) === null || _func === void 0 ? void 0 : _func.toLowerCase()];
+    });
+  }
+  var _useFormObserverConte = useFormObserverContext(),
+    isChangedForm = _useFormObserverConte[0],
+    isChangedField = _useFormObserverConte[1],
+    onValuesChange = _useFormObserverConte[2];
+  var getFormFields = useCallback(function () {
+    var _propertiesFiltered$f;
+    if (!excludeFields) return [];
+    return (_propertiesFiltered$f = propertiesFiltered === null || propertiesFiltered === void 0 ? void 0 : propertiesFiltered.filter(function (e) {
+      var _e$name, _e$name2;
+      return !(e.name && (excludeFields[(_e$name = e.name) === null || _e$name === void 0 ? void 0 : _e$name.toLowerCase()] || excludeFields[((_e$name2 = e.name) === null || _e$name2 === void 0 ? void 0 : _e$name2.toLowerCase()) + "ID"]));
+    })) != null ? _propertiesFiltered$f : [];
+  }, [excludeFields, propertiesFiltered]);
+  var getFieldFormItemProps = useCallback(function (item) {
+    return {
+      preserve: item.hidden ? "true" : "false",
+      hidden: item.hidden,
+      name: item.type !== "object" && item.type !== "document" ? uncapitalize(item === null || item === void 0 ? void 0 : item.name) : uncapitalize(item === null || item === void 0 ? void 0 : item.name) + "ID",
+      label: item.type !== "bool" && item.type !== "boolean" ? item.label : undefined,
+      rules: formItemRules(item),
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || name || "model", props === null || props === void 0 ? void 0 : props.object)
+    };
+  }, [name, props === null || props === void 0 ? void 0 : props.locator, props === null || props === void 0 ? void 0 : props.object]);
+  var getFieldProps = useCallback(function (item) {
+    var _item$name, _item$name2;
+    return {
+      mode: "model",
+      objectName: name,
+      contextObject: contextObject,
+      auth: auth,
+      formItem: true,
+      data: data,
+      item: _extends({}, item, {
+        filterType: undefined,
+        func: funcStat && funcStat[item === null || item === void 0 ? void 0 : (_item$name = item.name) === null || _item$name === void 0 ? void 0 : _item$name.toLowerCase()] ? funcStat[item === null || item === void 0 ? void 0 : (_item$name2 = item.name) === null || _item$name2 === void 0 ? void 0 : _item$name2.toLowerCase()] : {}
+      }),
+      isChanged: isChangedField ? isChangedField(item.type !== "object" && item.type !== "document" ? uncapitalize(item === null || item === void 0 ? void 0 : item.name) : uncapitalize(item === null || item === void 0 ? void 0 : item.name) + "ID") : undefined
+    };
+  }, [name, contextObject, auth, data, funcStat, isChangedField]);
+  var getFuncRenderArgs = useCallback(function (item, idx) {
+    return {
+      auth: auth,
+      item: item,
+      context: {
+        data: data,
+        object: object,
+        contextObject: contextObject,
+        funcStat: funcStat
+      }
+    };
+  }, [auth, data, object, contextObject, funcStat]);
+  var getCollectionTabProps = useCallback(function (e, idx) {
+    return {
+      auth: auth,
+      item: e,
+      object: object,
+      linksCompareFunction: linksCompareFunction,
+      linksModelActions: links,
+      scheme: scheme,
+      queryDetail: queryDetail,
+      modelActions: modelActions,
+      collectionActions: collectionActions
+    };
+  }, [auth, object, linksCompareFunction, links, scheme, queryDetail, modelActions, collectionActions]);
+  var getObjectDisplayValue = useCallback(function () {
+    return meta !== null && meta !== void 0 && meta.name && object ? getObjectDisplay(object, meta.name, gmeta) : "";
+  }, [meta === null || meta === void 0 ? void 0 : meta.name, object, gmeta]);
+  var getLocatorForModel = useCallback(function (l, o) {
+    return getLocator(l || name || "model", o || object);
+  }, [name, object]);
+  if (!excludeFields) return null;
+  var modelContext = {
+    form: formInstance || undefined,
+    submit: submit,
+    initialValues: _extends({}, object),
+    options: _extends({}, options, {
+      labelAlign: "left",
+      layout: "vertical"
+    }),
+    propertiesFiltered: propertiesFiltered,
+    propertiesOneMany: propertiesOneMany,
+    getFormFields: getFormFields,
+    getFieldFormItemProps: getFieldFormItemProps,
+    getFieldProps: getFieldProps,
+    getFuncRenderArgs: getFuncRenderArgs,
+    getCollectionTabProps: getCollectionTabProps,
+    getObjectDisplayValue: getObjectDisplayValue,
+    getLocator: getLocatorForModel,
+    formItemRules: formItemRules,
+    uncapitalize: uncapitalize,
+    meta: meta,
+    name: name,
+    auth: auth,
+    data: data,
+    contextObject: contextObject,
+    object: object,
+    locator: locator,
+    funcStat: funcStat,
+    excludeFields: excludeFields,
+    visible: visible,
+    setVisible: setVisible,
+    links: links,
+    scheme: scheme,
+    linksCompareFunction: linksCompareFunction,
+    queryDetail: queryDetail,
+    modelActions: modelActions,
+    collectionActions: collectionActions,
+    isChangedForm: isChangedForm,
+    isChangedField: isChangedField,
+    onValuesChange: onValuesChange,
+    showHeaderBlock: !!(object && links && links !== "inline" && ((_propertiesOneMany2 = propertiesOneMany) === null || _propertiesOneMany2 === void 0 ? void 0 : _propertiesOneMany2.length) > 0),
+    showTabsBlock: !!(object !== null && object !== void 0 && object.ID && ((_propertiesOneMany3 = propertiesOneMany) === null || _propertiesOneMany3 === void 0 ? void 0 : _propertiesOneMany3.length) > 0 && links)
+  };
+  return render ? render(modelContext) : null;
+}
+function Model(props) {
+  var auth = props.auth,
+    name = props.name,
+    meta = props.meta,
+    options = props.options,
+    object = props.object,
+    data = props.data,
+    locator = props.locator,
+    form = props.form,
+    submit = props.submit,
+    funcStat = props.funcStat,
+    contextFilters = props.contextFilters,
+    links = props.links,
+    scheme = props.scheme,
+    linksCompareFunction = props.linksCompareFunction,
+    contextObject = props.contextObject,
+    queryDetail = props.queryDetail,
+    modelActions = props.modelActions,
+    collectionActions = props.collectionActions,
+    render = props.render;
+  var xmeta = GetMeta(meta);
+  if (!xmeta) return null;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, props !== null && props !== void 0 && props.subheader ? props === null || props === void 0 ? void 0 : props.subheader : null, /*#__PURE__*/React.createElement(Frm, {
+    auth: auth,
+    form: form,
+    links: links,
+    contextObject: contextObject,
+    queryDetail: queryDetail,
+    modelActions: modelActions,
+    collectionActions: collectionActions,
+    scheme: scheme,
+    linksCompareFunction: linksCompareFunction,
+    contextFilters: contextFilters,
+    submit: submit,
+    name: name,
+    meta: meta,
+    options: options,
+    object: object,
+    data: data,
+    locator: locator,
+    funcStat: funcStat,
+    render: render
+  }));
+}
+
+var Option = Select.Option;
+var Text = Typography.Text;
+function SortingFieldsUI(props) {
+  var filters = props.filters,
+    value = props.value,
+    _onChange = props.onChange;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Divider, {
+    type: "horizontal",
+    orientation: "left",
+    style: {
+      margin: "12px 0",
+      fontSize: "13px",
+      fontWeight: "600",
+      padding: "0px 15px 0px 0px"
+    }
+  }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React.createElement("div", {
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sorting", props === null || props === void 0 ? void 0 : props.object),
+    style: {}
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement(Select, {
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingselect", props === null || props === void 0 ? void 0 : props.object),
+    allowClear: true,
+    value: value.name,
+    onChange: function onChange(v) {
+      return _onChange({
+        name: v,
+        order: value.order
+      });
+    },
+    optionFilterProp: "children",
+    filterOption: function filterOption(input, option) {
+      return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    },
+    style: {
+      width: "100%",
+      marginRight: "5px"
+    }
+  }, JSXMap(filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
+    return f.sort;
+  }), function (item, idx) {
+    return /*#__PURE__*/React.createElement(Option, {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingitem", (props === null || props === void 0 ? void 0 : props.object) || idx),
+      key: idx,
+      value: item.name
+    }, item.label);
+  })), /*#__PURE__*/React.createElement("div", null, value.order === "ASC" && /*#__PURE__*/React.createElement(Tooltip, {
+    title: "\u0412\u043E\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
+  }, /*#__PURE__*/React.createElement(Button, {
+    icon: /*#__PURE__*/React.createElement(SortAscendingOutlined, null),
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingasc", props === null || props === void 0 ? void 0 : props.object),
+    onClick: function onClick() {
+      return _onChange({
+        name: value.name,
+        order: value.order === "ASC" ? "DESC" : "ASC"
+      });
+    }
+  })), value.order === "DESC" && /*#__PURE__*/React.createElement(Tooltip, {
+    title: "\u041D\u0438\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
+  }, /*#__PURE__*/React.createElement(Button, {
+    icon: /*#__PURE__*/React.createElement(SortDescendingOutlined, null),
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingdesc", props === null || props === void 0 ? void 0 : props.object),
+    onClick: function onClick() {
+      return _onChange({
+        name: value.name,
+        order: value.order === "ASC" ? "DESC" : "ASC"
+      });
+    }
+  }))))));
+}
+function FiltersFieldsUI(props) {
+  var auth = props.auth,
+    filters = props.filters,
+    funcs = props.funcs,
+    value = props.value,
+    onChange = props.onChange;
+  var _onFilterChange = React.useMemo(function () {
+    return function (v, item) {
+      if (!v && !(item !== null && item !== void 0 && item.permanent) || item !== null && item !== void 0 && item.permanent && (v === undefined || v === null) || lodash.isArray(v) && v.length == 0) {
+        var f = _extends({}, value);
+        delete f[item.name];
+        onChange(f);
+        return;
+      } else {
+        var _extends2;
+        var newFiltr = _extends({}, value, (_extends2 = {}, _extends2[item.name] = v, _extends2));
+        onChange(newFiltr);
+      }
+    };
+  }, [value]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Divider, {
+    type: "horizontal",
+    orientation: "left",
+    style: {
+      margin: "12px 0",
+      fontSize: "13px",
+      fontWeight: "600",
+      padding: "0px 15px 0px 0px"
+    }
+  }, "\u0424\u0438\u043B\u044C\u0442\u0440\u044B"), /*#__PURE__*/React.createElement("div", {
+    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "filters", props === null || props === void 0 ? void 0 : props.object),
+    style: {}
+  }, /*#__PURE__*/React.createElement("div", null, JSXMap(filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
+    return i.filter;
+  }), function (item) {
+    var _item$name;
+    return /*#__PURE__*/React.createElement("div", {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "filtersfield", props === null || props === void 0 ? void 0 : props.object),
+      key: item.name,
+      style: {
+        marginBottom: "10px"
+      }
+    }, item.filter && item.type !== "bool" && item.type !== "boolean" && /*#__PURE__*/React.createElement(Text, null, item.label), /*#__PURE__*/React.createElement(Field, {
+      mode: "filter",
+      formItem: true,
+      key: item.name,
+      auth: auth,
+      item: _extends({}, item, {
+        func: funcs && funcs[item === null || item === void 0 ? void 0 : (_item$name = item.name) === null || _item$name === void 0 ? void 0 : _item$name.toLowerCase()] ? funcs[item.name.toLowerCase()] : {}
+      }),
+      value: value[item.name],
+      onChange: function onChange(value) {
+        return _onFilterChange(value, item);
+      }
+    }));
+  }))));
+}
+function collectionQueryParams(filters, contextFilters, filter, sorting, current, count, queryDetail) {
+  var ctxFlt = ContextFiltersToQueryFilters(contextFilters);
+  var flt = [];
+  Object.keys(filter).forEach(function (key) {
+    var item = filters === null || filters === void 0 ? void 0 : filters.find(function (e) {
+      return e.name == key;
+    });
+    var akey = (item === null || item === void 0 ? void 0 : item.alias) || key;
+    if (item !== null && item !== void 0 && item.additionalFilter) {
+      var additionalFlt = ContextFiltersToQueryFilters(item === null || item === void 0 ? void 0 : item.additionalFilter);
+      flt.push.apply(flt, additionalFlt);
+    }
+    if (item) {
+      var filterByKey = filter[key];
+      switch (item === null || item === void 0 ? void 0 : item.filterType) {
+        case "group":
+          switch (item === null || item === void 0 ? void 0 : item.type) {
+            case "object":
+            case "document":
+              flt.push(QueryParam("w-in-" + akey, filterByKey));
+              break;
+            default:
+              flt.push(QueryParam("w-in-" + akey, filterByKey));
+              break;
+          }
+          break;
+        case "range":
+          switch (item === null || item === void 0 ? void 0 : item.type) {
+            case "int":
+            case "uint":
+            case "integer":
+            case "int64":
+            case "int32":
+            case "uint64":
+            case "uint32":
+              if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
+                flt.push(QueryParam("w-lge-" + akey, filterByKey[0]));
+                flt.push(QueryParam("w-lwe-" + akey, filterByKey[1]));
+              }
+              break;
+            case "double":
+            case "float":
+            case "float64":
+            case "float32":
+              if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
+                flt.push(QueryParam("w-lge-" + akey, filterByKey[0]));
+                flt.push(QueryParam("w-lwe-" + akey, filterByKey[1]));
+              }
+              break;
+            case "time":
+              if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
+                flt.push(QueryParam("w-lge-" + akey, filterByKey[0].format("HH:mm:ss")));
+                flt.push(QueryParam("w-lwe-" + akey, filterByKey[1].format("HH:mm:ss")));
+              }
+              break;
+            case "date":
+              if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
+                flt.push(QueryParam("w-lge-" + akey, filterByKey[0].format("YYYY-MM-DD")));
+                flt.push(QueryParam("w-lwe-" + akey, filterByKey[1].format("YYYY-MM-DD")));
+              }
+              break;
+            case "datetime":
+            case "time.Time":
+              if (lodash.isArray(filterByKey) && filterByKey.length >= 2) {
+                flt.push(QueryParam("w-lge-" + akey, filterByKey[0].format("YYYY-MM-DD HH:mm")));
+                flt.push(QueryParam("w-lwe-" + akey, filterByKey[1].format("YYYY-MM-DD HH:mm")));
+              }
+              break;
+            default:
+              if (item !== null && item !== void 0 && item.queryComparer) {
+                if (lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer)) {
+                  flt.push(QueryParam("w-" + (item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item)) + "-" + akey, filterByKey));
+                } else {
+                  flt.push(QueryParam("w-" + (item === null || item === void 0 ? void 0 : item.queryComparer) + "-" + akey, filterByKey));
+                }
+              } else {
+                flt.push(QueryParam("w-" + akey, filterByKey));
+              }
+              break;
+          }
+          break;
+        default:
+          switch (item === null || item === void 0 ? void 0 : item.type) {
+            case "string":
+              if (lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer)) {
+                flt.push(QueryParam("w-" + ((item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item)) || "co") + "-" + akey, filterByKey));
+              } else {
+                flt.push(QueryParam("w-" + ((item === null || item === void 0 ? void 0 : item.queryComparer) || "co") + "-" + akey, filterByKey));
+              }
+              break;
+            case "func":
+              if (lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryPrefix)) {
+                flt.push(QueryParam("" + ((item === null || item === void 0 ? void 0 : item.queryPrefix(filterByKey, item)) || "") + akey, filterByKey));
+              } else {
+                flt.push(QueryParam("" + ((item === null || item === void 0 ? void 0 : item.queryPrefix) || "") + akey, filterByKey));
+              }
+              break;
+            default:
+              if (item !== null && item !== void 0 && item.queryRaw) {
+                if (lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryRaw)) {
+                  flt.push(item === null || item === void 0 ? void 0 : item.queryRaw(filterByKey, item, akey));
+                } else {
+                  flt.push(item === null || item === void 0 ? void 0 : item.queryRaw);
+                }
+              } else if (item !== null && item !== void 0 && item.queryComparer) {
+                if (lodash.isFunction(item === null || item === void 0 ? void 0 : item.queryComparer)) {
+                  flt.push(QueryParam("w-" + (item === null || item === void 0 ? void 0 : item.queryComparer(filterByKey, item)) + "-" + akey, filterByKey));
+                } else {
+                  flt.push(QueryParam("w-" + (item === null || item === void 0 ? void 0 : item.queryComparer) + "-" + akey, filterByKey));
+                }
+              } else {
+                flt.push(QueryParam("w-" + akey, filterByKey));
+              }
+              break;
+          }
+          break;
+      }
+    }
+  });
+  var func = [];
+  filters === null || filters === void 0 ? void 0 : filters.forEach(function (item) {
+    if (item.func && lodash.isArray(item.func)) {
+      item.func.forEach(function (fu) {
+        func.push(QueryFunc(fu, item.name));
+      });
+    }
+  });
+  var sort = [];
+  if (sorting && sorting !== null && sorting !== void 0 && sorting.name) {
+    sort.push(QueryParam("s-" + sorting.name, sorting.order));
+  }
+  var params = [QueryDetail(queryDetail || "model"), QueryParam("page", current), QueryParam("count", count)].concat(sort, flt, func, ctxFlt);
+  return params;
+}
+function FilterContent(_ref) {
+  var auth = _ref.auth,
+    filters = _ref.filters,
+    sorting = _ref.sorting,
+    setSorting = _ref.setSorting,
+    state = _ref.state,
+    funcStat = _ref.funcStat,
+    filtered = _ref.filtered,
+    locator = _ref.locator,
+    object = _ref.object,
+    name = _ref.name,
+    fieldName = _ref.fieldName,
+    _onFilterChange = _ref._onFilterChange,
+    applyFilter = _ref.applyFilter,
+    clearFilter = _ref.clearFilter;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, JSX(function () {
+    var fl = filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
+      return i.filter;
+    });
+    if (filtered && fl.length > 0) {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+        style: {}
+      }, /*#__PURE__*/React.createElement(Button, {
+        "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),
+        style: {
+          width: "100%"
+        },
+        disabled: !state.filterChanged,
+        type: "primary",
+        onClick: applyFilter
+      }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C")), /*#__PURE__*/React.createElement("div", {
+        style: {
+          marginTop: "5px"
+        }
+      }, /*#__PURE__*/React.createElement(Button, {
+        "data-locator": getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object),
+        style: {
+          width: "100%"
+        },
+        disabled: lodash.isEmpty(state.filter),
+        onClick: clearFilter
+      }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C")));
+    }
+    return /*#__PURE__*/React.createElement(React.Fragment, null);
+  }), /*#__PURE__*/React.createElement(SortingFieldsUI, {
+    value: sorting,
+    onChange: setSorting,
+    filters: filters
+  }), /*#__PURE__*/React.createElement(FiltersFieldsUI, {
+    auth: auth,
+    value: state.newFilter,
+    onChange: _onFilterChange,
+    filters: filters,
+    funcs: funcStat
+  }));
+}
+function Collection(props) {
+  var auth = props.auth,
+    name = props.name,
+    source = props.source,
+    queryDetail = props.queryDetail,
+    _modelActions = props.modelActions,
+    _collectionActions = props.collectionActions,
+    linksModelActions = props.linksModelActions,
+    scheme = props.scheme,
+    field = props.field,
+    fieldName = props.fieldName,
+    contextObject = props.contextObject,
+    linksCompareFunction = props.linksCompareFunction,
+    selection = props.selection,
+    render = props.render,
+    collectionRef = props.collectionRef,
+    contextFilters = props.contextFilters,
+    subscribe$1 = props.subscribe,
+    onSetCollection = props.onSetCollection,
+    onCollectionChange = props.onCollectionChange,
+    onChange = props.onChange,
+    value = props.value,
+    getSelectedOnly = props.getSelectedOnly,
+    onChangeRequestParameters = props.onChangeRequestParameters,
+    onApplyFilter = props.onApplyFilter,
+    floatingFilter = props.floatingFilter,
+    disableScrollTo = props.disableScrollTo,
+    style = props.style,
+    headerStyle = props.headerStyle,
+    bodyStyle = props.bodyStyle,
+    contentStyle = props.contentStyle,
+    footerStyle = props.footerStyle,
+    filterPopoverStyle = props.filterPopoverStyle,
+    allowFullscreen = props.allowFullscreen,
+    pagination = props.pagination;
+  var defFilters = function defFilters(filters) {
+    var f = filters;
+    if (f && f.length) {
+      var filtr = {};
+      for (var d = 0; d < f.length; d++) {
+        var element = f[d];
+        if (element.filtered) {
+          var _extends3;
+          filtr = _extends({}, filtr, (_extends3 = {}, _extends3[element.name] = element.filtered, _extends3));
+        }
+      }
+      return filtr;
+    }
+    return {};
+  };
+  var defSorting = function defSorting(filters) {
+    var sorted = {
+      name: "",
+      order: "ASC"
+    };
+    var f = filters;
+    if (f && f.length) {
+      for (var s = 0; s < f.length; s++) {
+        var element = f[s];
+        if (element.sorted) {
+          sorted.name = element.name;
+          sorted.order = element.sorted;
+          break;
+        }
+      }
+    }
+    return sorted;
+  };
+  var fltrs = props.filters ? props.filters() : [];
+  var meta = useMetaContext();
+  var _useState = useState(false),
+    loading = _useState[0],
+    setLoading = _useState[1];
+  var _useState2 = useState([]),
+    collection = _useState2[0],
+    _setCollection = _useState2[1];
+  var _useState3 = useState(),
+    response = _useState3[0],
+    setResponse = _useState3[1];
+  var _useState4 = useState(),
+    funcStat = _useState4[0],
+    setFuncStat = _useState4[1];
+  var _useState5 = useState(),
+    lastFuncStat = _useState5[0],
+    setLastFuncStat = _useState5[1];
+  var _useState6 = useState({
+      filter: defFilters(props.filters ? fltrs : []),
+      newFilter: defFilters(props.filters ? fltrs : []),
+      filterChanged: false
+    }),
+    state = _useState6[0],
+    setState = _useState6[1];
+  var _useState7 = useState(false),
+    filtered = _useState7[0],
+    setFiltered = _useState7[1];
+  var _useState8 = useState(),
+    filters = _useState8[0],
+    setFilters = _useState8[1];
+  var _useState9 = useState(),
+    mobject = _useState9[0],
+    setMObject = _useState9[1];
+  var _useState0 = useState(defSorting(props.filters ? fltrs : [])),
+    sorting = _useState0[0],
+    setSorting = _useState0[1];
+  var _useState1 = useState(props.page ? parseInt(props.page()) || 1 : 1),
+    current = _useState1[0],
+    _setCurrent = _useState1[1];
+  var _useState10 = useState(props.count ? parseInt(props.count()) || 20 : 20),
+    count = _useState10[0],
+    setCount = _useState10[1];
+  var _useState11 = useState(1),
+    total = _useState11[0],
+    setTotal = _useState11[1];
+  var _useState12 = useState(1),
+    totalPages = _useState12[0],
+    setTotalPages = _useState12[1];
+  useEffect(function () {
+    if (onChangeRequestParameters) {
+      onChangeRequestParameters({
+        filters: filters,
+        page: parseInt(current) || 1,
+        count: count,
+        queryDetail: queryDetail,
+        contextFilters: contextFilters,
+        sorting: sorting,
+        filter: state.filter,
+        queryParams: collectionQueryParams(filters, contextFilters, state.filter, sorting, current, count, queryDetail)
+      });
+    }
+  }, [filters, contextFilters, state.filter, sorting, current, count, queryDetail]);
+  var setCurrent = function setCurrent(value) {
+    _setCurrent(value);
+    if (!disableScrollTo) {
+      window.scrollTo(0, 0);
+    }
+  };
+  var lock = function lock() {
+    setLoading(true);
+  };
+  var unlock = function unlock() {
+    setLoading(false);
+  };
+  useEffect(function () {
+    if (value) {
+      if (selectionType === "radio") {
+        setSelectedRowKeys(function (o) {
+          return lodash.union(o, value.map(function (e) {
+            return e === null || e === void 0 ? void 0 : e.ID;
+          }));
+        });
+        setSelectedRows(function (o) {
+          return lodash.unionBy(o, value, 'ID');
+        });
+      } else {
+        setSelectedRowKeys(value.map(function (e) {
+          return e === null || e === void 0 ? void 0 : e.ID;
+        }));
+        setSelectedRows(value);
+      }
+    } else {
+      setSelectedRowKeys([]);
+      setSelectedRows([]);
+    }
+  }, [value]);
+  useEffect(function () {
+    if (name && meta) {
+      var mo = meta[name] || meta[name.toLowerCase()];
+      if (mo) {
+        setMObject(mo);
+        if (props.filters) {
+          var _f = fltrs === null || fltrs === void 0 ? void 0 : fltrs.map(function (pf) {
+            var field = GetMetaPropertyByPath(meta, mo, pf.name);
+            return _extends({}, field, pf);
+          });
+          setFilters(_f);
+        }
+      }
+    } else {
+      var f = props.filters ? fltrs : [];
+      setFilters(f);
+    }
+  }, [name, meta]);
+  var setCollection = React.useCallback(function (array) {
+    if (onSetCollection) {
+      var _collection = onSetCollection(array);
+      _setCollection(_collection);
+      if (onCollectionChange) {
+        onCollectionChange(_collection);
+      }
+    } else {
+      _setCollection(array);
+      if (onCollectionChange) {
+        onCollectionChange(array);
+      }
+    }
+  }, [collection]);
+  var setCollectionItem = React.useCallback(function (item) {
+    setCollection(updateInArray(collection, item));
+  }, [collection]);
+  var removeCollectionItem = React.useCallback(function (item) {
+    setCollection(deleteInArray(collection, item));
+  }, [collection]);
+  var clearFilter = React.useCallback(function () {
+    setFuncStat(undefined);
+    setLastFuncStat(undefined);
+    setState(_extends({}, state, {
+      filterChanged: false,
+      newFilter: {},
+      filter: {}
+    }));
+    setCurrent(1);
+    if (onApplyFilter) {
+      onApplyFilter({
+        filters: filters,
+        page: current,
+        count: count,
+        queryDetail: queryDetail,
+        contextFilters: contextFilters,
+        sorting: sorting,
+        filter: {},
+        queryParams: []
+      });
+    }
+  }, [current]);
+  var applyFilter = React.useMemo(function () {
+    return function () {
+      var o = _extends({}, state, {
+        filterChanged: false,
+        filter: state.newFilter
+      });
+      setState(o);
+      setCurrent(1);
+      if (onApplyFilter) {
+        onApplyFilter({
+          filters: filters,
+          page: current,
+          count: count,
+          queryDetail: queryDetail,
+          contextFilters: contextFilters,
+          sorting: sorting,
+          filter: o === null || o === void 0 ? void 0 : o.filter,
+          queryParams: collectionQueryParams(filters, contextFilters, o === null || o === void 0 ? void 0 : o.filter, sorting, current, count, queryDetail)
+        });
+      }
+    };
+  }, [current, state, filters, contextFilters, sorting, count, queryDetail]);
+  var _request = React.useMemo(function () {
+    return function (filter) {
+      if (!meta || !filters) {
+        return;
+      }
+      var queryParams = collectionQueryParams(filters, contextFilters, filter, sorting, current, count, queryDetail);
+      if (source && lodash.isFunction(source)) {
+        source({
+          lock: lock,
+          unlock: unlock,
+          page: current,
+          count: count,
+          sorting: sorting,
+          filter: filter,
+          apply: function apply(data) {
+            if (data !== null && data !== void 0 && data.stat) {
+              setLastFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+            }
+            if (!funcStat) {
+              setFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+            }
+            setCurrent((data === null || data === void 0 ? void 0 : data.number) || current);
+            setTotalPages(data === null || data === void 0 ? void 0 : data.totalPages);
+            setCount(data === null || data === void 0 ? void 0 : data.size);
+            setTotal(data === null || data === void 0 ? void 0 : data.totalElements);
+            setCollection(data && data !== null && data !== void 0 && data.content ? data === null || data === void 0 ? void 0 : data.content : []);
+          }
+        });
+      } else if (source && !lodash.isFunction(source)) {
+        lock();
+        GETWITH(auth, source, queryParams, function (resp) {
+          var data = resp.data;
+          setResponse(resp);
+          if (data !== null && data !== void 0 && data.stat) {
+            setLastFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+          }
+          if (!funcStat) {
+            setFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+          }
+          setCurrent((data === null || data === void 0 ? void 0 : data.number) || current);
+          setTotalPages(data === null || data === void 0 ? void 0 : data.totalPages);
+          setCount(data === null || data === void 0 ? void 0 : data.size);
+          setTotal(data === null || data === void 0 ? void 0 : data.totalElements);
+          setCollection(data && data !== null && data !== void 0 && data.content ? data === null || data === void 0 ? void 0 : data.content : []);
+          unlock();
+        }, function (err) {
+          return errorCatch(err, unlock);
+        });
+      } else {
+        lock();
+        READWITH(auth, name, queryParams, function (resp) {
+          var data = resp.data;
+          setResponse(resp);
+          if (data !== null && data !== void 0 && data.stat) {
+            setLastFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+          }
+          if (!funcStat) {
+            setFuncStat(data === null || data === void 0 ? void 0 : data.stat);
+          }
+          setCurrent((data === null || data === void 0 ? void 0 : data.number) || current);
+          setTotalPages(data === null || data === void 0 ? void 0 : data.totalPages);
+          setCount(data === null || data === void 0 ? void 0 : data.size);
+          setTotal(data === null || data === void 0 ? void 0 : data.totalElements);
+          setCollection(data && data !== null && data !== void 0 && data.content ? data === null || data === void 0 ? void 0 : data.content : []);
+          unlock();
+        }, function (err) {
+          return errorCatch(err, unlock);
+        });
+      }
+    };
+  }, [source, current, count, sorting, funcStat, filters, contextFilters]);
+  var update = React.useCallback(function () {
+    _request(state.filter);
+  }, [_request, state.filter]);
+  useEffect(function () {
+    _request(state.filter);
+  }, [source, name, state.filter, filters, sorting, current, contextFilters]);
+  var _useState13 = useState(selection || 'checkbox'),
+    selectionType = _useState13[0],
+    setSelectionType = _useState13[1];
+  var _useState14 = useState([]),
+    selectedRowKeys = _useState14[0],
+    setSelectedRowKeys = _useState14[1];
+  var _useState15 = useState([]),
+    selectedRows = _useState15[0],
+    setSelectedRows = _useState15[1];
+  useEffect(function () {
+    setSelectionType(selection);
+  }, [selection]);
+  useEffect(function () {
+    if (subscribe$1 && subscribe$1.name && subscribe$1.func) {
+      var token = subscribe(subscribe$1.name, function (msg, data) {
+        if (subscribe$1.filter && msg.startsWith(subscribe$1.filter)) {
+          return;
+        }
+        return subscribe$1.func(data, {
+          msg: msg,
+          collection: collection,
+          setCollection: setCollection,
+          collectionRef: collectionRef,
+          updateCollection: update,
+          setCollectionItem: setCollectionItem,
+          removeCollectionItem: removeCollectionItem,
+          request: function request() {
+            return _request(state.filter);
+          },
+          state: state
+        });
+      });
+      return function () {
+        unsubscribe(token);
+      };
+    }
+  }, [subscribe$1, collection, _setCollection, setCollectionItem, removeCollectionItem, _request, state]);
+  var triggerChange = function triggerChange(value) {
+    if (onChange) {
+      onChange(value);
+    }
+  };
+  var defaultModelAction = React.useCallback(function (item) {
+    return !name ? [] : [{
+      key: "update",
+      title: "Изменить",
+      action: {
+        method: "POST",
+        path: "/api/query-update/" + name.toLowerCase(),
+        mutation: "update",
+        onValues: function onValues(values) {
+          var ctxFlt = contextFilterToObject(contextFilters);
+          return _extends({}, values, ctxFlt, {
+            ID: item.ID
+          });
+        },
+        onClose: function onClose(_ref2) {
+          var close = _ref2.close;
+          return close();
+        }
+      },
+      contextFilters: contextFilters,
+      form: Model,
+      name: name,
+      links: linksModelActions,
+      scheme: scheme,
+      linksCompareFunction: linksCompareFunction,
+      contextObject: contextObject,
+      queryDetail: queryDetail,
+      modelActions: _modelActions,
+      collectionActions: _collectionActions,
+      modal: {
+        width: "700px"
+      },
+      options: {
+        initialValues: _extends({}, item)
+      },
+      meta: mobject,
+      object: item
+    }, {
+      key: "delete",
+      title: /*#__PURE__*/React.createElement("span", {
+        style: {
+          color: "red"
+        }
+      }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"),
+      action: function action(values, unlock, close, _ref3) {
+        var collection = _ref3.collection,
+          setCollection = _ref3.setCollection;
+        Modal.confirm({
+          title: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u043B\u0435\u043C\u0435\u043D\u0442?",
+          icon: /*#__PURE__*/React.createElement(ExclamationCircleOutlined, null),
+          content: /*#__PURE__*/React.createElement("div", null, mobject && /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "12px",
+              color: "grey"
+            }
+          }, /*#__PURE__*/React.createElement("div", null, mobject === null || mobject === void 0 ? void 0 : mobject.label)), /*#__PURE__*/React.createElement("div", null, getObjectDisplay(item, name, meta))),
+          okText: "Да",
+          okType: 'danger',
+          cancelText: "Нет",
+          onOk: function onOk() {
+            GET(auth, "/api/query-delete/" + name.toLowerCase() + '/' + item.ID, function () {
+              setCollection(deleteInArray(collection, item));
+            }, errorCatch);
+          }
+        });
+      }
+    }];
+  }, [auth, collection, _collectionActions, name, mobject]);
+  var defaultCollectionAction = React.useCallback(function () {
+    return !name ? [] : [{
+      key: "create",
+      title: "Создать",
+      action: {
+        method: "POST",
+        path: "/api/query-create/" + name.toLowerCase(),
+        mutation: "update",
+        onValues: function onValues(values) {
+          var ctxFlt = contextFilterToObject(contextFilters);
+          return _extends({}, values, ctxFlt);
+        },
+        onClose: function onClose(_ref4) {
+          var close = _ref4.close;
+          return close();
+        }
+      },
+      contextFilters: contextFilters,
+      form: Model,
+      name: name,
+      links: linksModelActions,
+      scheme: scheme,
+      linksCompareFunction: linksCompareFunction,
+      contextObject: contextObject,
+      queryDetail: queryDetail,
+      modelActions: _modelActions,
+      collectionActions: _collectionActions,
+      options: {
+        initialValues: {}
+      },
+      meta: mobject
+    }];
+  }, [auth, collection, _collectionActions, name, mobject]);
+  var RenderOnCollectionActions = React.useCallback(function () {
+    var defaultAction = defaultCollectionAction();
+    if (!_collectionActions) return /*#__PURE__*/React.createElement(React.Fragment, null);
+    var values = clean(_unwrap(_collectionActions({
+      mobject: mobject,
+      name: name,
+      field: field,
+      fieldName: fieldName,
+      contextObject: contextObject,
+      contextFilters: contextFilters,
+      actions: defaultAction,
+      collection: collection,
+      setCollection: setCollection,
+      collectionRef: collectionRef,
+      updateCollection: update,
+      setCollectionItem: setCollectionItem,
+      removeCollectionItem: removeCollectionItem,
+      onSelection: onSelection,
+      isSelected: isSelected,
+      lock: lock,
+      unlock: unlock,
+      loading: loading,
+      update: update
+    })));
+    if (!values || !values.length) return /*#__PURE__*/React.createElement(React.Fragment, null);
+    return values === null || values === void 0 ? void 0 : values.map(function (e, idx) {
+      if (lodash.isFunction(e)) {
+        return e({
+          collection: collection,
+          setCollection: setCollection,
+          collectionRef: collectionRef,
+          updateCollection: update,
+          setCollectionItem: setCollectionItem,
+          removeCollectionItem: removeCollectionItem,
+          onSelection: onSelection,
+          isSelected: isSelected,
+          lock: lock,
+          unlock: unlock,
+          loading: loading,
+          update: update
+        }, idx);
+      }
+      return /*#__PURE__*/React.createElement(Action, _extends({
+        key: e.key || idx,
+        auth: auth,
+        mode: "button",
+        locator: (props === null || props === void 0 ? void 0 : props.locator) || name || fieldName,
+        collection: collection,
+        setCollection: setCollection,
+        collectionRef: collectionRef,
+        updateCollection: update,
+        contextFilters: contextFilters,
+        links: linksModelActions,
+        scheme: scheme,
+        linksCompareFunction: linksCompareFunction,
+        queryDetail: queryDetail,
+        modelActions: _modelActions,
+        collectionActions: _collectionActions
+      }, e));
+    });
+  }, [auth, collection, _collectionActions, name, mobject, defaultCollectionAction]);
+  var onSelection = function onSelection(item) {
+    if (!selection || !item) return;
+    if (selectionType === "radio") {
+      setSelectedRowKeys([item.ID]);
+      setSelectedRows([item]);
+      triggerChange([item]);
+    } else {
+      var sr = selectedRows.filter(function (e) {
+        return (e === null || e === void 0 ? void 0 : e.ID) !== (item === null || item === void 0 ? void 0 : item.ID);
+      });
+      var srk = selectedRowKeys.filter(function (e) {
+        return e !== (item === null || item === void 0 ? void 0 : item.ID);
+      });
+      var vsr = (value === null || value === void 0 ? void 0 : value.filter(function (e) {
+        return (e === null || e === void 0 ? void 0 : e.ID) !== (item === null || item === void 0 ? void 0 : item.ID);
+      })) || [];
+      if (sr.length !== selectedRows.length) {
+        setSelectedRowKeys(srk);
+        setSelectedRows(sr);
+        if (!getSelectedOnly) {
+          triggerChange(lodash.unionBy([].concat(vsr), sr, 'ID'));
+        } else {
+          triggerChange(sr);
+        }
+      } else {
+        var v = [].concat(sr, [item]);
+        setSelectedRowKeys([].concat(srk, [item === null || item === void 0 ? void 0 : item.ID]));
+        setSelectedRows(v);
+        if (!getSelectedOnly) {
+          triggerChange(lodash.unionBy([].concat(vsr), v, 'ID'));
+        } else {
+          triggerChange(v);
+        }
+      }
+    }
+  };
+  var isSelected = function isSelected(item) {
+    var v = selectedRows.find(function (e) {
+      return (e === null || e === void 0 ? void 0 : e.ID) === (item === null || item === void 0 ? void 0 : item.ID);
+    });
+    return v !== undefined;
+  };
+  var _onFilterChange = React.useMemo(function () {
+    return function (value) {
+      setState(function (o) {
+        return _extends({}, o, {
+          filterChanged: !lodash.isEqual(o.filter, value),
+          newFilter: value
+        });
+      });
+    };
+  }, [state]);
+  React.useEffect(function () {
+    if (collectionRef) {
+      collectionRef.current = {
+        collection: collection,
+        setCollection: setCollection,
+        setCollectionItem: setCollectionItem,
+        removeCollectionItem: removeCollectionItem,
+        onSelection: onSelection,
+        isSelected: isSelected,
+        lock: lock,
+        unlock: unlock,
+        loading: loading,
+        update: update,
+        filter: state.filter,
+        sorting: sorting,
+        page: current,
+        count: count
+      };
+    }
+  }, [collection, setCollection, setCollectionItem, removeCollectionItem, loading, update, state.filter, sorting, current, count]);
+  var _useState16 = useState(false),
+    openOverlay = _useState16[0],
+    setOpenOverlay = _useState16[1];
+  var isFullscreen = openOverlay;
+  var openFullscreen = function openFullscreen() {
+    setOpenOverlay(true);
+  };
+  var closeFullscreen = function closeFullscreen() {
+    setOpenOverlay(false);
+  };
+  var collectionContext = {
+    collection: collection,
+    loading: loading,
+    response: response,
+    state: state,
+    sorting: sorting,
+    current: current,
+    count: count,
+    total: total,
+    totalPages: totalPages,
+    filters: filters,
+    funcStat: funcStat,
+    lastFuncStat: lastFuncStat,
+    selectedRowKeys: selectedRowKeys,
+    selectedRows: selectedRows,
+    filtered: filtered,
+    isFullscreen: isFullscreen,
+    setCollection: setCollection,
+    setCollectionItem: setCollectionItem,
+    removeCollectionItem: removeCollectionItem,
+    updateCollection: update,
+    collectionRef: collectionRef,
+    request: _request,
+    lock: lock,
+    unlock: unlock,
+    applyFilter: applyFilter,
+    clearFilter: clearFilter,
+    onFilterChange: _onFilterChange,
+    setSorting: setSorting,
+    setFiltered: setFiltered,
+    renderFilterPanel: function renderFilterPanel() {
+      return /*#__PURE__*/React.createElement(FilterContent, {
+        auth: auth,
+        filters: filters,
+        sorting: sorting,
+        setSorting: setSorting,
+        state: state,
+        funcStat: funcStat,
+        filtered: filtered,
+        locator: getLocator((props === null || props === void 0 ? void 0 : props.locator) || "collection-" + name || "collection-" + fieldName || "collection", props === null || props === void 0 ? void 0 : props.object),
+        object: props === null || props === void 0 ? void 0 : props.object,
+        name: name,
+        fieldName: fieldName,
+        _onFilterChange: _onFilterChange,
+        applyFilter: applyFilter,
+        clearFilter: clearFilter
+      });
+    },
+    setCurrent: setCurrent,
+    setCount: setCount,
+    onSelection: onSelection,
+    isSelected: isSelected,
+    selectionType: selectionType,
+    triggerChange: triggerChange,
+    openFullscreen: openFullscreen,
+    closeFullscreen: closeFullscreen,
+    defaultModelAction: defaultModelAction,
+    defaultCollectionAction: defaultCollectionAction,
+    getCollectionActions: function getCollectionActions() {
+      return _collectionActions ? clean(_unwrap(_collectionActions({
+        mobject: mobject,
+        name: name,
+        field: field,
+        fieldName: fieldName,
+        contextObject: contextObject,
+        collection: collection,
+        setCollection: setCollection,
+        actions: defaultCollectionAction(),
+        updateCollection: update,
+        setCollectionItem: setCollectionItem,
+        removeCollectionItem: removeCollectionItem,
+        onSelection: onSelection,
+        isSelected: isSelected,
+        lock: lock,
+        unlock: unlock,
+        loading: loading,
+        update: update
+      }))) : undefined;
+    },
+    getModelActions: function getModelActions(item, index) {
+      return _modelActions ? clean(_unwrap(_modelActions(item, index, {
+        mobject: mobject,
+        name: name,
+        field: field,
+        fieldName: fieldName,
+        contextObject: contextObject,
+        collection: collection,
+        setCollection: setCollection,
+        actions: defaultModelAction(item, index)
+      }))) : undefined;
+    },
+    auth: auth,
+    name: name,
+    field: field,
+    fieldName: fieldName,
+    contextObject: contextObject,
+    contextFilters: contextFilters,
+    linksModelActions: linksModelActions,
+    scheme: scheme,
+    mobject: mobject,
+    meta: meta,
+    queryDetail: queryDetail,
+    source: source,
+    locator: props === null || props === void 0 ? void 0 : props.locator,
+    object: props === null || props === void 0 ? void 0 : props.object,
+    style: style,
+    headerStyle: headerStyle,
+    bodyStyle: bodyStyle,
+    contentStyle: contentStyle,
+    footerStyle: footerStyle,
+    filterPopoverStyle: filterPopoverStyle,
+    allowFullscreen: allowFullscreen,
+    floatingFilter: floatingFilter,
+    disableScrollTo: disableScrollTo,
+    value: value,
+    onChange: onChange,
+    getSelectedOnly: getSelectedOnly,
+    onChangeRequestParameters: onChangeRequestParameters,
+    onApplyFilter: onApplyFilter,
+    pagination: pagination,
+    getLocator: function getLocator$1(loc, obj) {
+      return getLocator(loc || "collection-" + name || "collection-" + fieldName || "collection", obj || (props === null || props === void 0 ? void 0 : props.object));
+    },
+    getQueryParams: function getQueryParams(filterOverride, currentOverride, countOverride) {
+      return collectionQueryParams(filters, contextFilters, filterOverride != null ? filterOverride : state.filter, sorting, currentOverride != null ? currentOverride : current, countOverride != null ? countOverride : count, queryDetail);
+    }
+  };
+  return render ? render(collectionContext) : null;
+}
+
 var UIAdapter = /*#__PURE__*/function () {
   function UIAdapter() {
     this.Input = null;
@@ -19959,6 +22197,9 @@ var UIAdapter = /*#__PURE__*/function () {
   _proto.normalizeFiles = function normalizeFiles(fileList) {
     return fileList;
   };
+  _proto.renderField = function renderField(options) {
+    return null;
+  };
   return UIAdapter;
 }();
 
@@ -19986,5 +22227,5 @@ var HasRoleID = function HasRoleID(user, roleID) {
   return false;
 };
 
-export { And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, ContextFiltersToQueryFilters, DELETE, DELETEP, FennecError, FilterToQueryParameters, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse, JSX, JSXIndex, JSXMap, JSXPathMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, ObjectToContextFilters, ObjectToQueryParam, Or, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useTranslateContext, useUI, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
+export { Action, And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, Collection, CollectionByProperty, ContextFiltersToQueryFilters, DELETE, DELETEP, DropdownAction, FennecError, Field, FieldWrapper, FilterToQueryParameters, FiltersFieldsUI, FooterButton, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse, JSX, JSXIndex, JSXMap, JSXPathMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, Model, ObjectToContextFilters, ObjectToQueryParam, Or, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, SortingFieldsUI, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, collectionQueryParams, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useTranslateContext, useUI, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
 //# sourceMappingURL=fennec-core.modern.js.map

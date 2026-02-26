@@ -466,4 +466,22 @@ export class UIAdapter {
   normalizeFiles(fileList) {
     return fileList
   }
+
+  /**
+   * Рендер контрола по типу поля (для Field без item.render).
+   * Адаптер по type (string, float, boolean, date, ...) возвращает нужный компонент ввода.
+   *
+   * @param {Object} options
+   * @param {string} options.type - Тип из мета (string, float, bool, date, datetime, int, password, text, ...)
+   * @param {any} options.value - Текущее значение
+   * @param {Function} options.onChange - (value) => void
+   * @param {string} [options.mode] - Режим (model, filter, ...)
+   * @param {Object} [options.item] - Описание поля из мета (label, required, options, filterType, ...)
+   * @param {boolean} [options.disabled]
+   * @param {string} [options.placeholder]
+   * @returns {React.ReactNode|null} Элемент ввода или null
+   */
+  renderField(options) {
+    return null
+  }
 }

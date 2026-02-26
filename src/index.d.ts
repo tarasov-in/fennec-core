@@ -224,6 +224,12 @@ export const LOCATOR_ACTIONS: {
 export function getLocator(type: string, name: string, action?: string): string;
 export function getAILocator(description: string): string;
 
+// ==================== Components ====================
+export { Action, FooterButton } from './components/Action';
+export { Collection, SortingFieldsUI, FiltersFieldsUI, collectionQueryParams } from './components/Collection';
+export { Field, FieldWrapper, DropdownAction } from './components/Field';
+export { Model, CollectionByProperty } from './components/Model';
+
 // ==================== Module Namespaces ====================
 // Modular exports for tree-shaking and better code organization
 

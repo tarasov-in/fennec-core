@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import _ from 'lodash';
-// import ScrollLocker from 'rc-util/lib/Dom/scrollLocker';
-import { Form } from 'antd';
-import { useMediaQuery } from 'react-responsive'
-import { IfElse, Request, makeFormData, unpackFormFields, pushStateHistoryModal, unsubscribe, subscribe, getLocator, errorCatch } from '../../core/utils';
-import { Spin, Button, Modal } from 'antd';
-// import {
-//     Popup,
-//     SpinLoading
-// } from 'antd-mobile';
-import { DeviceUUID } from "device-uuid"
-// import { FormObserverContext } from '../Context';
+import { useMediaQuery } from 'react-responsive';
+import { IfElse, Request, makeFormData, unpackFormFields, pushStateHistoryModal, unsubscribe, subscribe, getLocator, errorCatch, eventExecution } from '../../core/utils';
+// import { DeviceUUID } from "device-uuid";
+import { useUIOptional } from '../../adapters/UIContext';
 
 const CurrentForm = (props) => {
-    const { current, steps, object, action, setSubmit } = props;
-    const [frm] = Form.useForm();
+    const { current, steps, object, action, setSubmit, Form: FormComponent } = props;
+    const [frm] = FormComponent ? FormComponent.useForm() : [null];
     const item = React.useMemo(() => steps[current], [steps, current]);
     const F = React.useMemo(() => item.form, [item]);
     useEffect(() => {
@@ -45,22 +38,32 @@ const CurrentForm = (props) => {
 };
 
 export const FooterButton = ({ key, name, callback, options, isDesktopOrLaptop, locator, object }) => {
-    if (isDesktopOrLaptop) {
-        return (<Button
-            data-locator={getLocator(locator || key, object)}
-            key={key} onClick={callback} {...options}>{name}</Button>);
-    } else {
-        const btn = { key: key, text: name, onPress: callback, options: { ...options, key: getLocator(locator || key, object) } };
-        return (btn);
-    }
+    const btn = { key: key, text: name, onPress: callback, options: { ...options, key: getLocator(locator || key, object) } };
+    return (btn);
+};
+
+function ActionWithFormInstance({ ui, ...props }) {
+    const [form] = ui.createFormInstance();
+    return <ActionContent formInstance={form} ui={ui} {...props} />;
 }
+
 export function Action(props) {
-    let isMobile = false;
-    try {
-        isMobile = new DeviceUUID().parse()?.isMobile
-    } catch (error) {
-        console.error(error)
+    const ui = useUIOptional();
+    if ((props.steps || props.form) && ui?.Form && ui.createFormInstance) {
+        return <ActionWithFormInstance ui={ui} {...props} />;
     }
+    return <ActionContent form={null} ui={null} {...props} />;
+}
+
+function ActionContent(incomingProps) {
+    const { formInstance, ui, ...rest } = incomingProps;
+    const props = { ...rest, formInstance, ui };
+    // let isMobile = false;
+    // try {
+    //     isMobile = new DeviceUUID().parse()?.isMobile
+    // } catch (error) {
+    //     console.error(error)
+    // }
 
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 })
 
@@ -91,6 +94,7 @@ export function Action(props) {
         disabledOkOnUncahngedForm,
         contextFilters,
 
+        render
     } = props;
 
     //----FormObserver-----------------
@@ -116,29 +120,24 @@ export function Action(props) {
     }, [values, setValues])
     //---------------------------------
 
-    // Helpers
-    // const scrollLocker = new ScrollLocker();
-
     // Internal States
     const [loading, setLoading] = useState(false);
     const [opened, setOpened] = useState(false);
 
-    // ---------------------------------
     const [stepObject, setStepObject] = useState({});
     const [currentStep, setCurrentStep] = useState(0);
 
-    const [form] = Form.useForm();
     const closePopup = useCallback(() => {
-        form.resetFields();
+        if (formInstance?.resetFields) formInstance.resetFields();
         close();
-    }, [form]);
+    }, [formInstance]);
     const ContentForm = props.form;
-    // ---------------------------------
+
     const stack = [];
     const getStack = useCallback(() => {
         return stack;
     }, []);
-    // ---------------------------------
+
     useEffect(() => {
         if (uuid) {
             var token_click = subscribe(`action.${uuid}.click`, function (msg, data) {
@@ -151,18 +150,7 @@ export function Action(props) {
             }
         };
     }, [uuid])
-    // ---------------------------------        
-    // var available = true;
-    // useEffect(
-    //     () => {
-    //         available = true;
-    //         return () => {
-    //             available = false;
-    //         };
-    //     },
-    //     [ /* TODO: memoization parameters here */]
-    // );
-    // ---------------------------------
+
     let submitCache = React.useMemo(() => ({}), []);
     const execStep = React.useCallback((current) => {
         if (submitCache[current]) {
@@ -172,7 +160,7 @@ export function Action(props) {
     const setSubmit = (submit, current) => {
         submitCache[current] = submit;
     };
-    // ---------------------------------
+
     const lock = React.useCallback(() => {
         setLoading(true);
     }, []);
@@ -182,19 +170,17 @@ export function Action(props) {
     const close = React.useCallback(() => {
         setCurrentStep(0);
         setLoading(false);
-        // if (mode !== "inline") {
         if (props.onClose) {
             props.onClose();
         }
         window.history.back();
-        // }
-    }, [/*mode,*/ props.onClose]);
-    // ---------------------------------
+    }, [props.onClose]);
+
     const action = React.useCallback((_values) => {
 
         let values = eventExecution(modify, _values, {});
 
-        values = IfElse(form, unpackFormFields(form, values), values);
+        values = IfElse(formInstance, unpackFormFields(formInstance, values), values);
         values = IfElse(isFormData, makeFormData(values), values);
 
         setLoading(true);
@@ -235,17 +221,15 @@ export function Action(props) {
                 close,
             }
         );
-    }, [modify, form, isFormData, callback, props.action, props.document, props.collection, props.collectionRef, props.updateCollection, props.setCollection, props.contextFilters, props.auth]);
+    }, [modify, formInstance, isFormData, callback, props.action, props.document, props.collection, props.collectionRef, props.updateCollection, props.setCollection, props.contextFilters, props.auth]);
 
     const click = React.useCallback((e) => {
         if (excludeKeyPressed && excludeKeyPressed(e)) {
             return;
         }
         if ((!steps && ContentForm) || steps) {
-            // if (available == true) {
             pushStateHistoryModal(setOpened, getStack);
             setOpened(true);
-            // };
         } else {
             action({});
         }
@@ -254,7 +238,6 @@ export function Action(props) {
         }
     }, [action, steps, excludeKeyPressed, hideMenu, props.collection])
 
-    // ---------------------------------
     const prev = React.useCallback(() => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
@@ -291,14 +274,12 @@ export function Action(props) {
             action(o);
         }
     }, [steps, stepObject]);
-    // ---------------------------------
+
     const FooterDismissFunction = () => {
         if (steps && currentStep > 0) {
             return prev;
         } else {
-            // if (mode !== "inline") {
-                return closePopup
-            // } else return undefined
+            return closePopup
         }
     }
     const FooterOkFunction = () => {
@@ -307,7 +288,7 @@ export function Action(props) {
                 execStep(currentStep);
             }
         } else {
-            return form.submit
+            return formInstance.submit
         }
     }
     const FooterDismissButtons = () => {
@@ -320,23 +301,21 @@ export function Action(props) {
                     options: {
                         type: "ghost"
                     },
-                    isDesktopOrLaptop: isDesktopOrLaptop || !isMobile
+                    isDesktopOrLaptop: isDesktopOrLaptop 
                 })
             ];
         } else {
-            // if (mode !== "inline") {
-                return [
-                    FooterButton({
-                        key: "dismiss",
-                        name: dismissText || 'Закрыть',
-                        callback: FooterDismissFunction(),
-                        options: {
-                            type: "ghost"
-                        },
-                        isDesktopOrLaptop: isDesktopOrLaptop || !isMobile
-                    })
-                ]
-            // } else return []
+            return [
+                FooterButton({
+                    key: "dismiss",
+                    name: dismissText || 'Закрыть',
+                    callback: FooterDismissFunction(),
+                    options: {
+                        type: "ghost"
+                    },
+                    isDesktopOrLaptop: isDesktopOrLaptop 
+                })
+            ]
         }
     }
     const FooterOkButtons = useCallback(() => {
@@ -351,7 +330,7 @@ export function Action(props) {
                             type: "primary",
                             disabled: disabledOkOnUncahngedForm && !isChangedForm
                         },
-                        isDesktopOrLaptop: isDesktopOrLaptop || !isMobile
+                        isDesktopOrLaptop: isDesktopOrLaptop 
                     }),
                     FooterButton({
                         key: "ok",
@@ -361,7 +340,7 @@ export function Action(props) {
                             type: "primary",
                             disabled: disabledOkOnUncahngedForm && !isChangedForm
                         },
-                        isDesktopOrLaptop: isDesktopOrLaptop || !isMobile
+                        isDesktopOrLaptop: isDesktopOrLaptop 
                     }))
             ]
         } else {
@@ -374,7 +353,7 @@ export function Action(props) {
                         type: "primary",
                         disabled: disabledOkOnUncahngedForm && !isChangedForm
                     },
-                    isDesktopOrLaptop: isDesktopOrLaptop || !isMobile
+                    isDesktopOrLaptop: isDesktopOrLaptop 
                 })
             ]
         }
@@ -383,7 +362,7 @@ export function Action(props) {
         if (props.footerExtendedButtons) {
             let btns = props.footerExtendedButtons(parameters);
             if (btns) {
-                return btns?.map(e => FooterButton({ isDesktopOrLaptop: isDesktopOrLaptop || !isMobile, ...e }))
+                return btns?.map(e => FooterButton({ isDesktopOrLaptop: isDesktopOrLaptop, ...e }))
             }
         }
         return []
@@ -392,12 +371,11 @@ export function Action(props) {
         let ctx = {
             DismissFunction: FooterDismissFunction(),
             OkFunction: FooterOkFunction(),
-            form,
+            form: formInstance,
             object,
             lock,
             unlock,
             close,
-            // mode,
             readonly,
             loading,
             isChangedForm
@@ -405,7 +383,7 @@ export function Action(props) {
         if (props.footer) {
             let btns = props.footer(ctx);
             if (btns) {
-                let a = btns?.map(e => FooterButton({ isDesktopOrLaptop: isDesktopOrLaptop || !isMobile, ...e }))
+                let a = btns?.map(e => FooterButton({ isDesktopOrLaptop: isDesktopOrLaptop, ...e }))
                 return a
             }
         }
@@ -415,237 +393,112 @@ export function Action(props) {
                 ...FooterDismissButtons(),
             ]
         }
+        
         return [
             ...FooterExtendedButtons(ctx),
             ...FooterDismissButtons(),
             ...FooterOkButtons()
         ]
-    }, [isChangedForm, props.footer, isDesktopOrLaptop, currentStep, form, object, unlock, close, /*mode,*/ readonly, loading]);
+    }, [isChangedForm, props.footer, isDesktopOrLaptop, currentStep, formInstance, object, unlock, close, readonly, loading]);
 
     const trigger = React.useCallback(() => {
         return (props.trigger) ? props.trigger(click) : <React.Fragment></React.Fragment>;
-    }, [object, props.action, isDesktopOrLaptop, /*mode,*/ props.title, props.trigger, loading, disabled, triggerOptions, triggerStyle, props.closable]);
+    }, [object, props.action, isDesktopOrLaptop, props.title, props.trigger, loading, disabled, triggerOptions, triggerStyle, props.closable]);
+
+    const FormRenderer = React.useCallback(() => {
+        return <React.Fragment>
+            {steps && ui?.Form && <React.Fragment>
+                <CurrentForm
+                    Form={ui.Form}
+                    data-locator={getLocator(props?.locator || "actionform", stepObject)}
+                    setSubmit={setSubmit}
+                    auth={props.auth}
+                    current={currentStep}
+                    steps={steps}
+                    object={stepObject}
+                    action={(values) => {
+                        let o = {
+                            ...stepObject,
+                            [steps[currentStep].key]: { ...steps[currentStep].object, ...values }
+                        };
+                        next(values, steps[currentStep], currentStep);
+                    }}
+                />
+            </React.Fragment>}
+            {(!steps && props.form) &&
+                <ContentForm
+                    {...props}
+                    data-locator={getLocator(props?.locator || "actionform", props?.object)}
+                    subheader={(props.titles && props.titles.subheader) ? props.titles.subheader : ""}
+                    submit={action}
+                    // form={form}
+                    form={formInstance}
+                />
+            }
+        </React.Fragment>
+    }, [steps, stepObject, currentStep, props.form, props.auth, props.object, props.locator, props.titles, formInstance, ui]);
+
     const content = React.useCallback(() => {
-        // if (isDesktopOrLaptop || !isMobile) {
-        const width = props.width;
-        const title = props.title;
-        // if (mode == "inline") {
-        //     return (<div data-locator={getLocator(props?.locator || "actioncontent", props?.object)} style={{ width: "100%", height: "100%", resize: "none" }} className='action-content'>
-        //         <Spin spinning={loading}>
-        //             {steps && <React.Fragment>
-        //                 <CurrentForm
-        //                     setSubmit={setSubmit}
-        //                     auth={props.auth}
-        //                     current={currentStep}
-        //                     steps={steps}
-        //                     object={stepObject}
-        //                     action={(values) => {
-        //                         let o = {
-        //                             ...stepObject,
-        //                             [steps[currentStep].key]: { ...steps[currentStep].object, ...values }
-        //                         };
-        //                         next(values, steps[currentStep], currentStep);
-        //                     }}
-        //                 />
-        //             </React.Fragment>}
-        //             {(!steps && props.form) &&
-        //                 <FormObserverContext.Provider value={[isChangedForm, isChangedField, onValuesChange]}>
-        //                     <ContentForm
-        //                         {...props}
-        //                         submit={action}
-        //                         form={(!noAntForm) ? form : undefined}
+        // const width = props.width;
+        // const title = props.title;
 
-        //                         isChangedForm={isChangedForm}
-        //                         isChangedField={isChangedField}
-        //                         onValuesChange={onValuesChange}
-        //                     />
-        //                 </FormObserverContext.Provider>
-        //             }
-        //             <div>
-        //                 <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }} className='action-footer'>
-        //                     {footer()}
-        //                 </div>
-        //             </div>
-        //         </Spin>
-        //     </div>)
-        // } else {
-        return (<React.Fragment>
-            <Modal
-                afterClose={props.afterClose}
-                width={width}
-                title={title}
-                open={opened || visible}
-                closable={true}
-                destroyOnHidden={true}
-                onCancel={closePopup}
-                footer={footer()}
+        return props?.render ? props.render({
+            FormRenderer,
+            footer,
+            trigger,
+            opened,
+            loading,
+            // title,
+            // width,
+            // form,
+            object,
+            close,
+            readonly,
+            disabled,
+            // formWraperStyle,
+            // triggerStyle,
+            // triggerOptions,
+            // titles,
+            // currentStep,
+            // steps,
+            // setSubmit,
+            isChangedField,
+            isChangedForm,
+            onValuesChange,
+            DismissFunction: FooterDismissFunction(),
+            OkFunction: FooterOkFunction(),
+            formInstance,
+            lock,
+            unlock
+        }) : undefined;
 
-                keyboard={false}
-                styles={{
-                    body: (props.modal && props.modal.bodyStyle) ? props.modal.bodyStyle : {}
-                }}
-                {...props.modal}
-            >
-                <div style={{ width: "100%", height: "100%", resize: "none" }}>
-                    <Spin spinning={loading}>
-                        {steps && <React.Fragment>
-                            <CurrentForm
-                                data-locator={getLocator(props?.locator || "actionform", stepObject)}
-                                setSubmit={setSubmit}
-                                auth={props.auth}
-                                current={currentStep}
-                                steps={steps}
-                                object={stepObject}
-                                action={(values) => {
-                                    let o = {
-                                        ...stepObject,
-                                        [steps[currentStep].key]: { ...steps[currentStep].object, ...values }
-                                    };
-                                    next(values, steps[currentStep], currentStep);
-                                }}
-                            />
-                        </React.Fragment>}
-                        {(!steps && props.form) &&
-                            <ContentForm
-                                {...props}
-                                data-locator={getLocator(props?.locator || "actionform", props?.object)}
-                                subheader={(titles && titles.subheader) ? titles.subheader : ""}
-                                submit={action}
-                                form={form}
-                            />
-                        }
-                    </Spin>
-                </div>
-            </Modal>
-            {trigger && trigger()}
-        </React.Fragment>)
-        // }
-        // } else {
-        //     if (mode == "inline") {
-        //         return (<React.Fragment>
-        //             <div style={{
-        //                 display: "flex",
-        //                 flexDirection: "column",
-        //                 height: "100%",
-        //             }}>
-        //                 <div style={{ textAlign: "center", fontWeight: "600", fontSize: "14px", minHeight: ((titles && titles.header)) ? "47px" : "0px" }}>{(titles && titles.subheader) ? titles.subheader : ""}</div>
-        //                 {!loading && <div style={{ height: "100%", padding: "0px", ...formWraperStyle }}>
-        //                     {steps && <React.Fragment>
-        //                         <CurrentForm
-        //                             setSubmit={setSubmit}
-        //                             auth={props.auth}
-        //                             current={currentStep}
-        //                             steps={steps}
-        //                             object={stepObject}
-        //                             data-locator={getLocator(props?.locator || "actionform", stepObject)}
-        //                             action={(values) => {
-        //                                 let o = {
-        //                                     ...stepObject,
-        //                                     [steps[currentStep].key]: { ...steps[currentStep].object, ...values }
-        //                                 };
-        //                                 next(values, steps[currentStep], currentStep);
-        //                             }}
-        //                         />
-        //                     </React.Fragment>}
-        //                     {(!steps && props.form) &&
-        //                         <ContentForm
-        //                             {...props}
-        //                             data-locator={getLocator(props?.locator || "actionform", props?.object)}
-        //                             subheader={(titles && titles.subheader) ? titles.subheader : ""}
-        //                             submit={action}
-        //                             form={form}
-        //                         />
-        //                     }
-        //                 </div>}
-        //                 {loading && <div className="loading" style={{ height: "100%" }}>
-        //                     <div className="align" style={{ textAlign: "center" }}>
-        //                         <div style={{ display: "flex", justifyContent: "center" }}>
-        //                             <SpinLoading style={{ '--size': '48px' }} />
-        //                         </div>
-        //                         <span style={{ marginTop: 8 }}>Отправка ...</span>
-        //                     </div>
-        //                 </div>}
-        //                 <div style={{
-        //                     padding: "8px",
-        //                     width: "100%",
-        //                     zIndex: "1",
-        //                     backgroundColor: "white"
-        //                 }}>
-        //                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-        //                         {footer()?.map((e, idx) => {
-        //                             return (<Button key={idx} style={{ flex: "auto" }} type="ghost" {...e.options} onClick={e.onPress}>{e.text}</Button>)
-        //                         })}
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </React.Fragment>);
-        //     } else {
-        //         return (<React.Fragment>
-        //             <Popup
-        //                 visible={opened || visible}
-        //                 showCloseButton
-        //                 bodyStyle={{ height: "100%" }}
-        //                 onClose={closePopup}
-        //             >
-        //                 <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        //                     <div style={{ flex: "0", padding: "0 10px" }}>
-        //                         {(titles && titles.header) ?
-        //                             <div style={{ display: "flex", justifyContent: "center", padding: "10px 30px 10px 15px", fontSize: "16px" }}>
-        //                                 {titles.header}
-        //                             </div> : undefined
-        //                         }
-        //                     </div>
-        //                     <div style={{ overflowY: 'scroll', flex: "1", height: "100%" }}>
-        //                         <div style={{ padding: "0 10px", textAlign: "center", fontWeight: "600", fontSize: "14px", minHeight: (!(titles && titles.header)) ? "47px" : "0px" }}>{(titles && titles.subheader) ? titles.subheader : ""}</div>
-        //                         {!loading && <div style={{ height: "100%", padding: "0px" }}>
-        //                             {steps && <React.Fragment>
-        //                                 <CurrentForm
-        //                                     setSubmit={setSubmit}
-        //                                     auth={props.auth}
-        //                                     current={currentStep}
-        //                                     steps={steps}
-        //                                     object={stepObject}
-        //                                     data-locator={getLocator(props?.locator || "actionform", stepObject)}
-        //                                     action={(values) => {
-        //                                         let o = {
-        //                                             ...stepObject,
-        //                                             [steps[currentStep].key]: { ...steps[currentStep].object, ...values }
-        //                                         };
-        //                                         next(values, steps[currentStep], currentStep);
-        //                                     }}
-        //                                 />
-        //                             </React.Fragment>}
-        //                             {(!steps && props.form) &&
-        //                                 <ContentForm
-        //                                     {...props}
-        //                                     data-locator={getLocator(props?.locator || "actionform", props?.object)}
-        //                                     subheader={(titles && titles.subheader) ? titles.subheader : ""}
-        //                                     submit={action}
-        //                                     form={form}
-        //                                 />
-        //                             }
-        //                         </div>}
-        //                         {loading && <div className="loading">
-        //                             <div className="align" style={{ textAlign: "center" }}>
-        //                                 <div style={{ display: "flex", justifyContent: "center" }}>
-        //                                     <SpinLoading style={{ '--size': '48px' }} />
-        //                                 </div>
-        //                                 <span style={{ marginTop: 8 }}>Отправка ...</span>
-        //                             </div>
-        //                         </div>}
-        //                     </div>
-        //                     <div style={{ flex: "0" }}>
-        //                         <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", padding: "10px" }}>
-        //                             {footer()?.map((e, idx) => <Button style={{ flex: "auto" }} type="ghost" {...e.options} key={idx} onClick={e.onPress}>{e.text}</Button>)}
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //             </Popup>
-        //             {trigger && trigger()}
-        //         </React.Fragment>);
-        //     }
-        // }
-    }, [isChangedForm, isChangedField, onValuesChange, props.action, /*mode,*/ steps, stepObject, currentStep, stepObject, props.auth, loading, titles, opened, visible, formWraperStyle, next, action, form]);
+        // return (<React.Fragment>
+        //     <Modal
+        //         afterClose={props.afterClose}
+        //         width={width}
+        //         title={title}
+        //         open={opened || visible}
+        //         closable={true}
+        //         destroyOnHidden={true}
+        //         onCancel={closePopup}
+        //         footer={footer()}
+
+        //         keyboard={false}
+        //         styles={{
+        //             body: (props.modal && props.modal.bodyStyle) ? props.modal.bodyStyle : {}
+        //         }}
+        //         {...props.modal}
+        //     >
+        //         <div style={{ width: "100%", height: "100%", resize: "none" }}>
+        //             <Spin spinning={loading}>
+        //                 {FormRenderer()}
+        //             </Spin>
+        //         </div>
+        //     </Modal>
+        //     {trigger && trigger()}
+        // </React.Fragment>)
+
+    }, [props.render, isChangedForm, isChangedField, onValuesChange, props.action, steps, stepObject, currentStep, stepObject, props.auth, loading, titles, opened, visible, formWraperStyle, next, action, formInstance]);
     React.useEffect(() => {
         if (actionRef) {
             actionRef.current = {

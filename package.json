@@ -1,6 +1,6 @@
 {
   "name": "fennec-core",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "description": "Modern React UI library with UI-agnostic architecture",
   "author": "tarasovin",
   "license": "MIT",
@@ -132,7 +132,7 @@
     "@storybook/react": "^10.2.5",
     "@storybook/react-webpack5": "^10.2.5",
     "@storybook/testing-library": "^0.2.2",
-    "antd": "5.29.2",
+    "antd": "6.3.0",
     "antd-mobile": "^5.15.1",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.3",

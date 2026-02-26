@@ -260,14 +260,13 @@ function FilterButton(props) {
             minWidth: "28px",
             fontSize: "14px",
             lineHeight: "22px",
-            // backgroundColor: (filtered) ? "#1677FF" : "rgba(190, 190, 190, 0.2)"
         }}
         ref={ref}
         data-locator={getLocator(locator || "collectionfilter-" + name || "collectionfilter-" + fieldName || "collectionfilter", object)}
         onClick={() => setFiltered(o => !o)}
     >
         <Badge dot={(state && state.filter && Object.keys(state.filter)?.length > 0) ? true : false}>
-            <FilterOutlined style={{ color: (filtered) ? "white" : "black" }} />
+            <FilterOutlined style={{ }} />
         </Badge>
     </div>)
 }
@@ -922,140 +921,150 @@ export function Collection(props) {
         response
     }
 
-    const [openOverlay, setOpenOverlay] = useState(false)
+    const [openOverlay, setOpenOverlay] = useState(false);
     const isFullscreen = openOverlay;
-    const openFullscreen = () => { setOpenOverlay(true) }
-    const closeFullscreen = () => { setOpenOverlay(false) }
-    return (
-        <Overlay
-            open={openOverlay}
-            setOpen={setOpenOverlay}
-        >
-            <div style={(style) ? style : {}} data-locator={getLocator(props?.locator || ("collection-" + name) || ("collection-" + fieldName) || "collection", props?.object)} className="collection default-collection filtered">
-                <div className="filtered-header"
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        paddingBottom: (filters && filters.length > 0)?"10px":"0px",
-                        ...(headerStyle) ? headerStyle : {}
-                    }}>
-                    <div style={{ flex: "1 1 auto", paddingRight: "15px", display: "flex", gap: "5px" }}>
-                        {RenderOnCollectionActions()}
-                    </div>
-                    {(filters && filters.length > 0) && <div style={{ flex: "0 0 auto", display: "flex", justifyContent: "flex-start", gap: "5px" }}>
-                        {allowFullscreen && <div
-                            className={`bg ${(isFullscreen) ? "bg-altblue" : "bg-grey"} pointer`}
-                            style={{
-                                minWidth: "28px",
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                color: (isFullscreen) ? "white" : "black",
-                            }}
-                            data-locator={getLocator(props?.locator || "collectionfullscreen-" + name || "collectionfullscreen-" + fieldName || "collectionfullscreen", props?.object)}
-                            onClick={() => { (isFullscreen) ? closeFullscreen() : openFullscreen() }}
-                        >
-                            {(!isFullscreen) && <FullscreenOutlined />}
-                            {(isFullscreen) && <FullscreenExitOutlined />}
-                        </div>}
-                        <div>
-                            <Tooltip title="Фильтр и сортировка">
+    const openFullscreen = () => { setOpenOverlay(true); };
+    const closeFullscreen = () => { setOpenOverlay(false); };
 
-                                {(floatingFilter && !isFullscreen) && <PopoverModal
-                                    title="Фильтр и сортировка"
-                                    open={filtered}
-                                    setOpen={setFiltered}
-                                    trigger={
-                                        <FilterButton filtered={filtered} setFiltered={setFiltered} state={state} locator={props?.locator} object={props?.object} name={name} fieldName={fieldName} />
-                                    }
-                                >
-                                    <div style={{
-                                        maxWidth: "425px",
-                                        ...(filterPopoverStyle) ? filterPopoverStyle : {}
-                                    }}>
-                                        {((filters && filters.length > 0) && filtered) &&
-                                            <FilterContent
-                                                auth={auth}
-                                                filters={filters}
-                                                sorting={sorting}
-                                                setSorting={setSorting}
-                                                state={state}
-                                                funcStat={funcStat}
-                                                filtered={filtered}
-                                                locator={props?.locator}
-                                                object={props?.object}
-                                                name={name}
-                                                fieldName={fieldName}
-                                                _onFilterChange={_onFilterChange}
-                                                applyFilter={applyFilter}
-                                                clearFilter={clearFilter}
-                                            />
-                                        }
-                                    </div>
-                                </PopoverModal>}
-                                {(!floatingFilter || isFullscreen) &&
-                                    <FilterButton filtered={filtered} setFiltered={setFiltered} state={state} locator={props?.locator} object={props?.object} name={name} fieldName={fieldName} />
-                                }
-                            </Tooltip>
-                        </div>
-                    </div>}
-                </div>
-                <Layout style={{ backgroundColor: "transparent", ...(bodyStyle) ? bodyStyle : {} }} className="filtered-body">
-                    <div style={{ width: "100%", marginBottom: "0px", ...(isFullscreen) ? { overflow: "auto" } : {}, ...(contentStyle) ? contentStyle : {} }}>
-                        {render && render(collection, contextProps)}
-                    </div>
-                    {(((!floatingFilter || isFullscreen) && filters && filters.length > 0) && filtered) &&
-                        <Sider width={240} theme={"light"} style={{ margin: "0 0px 5px 10px" }} className="filtered-sider">
-                            <FilterContent
-                                auth={auth}
-                                filters={filters}
-                                sorting={sorting}
-                                setSorting={setSorting}
-                                state={state}
-                                funcStat={funcStat}
-                                filtered={filtered}
-                                locator={props?.locator}
-                                object={props?.object}
-                                name={name}
-                                fieldName={fieldName}
-                                _onFilterChange={_onFilterChange}
-                                applyFilter={applyFilter}
-                                clearFilter={clearFilter}
-                            />
-                        </Sider>
-                    }
-                </Layout>
-                {(!!count && !!total && totalPages && totalPages > 1) &&
-                    <div className="filtered-footer" style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", ...(footerStyle) ? footerStyle : {} }}>
-                        <div style={{
-                            fontSize: "14px",
-                            lineHeight: "24px",
-                        }}>
-                            Элементов: {collection?.length} из {total}
-                        </div>
-                        {pagination && pagination({
-                            current: current,
-                            setCurrent: setCurrent,
-                            count: count,
-                            setCount: setCount,
-                            total: total,
-                            setTotal: setTotal,
-                            totalPages: totalPages,
-                            setTotalPages: setTotalPages,
-                            collection,
-                            setCollection: setCollection
-                        })}
-                        {!pagination && <Pagination className="filtered-pagination" size="small"
-                            data-locator={getLocator(props?.locator || "filtered-pagination-" + name || "filtered-pagination-" + fieldName || "filtered-pagination", props?.object)}
-                            current={current}
-                            onChange={setCurrent}
-                            pageSize={count}
-                            total={total}
-                            showSizeChanger={false}
-                        />}
-                    </div>
-                }
-            </div>
-        </Overlay>
-    );
+    const collectionContext = {
+        // data
+        collection,
+        loading,
+        response,
+        state,
+        sorting,
+        current,
+        count,
+        total,
+        totalPages,
+        filters,
+        funcStat,
+        lastFuncStat,
+        selectedRowKeys,
+        selectedRows,
+        filtered,
+        isFullscreen,
+        // collection actions
+        setCollection,
+        setCollectionItem,
+        removeCollectionItem,
+        updateCollection: update,
+        collectionRef,
+        request,
+        lock,
+        unlock,
+        // filter/sort
+        applyFilter,
+        clearFilter,
+        onFilterChange: _onFilterChange,
+        setSorting,
+        setFiltered,
+        renderFilterPanel: () => (
+            <FilterContent
+                auth={auth}
+                filters={filters}
+                sorting={sorting}
+                setSorting={setSorting}
+                state={state}
+                funcStat={funcStat}
+                filtered={filtered}
+                locator={getLocator(props?.locator || ("collection-" + name) || ("collection-" + fieldName) || "collection", props?.object)}
+                object={props?.object}
+                name={name}
+                fieldName={fieldName}
+                _onFilterChange={_onFilterChange}
+                applyFilter={applyFilter}
+                clearFilter={clearFilter}
+            />
+        ),
+        // pagination
+        setCurrent,
+        setCount,
+        // selection
+        onSelection,
+        isSelected,
+        selectionType,
+        triggerChange,
+        // fullscreen
+        openFullscreen,
+        closeFullscreen,
+        // actions config (data for building toolbar)
+        defaultModelAction,
+        defaultCollectionAction,
+        getCollectionActions: () => (collectionActions) ? clean(unwrap(collectionActions({
+            mobject,
+            name,
+            field,
+            fieldName,
+            contextObject,
+            collection,
+            setCollection,
+            actions: defaultCollectionAction(),
+            updateCollection: update,
+            setCollectionItem,
+            removeCollectionItem,
+            onSelection,
+            isSelected,
+            lock,
+            unlock,
+            loading,
+            update
+        }))) : undefined,
+        getModelActions: (item, index) => (modelActions) ? clean(unwrap(modelActions(item, index, {
+            mobject,
+            name,
+            field,
+            fieldName,
+            contextObject,
+            collection,
+            setCollection,
+            actions: defaultModelAction(item, index)
+        }))) : undefined,
+        // meta & config
+        auth,
+        name,
+        field,
+        fieldName,
+        contextObject,
+        contextFilters,
+        linksModelActions,
+        scheme,
+        mobject,
+        meta,
+        queryDetail,
+        source,
+        // props for getLocator / styling (user can ignore)
+        locator: props?.locator,
+        object: props?.object,
+        style,
+        headerStyle,
+        bodyStyle,
+        contentStyle,
+        footerStyle,
+        filterPopoverStyle,
+        allowFullscreen,
+        floatingFilter,
+        disableScrollTo,
+        // Form.Item API (when used as Form.Item)
+        value,
+        onChange,
+        getSelectedOnly,
+        // callbacks
+        onChangeRequestParameters,
+        onApplyFilter,
+        pagination,
+        // helpers
+        getLocator: (loc, obj) => getLocator(loc || ("collection-" + name) || ("collection-" + fieldName) || "collection", obj || props?.object),
+        getQueryParams: (filterOverride, currentOverride, countOverride) => collectionQueryParams(
+            filters,
+            contextFilters,
+            filterOverride ?? state.filter,
+            sorting,
+            currentOverride ?? current,
+            countOverride ?? count,
+            queryDetail
+        )
+    };
+
+    return render ? render(collectionContext) : null;
 }

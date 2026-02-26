@@ -1,3 +1,4 @@
+import React from 'react'
 import { UIAdapter } from '../UIAdapter'
 import { setNotifier } from '../../core/error'
 import { message } from 'antd'
@@ -171,11 +172,9 @@ export class AntdAdapter extends UIAdapter {
   }
 
   /**
-   * Создание экземпляра формы Ant Design
+   * Хук создания экземпляра формы Ant Design (для использования в компонентах)
    */
-  createFormInstance() {
-    return useFormInstance()
-  }
+  createFormInstance = useFormInstance
 
   /**
    * Нормализация файлов для Ant Design Upload
@@ -192,5 +191,149 @@ export class AntdAdapter extends UIAdapter {
       url: file.url || file.response?.url,
       response: file.response
     }))
+  }
+
+  /**
+   * Рендер контрола по типу поля для Ant Design
+   */
+  renderField(options) {
+    if (!options || !options.type) return null
+
+    const { type, value, onChange, mode, item = {}, disabled, placeholder } = options
+    const t = (type || '').toLowerCase()
+    const label = item.label
+    const place = placeholder ?? (mode === 'filter' ? label : undefined)
+
+    // string
+    if (t === 'string') {
+      return (
+        <this.Input
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+        />
+      )
+    }
+
+    if (t === 'password') {
+      return (
+        <this.Input
+          type="password"
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+        />
+      )
+    }
+
+    if (t === 'text') {
+      return (
+        <this.TextArea
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+          rows={3}
+        />
+      )
+    }
+
+    // number
+    const numTypes = ['int', 'uint', 'integer', 'int64', 'int32', 'uint64', 'uint32']
+    if (numTypes.includes(t)) {
+      return (
+        <this.InputNumber
+          value={value != null ? Number(value) : undefined}
+          onChange={onChange}
+          disabled={disabled}
+          min={item.min}
+          max={item.max}
+          step={1}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    const floatTypes = ['double', 'float', 'float64', 'float32']
+    if (floatTypes.includes(t)) {
+      return (
+        <this.InputNumber
+          value={value != null ? Number(value) : undefined}
+          onChange={onChange}
+          disabled={disabled}
+          min={item.min}
+          max={item.max}
+          step={0.01}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    // boolean
+    if (t === 'boolean' || t === 'bool') {
+      return (
+        <this.Checkbox
+          checked={!!value}
+          onChange={onChange}
+          disabled={disabled}
+        />
+      )
+    }
+
+    // date
+    if (t === 'date') {
+      const format = item.format || 'YYYY-MM-DD'
+      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <this.DatePicker
+          value={dayjsValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    if (t === 'datetime' || t === 'time.time') {
+      const format = item.format || 'YYYY-MM-DD HH:mm:ss'
+      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <this.DatePicker
+          showTime
+          value={dayjsValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    if (t === 'time') {
+      const format = item.format || 'HH:mm:ss'
+      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <this.TimePicker
+          value={dayjsValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    // fallback: string input
+    return (
+      <this.Input
+        value={value != null ? String(value) : ''}
+        onChange={onChange}
+        placeholder={place}
+        disabled={disabled}
+      />
+    )
   }
 }

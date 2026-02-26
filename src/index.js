@@ -94,6 +94,12 @@ export {
 }
 
 
+// ==================== Components ====================
+export { Action, FooterButton } from './components/Action'
+export { Collection, SortingFieldsUI, FiltersFieldsUI, collectionQueryParams } from './components/Collection'
+export { Field, FieldWrapper, DropdownAction } from './components/Field'
+export { Model, CollectionByProperty } from './components/Model'
+
 // ==================== UI Adapter System  ====================
 export { UIProvider, useUI, useUIOptional } from './adapters/UIContext'
 export { UIAdapter } from './adapters/UIAdapter'
