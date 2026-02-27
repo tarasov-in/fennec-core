@@ -11,7 +11,14 @@ const path = require('path')
 // --- Конфигурация (переменные вверху скрипта) ---
 const OLLAMA_MODEL = 'qwen3:4b'
 const OLLAMA_BASE_URL = 'http://localhost:11434'
-const OLLAMA_SYSTEM_PROMPT = `Ты помощник для формирования сообщений коммита. По переданному diff сформируй одно короткое сообщение для git commit на английском. Сообщение должно быть не длиннее 15 слов. Выведи только текст сообщения, без кавычек и пояснений.`
+
+// Системный промпт для первого шага: развёрнутое описание изменений по diff
+const OLLAMA_SUMMARY_SYSTEM_PROMPT =
+  'Ты помощник для анализа изменений кода. На основе diff-содержимого составь краткое, но информативное текстовое описание изменений на английском. Не используй маркдаун, списки, заголовки и технические пометки — только цельный текст описания.'
+
+// Системный промпт для второго шага: короткое сообщение для git commit
+const OLLAMA_COMMIT_SYSTEM_PROMPT =
+  'Ты помощник для формирования сообщений коммита. На основе текстового описания изменений создай одно короткое сообщение для git commit на английском. Сообщение должно быть не длиннее 15 слов. Не используй кавычки, теги, маркдаун или пояснения. Выведи только текст сообщения.'
 
 /** Максимальная длина diff в символах (отсечение при переполнении контекста модели) */
 const MAX_DIFF_CHARS = 20000
@@ -136,7 +143,22 @@ function hasThinkingBlocks(text) {
 
 function sanitizeCommitMessage(msg) {
   if (typeof msg !== 'string') return 'Update'
-  return msg.replace(/\r?\n/g, ' ').trim().slice(0, 200) || 'Update'
+
+  // Нормализуем пробелы и убираем переносы строк
+  let text = String(msg).replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim()
+
+  if (!text) return 'Update'
+
+  // Жёстко ограничиваем количество слов
+  const words = text.split(' ').filter(Boolean).slice(0, 15)
+  text = words.join(' ')
+
+  // Дополнительный лимит по длине (защита от очень длинных слов)
+  if (text.length > 120) {
+    text = text.slice(0, 120).trim()
+  }
+
+  return text || 'Update'
 }
 
 function ollamaGenerate(body) {
@@ -174,18 +196,38 @@ function ollamaGenerate(body) {
 
 async function generateCommitMessage(diff) {
   const truncatedDiff = truncate(diff, MAX_DIFF_CHARS)
-  const prompt = `Diff изменений для коммита:\n\n${truncatedDiff}`
 
-  const data = await ollamaGenerate({
+  // Шаг 1: получаем развёрнутое описание изменений по diff
+  const summaryPrompt = `Diff изменений для коммита:\n\n${truncatedDiff}`
+  const summaryData = await ollamaGenerate({
     model: OLLAMA_MODEL,
-    prompt,
-    system: OLLAMA_SYSTEM_PROMPT,
+    prompt: summaryPrompt,
+    system: OLLAMA_SUMMARY_SYSTEM_PROMPT,
     stream: false
   })
 
-  let raw = (data.response || '').trim()
-  raw = removeThinkingBlocks(raw)
-  return sanitizeCommitMessage(raw)
+  let summaryRaw = (summaryData.response || '').trim()
+  summaryRaw = removeThinkingBlocks(summaryRaw)
+
+  // На всякий случай ограничим размер описания, передаваемого во второй шаг
+  const safeSummary = truncate(summaryRaw, 2000)
+
+  // Шаг 2: на основе описания формируем короткое сообщение для коммита
+  const commitPrompt =
+    'Below is a natural language description of code changes. Based on it, generate ONE short git commit message in English (no more than 15 words). Do not use quotes, markdown, tags or explanations. Output only the commit message text.\n\n' +
+    safeSummary
+
+  const commitData = await ollamaGenerate({
+    model: OLLAMA_MODEL,
+    prompt: commitPrompt,
+    system: OLLAMA_COMMIT_SYSTEM_PROMPT,
+    stream: false
+  })
+
+  let commitRaw = (commitData.response || '').trim()
+  commitRaw = removeThinkingBlocks(commitRaw)
+
+  return sanitizeCommitMessage(commitRaw)
 }
 
 async function main() {
@@ -217,7 +259,11 @@ async function main() {
   }
 
   console.log('Commit message:', color(FgCyan, message))
-  const escaped = message.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+  const escaped = message
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/`/g, '\\`')
+    .replace(/\$/g, '\\$')
   run(`git -C "${root}" commit -m "${escaped}"`, { stdio: 'inherit' })
 
   console.log(color(FgGray, 'Running git push...'))
