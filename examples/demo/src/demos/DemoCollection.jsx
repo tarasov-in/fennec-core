@@ -91,8 +91,8 @@ export default function DemoCollection() {
         { name: 'Title', label: 'Название', type: 'string', filter: true, sort: true },
         { name: 'Price', label: 'Цена', type: 'float', filter: true, sort: true },
       ]}
-      floatingFilter
-      allowFullscreen
+      // floatingFilter
+      // allowFullscreen
       render={(ctx) => {
         const {
           collection,
