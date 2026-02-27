@@ -262,6 +262,20 @@ export class UIAdapter {
   Modal = null
 
   /**
+   * confirm - императивный диалог подтверждения (например, перед удалением)
+   * @type {Function|null}
+   * @param {Object} options
+   * @param {string|ReactNode} options.title - Заголовок
+   * @param {ReactNode} options.content - Содержимое
+   * @param {string} options.okText - Текст кнопки подтверждения
+   * @param {string} options.cancelText - Текст кнопки отмены
+   * @param {string} options.okType - Тип кнопки (danger, primary, default)
+   * @param {ReactNode} [options.icon] - Иконка
+   * @param {Function} options.onOk - Обработчик подтверждения () => void
+   */
+  confirm = null
+
+  /**
    * Drawer - боковая панель
    * @type {React.Component}
    * @props {boolean} visible - Видимость
@@ -341,6 +355,18 @@ export class UIAdapter {
    * @props {ReactNode} children - Элемент с подсказкой
    */
   Tooltip = null
+
+  /**
+   * Popover - всплывающее окно (например, для фильтра коллекции)
+   * @type {React.Component}
+   * @props {ReactNode} content - Содержимое поповера
+   * @props {string|ReactNode} title - Заголовок
+   * @props {string} trigger - Триггер (click, hover, focus, contextMenu)
+   * @props {boolean} open - Контролируемое состояние видимости
+   * @props {Function} onOpenChange - (open) => void
+   * @props {ReactNode} children - Элемент‑триггер
+   */
+  Popover = null
 
   // ==================== Utility Components ====================
 

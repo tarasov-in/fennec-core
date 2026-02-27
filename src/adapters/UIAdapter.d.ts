@@ -445,6 +445,23 @@ export interface BadgeProps {
   children?: ReactNode;
 }
 
+export interface PopoverProps extends BaseComponentProps {
+  content?: ReactNode;
+  title?: ReactNode;
+  trigger?: 'click' | 'hover' | 'focus' | 'contextMenu';
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: ReactNode;
+}
+
+export interface IconSet {
+  Filter?: ComponentType<any>;
+  SortAscending?: ComponentType<any>;
+  SortDescending?: ComponentType<any>;
+  Fullscreen?: ComponentType<any>;
+  FullscreenExit?: ComponentType<any>;
+}
+
 // ==================== UIAdapter Class ====================
 
 /**
@@ -499,6 +516,7 @@ export class UIAdapter {
   Button: ComponentType<ButtonProps> | null;
   Dropdown: ComponentType<DropdownProps> | null;
   Tooltip: ComponentType<TooltipProps> | null;
+  Popover: ComponentType<PopoverProps> | null;
 
   // ==================== Utility Components ====================
   Pagination: ComponentType<PaginationProps> | null;
@@ -506,6 +524,9 @@ export class UIAdapter {
   Empty: ComponentType<EmptyProps> | null;
   Tag: ComponentType<TagProps> | null;
   Badge: ComponentType<BadgeProps> | null;
+
+  // ==================== Optional icon set (used by Collection filter UI) ====================
+  Icons?: IconSet;
 
   // ==================== Utility Methods ====================
 

@@ -2,7 +2,8 @@ import React from 'react'
 import {
   Button as AntButton,
   Dropdown as AntDropdown,
-  Tooltip as AntTooltip
+  Tooltip as AntTooltip,
+  Popover as AntPopover
 } from 'antd'
 
 /**
@@ -68,5 +69,31 @@ export function Tooltip({
     >
       {children}
     </AntTooltip>
+  )
+}
+
+/**
+ * Popover компонент - обертка над Ant Design Popover
+ */
+export function Popover({
+  content,
+  title,
+  trigger = 'click',
+  open,
+  onOpenChange,
+  children,
+  ...rest
+}) {
+  return (
+    <AntPopover
+      content={content}
+      title={title}
+      trigger={trigger}
+      open={open}
+      onOpenChange={onOpenChange}
+      {...rest}
+    >
+      {children}
+    </AntPopover>
   )
 }

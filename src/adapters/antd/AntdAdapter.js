@@ -7,15 +7,17 @@ import {
   SortAscendingOutlined,
   SortDescendingOutlined,
   FullscreenOutlined,
-  FullscreenExitOutlined
+  FullscreenExitOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons'
+import { Modal as AntModal } from 'antd'
 import { Input, TextArea } from './components/Input'
 import { Select } from './components/Select'
 import { DatePicker, TimePicker, RangePicker } from './components/DatePicker'
 import { Form, FormItem, useFormInstance } from './components/Form'
 import { Table, List } from './components/Table'
 import { Modal, Drawer, Tabs, TabPane, Divider, Space, Card } from './components/Layout'
-import { Button, Dropdown, Tooltip } from './components/Actions'
+import { Button, Dropdown, Tooltip, Popover } from './components/Actions'
 import {
   Pagination,
   Spin,
@@ -95,6 +97,7 @@ export class AntdAdapter extends UIAdapter {
   Button = Button
   Dropdown = Dropdown
   Tooltip = Tooltip
+  Popover = Popover
 
   // ==================== Icons (optional, for CollectionRenderer) ====================
   Icons = {
@@ -111,6 +114,14 @@ export class AntdAdapter extends UIAdapter {
   Empty = Empty
   Tag = Tag
   Badge = Badge
+
+  // ==================== Imperative API ====================
+  confirm = (options) => {
+    AntModal.confirm({
+      ...options,
+      icon: options.icon ?? React.createElement(ExclamationCircleOutlined)
+    })
+  }
 
   // ==================== Utility Methods ====================
 

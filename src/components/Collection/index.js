@@ -1,61 +1,90 @@
 import React, { useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
-import { Layout, Button, Tooltip, Pagination, Divider, Typography, Select, Badge, Modal } from 'antd';
 import { Action } from '../Action'
 import { unwrap, GET, errorCatch, QueryParam, GETWITH, READWITH, QueryFunc, JSX, GetMetaPropertyByPath, updateInArray, deleteInArray, QueryDetail, subscribe as _subscribe, unsubscribe, clean, JSXMap, getObjectDisplay, ContextFiltersToQueryFilters, contextFilterToObject, getLocator } from '../../core/utils'
-import { FilterOutlined, SortAscendingOutlined, SortDescendingOutlined } from '@ant-design/icons';
 import { Field } from '../Field';
 import { Model } from '../Model';
 import { useMetaContext } from '../../Context';
-import { ExclamationCircleOutlined, FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { useUIOptional } from '../../adapters/UIContext';
 import { Overlay } from '../../Overlay';
 import { PopoverModal } from '../../PopoverModal';
 
-const { Sider } = Layout;
-const { Option } = Select;
-const { Text } = Typography;
-
 export function SortingFieldsUI(props) {
-    const { filters, value, onChange } = props;
+    const { filters, value, onChange, ui } = props;
+    const sortOptions = filters?.filter(f => f.sort) ?? [];
+    const locator = (suffix, obj) => getLocator(props?.locator || suffix, obj);
+
+    if (ui?.Divider && ui?.Select && ui?.Button && ui?.Tooltip && ui?.Icons) {
+        const Divider = ui.Divider;
+        const Select = ui.Select;
+        const Button = ui.Button;
+        const Tooltip = ui.Tooltip;
+        const SortAsc = ui.Icons.SortAscending;
+        const SortDesc = ui.Icons.SortDescending;
+        return (
+            <React.Fragment>
+                <Divider type="horizontal" orientation="left" style={{ margin: "12px 0", fontSize: "13px", fontWeight: "600", padding: "0px 15px 0px 0px" }}>
+                    Сортировка
+                </Divider>
+                <div data-locator={locator("sorting", props?.object)} style={{}}>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Select
+                            data-locator={locator("sortingselect", props?.object)}
+                            allowClear={true}
+                            value={value.name}
+                            onChange={(v) => onChange({ name: v, order: value.order })}
+                            options={sortOptions.map((item, idx) => ({ value: item.name, label: item.label }))}
+                            style={{ width: "100%", marginRight: "5px" }}
+                        />
+                        <div>
+                            {value.order === "ASC" && (
+                                <Tooltip title="Восходящий">
+                                    <Button icon={SortAsc ? <SortAsc /> : null} data-locator={locator("sortingasc", props?.object)} onClick={() => onChange({ name: value.name, order: "DESC" })} />
+                                </Tooltip>
+                            )}
+                            {value.order === "DESC" && (
+                                <Tooltip title="Нисходящий">
+                                    <Button icon={SortDesc ? <SortDesc /> : null} data-locator={locator("sortingdesc", props?.object)} onClick={() => onChange({ name: value.name, order: "ASC" })} />
+                                </Tooltip>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
+    }
+
     return (
         <React.Fragment>
-            <Divider type="horizontal"
-                orientation="left"
-                style={{ margin: "12px 0", fontSize: "13px", fontWeight: "600", padding: "0px 15px 0px 0px" }} >
-                Сортировка
-            </Divider>
-            <div data-locator={getLocator(props?.locator || "sorting", props?.object)} style={{}}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <Select
-                        data-locator={getLocator(props?.locator || "sortingselect", props?.object)}
-                        allowClear={true}
-                        value={value.name}
-                        onChange={(v) => onChange({ name: v, order: value.order })}
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        style={{ width: "100%", /*maxWidth: "203px",*/ marginRight: "5px" }}
+            <div style={{ margin: "12px 0", fontSize: "13px", fontWeight: "600" }}>Сортировка</div>
+            <div data-locator={locator("sorting", props?.object)}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
+                    <select
+                        data-locator={locator("sortingselect", props?.object)}
+                        value={value.name || ''}
+                        onChange={(e) => onChange({ name: e.target.value, order: value.order })}
+                        style={{ flex: 1 }}
                     >
-                        {JSXMap(filters?.filter(f => f.sort), (item, idx) => (
-                            <Option data-locator={getLocator(props?.locator || "sortingitem", props?.object || idx)} key={idx} value={item.name}>{item.label}</Option>
+                        <option value="">—</option>
+                        {sortOptions.map((item, idx) => (
+                            <option key={idx} value={item.name}>{item.label}</option>
                         ))}
-                    </Select>
-                    <div>
-                        {value.order === "ASC" && <Tooltip title="Восходящий">
-                            <Button icon={<SortAscendingOutlined />} data-locator={getLocator(props?.locator || "sortingasc", props?.object)} onClick={() => onChange({ name: value.name, order: (value.order === "ASC") ? "DESC" : "ASC" })} />
-                        </Tooltip>}
-                        {value.order === "DESC" && <Tooltip title="Нисходящий">
-                            <Button icon={<SortDescendingOutlined />} data-locator={getLocator(props?.locator || "sortingdesc", props?.object)} onClick={() => onChange({ name: value.name, order: (value.order === "ASC") ? "DESC" : "ASC" })} />
-                        </Tooltip>}
-                    </div>
+                    </select>
+                    <button
+                        type="button"
+                        data-locator={value.order === "ASC" ? locator("sortingasc", props?.object) : locator("sortingdesc", props?.object)}
+                        onClick={() => onChange({ name: value.name, order: value.order === "ASC" ? "DESC" : "ASC" })}
+                        title={value.order === "ASC" ? "Восходящий" : "Нисходящий"}
+                    >
+                        {value.order === "ASC" ? "↑" : "↓"}
+                    </button>
                 </div>
             </div>
         </React.Fragment>
     );
 }
 export function FiltersFieldsUI(props) {
-    const { auth, filters, funcs, value, onChange } = props;
+    const { auth, filters, funcs, value, onChange, ui } = props;
 
     const _onFilterChange = React.useMemo(() => (v, item) => {
         if ((!v && !item?.permanent) || (item?.permanent && (v === undefined || v === null)) || (_.isArray(v) && v.length == 0)) {
@@ -69,18 +98,17 @@ export function FiltersFieldsUI(props) {
         }
     }, [value]);
 
+    const DividerComp = ui?.Divider;
+    const dividerProps = { type: "horizontal", orientation: "left", style: { margin: "12px 0", fontSize: "13px", fontWeight: "600", padding: "0px 15px 0px 0px" } };
+
     return (
         <React.Fragment>
-            <Divider type="horizontal"
-                orientation="left"
-                style={{ margin: "12px 0", fontSize: "13px", fontWeight: "600", padding: "0px 15px 0px 0px" }} >
-                Фильтры
-            </Divider>
+            {DividerComp ? <DividerComp {...dividerProps}>Фильтры</DividerComp> : <div style={{ margin: "12px 0", fontSize: "13px", fontWeight: "600" }}>Фильтры</div>}
             <div data-locator={getLocator(props?.locator || "filters", props?.object)} style={{}}>
                 <div>
                     {JSXMap(filters?.filter(i => i.filter), (item) => (
                         <div data-locator={getLocator(props?.locator || "filtersfield", props?.object)} key={item.name} style={{ marginBottom: "10px" }}>
-                            {item.filter && (item.type !== "bool" && item.type !== "boolean") && <Text>{item.label}</Text>}
+                            {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>}
                             <Field
                                 mode="filter"
                                 formItem={true}
@@ -246,7 +274,7 @@ export function collectionQueryParams(filters, contextFilters, filter, sorting, 
 }
 function FilterButton(props) {
     const ref = useRef(null)
-    const { setBounding, filtered, setFiltered, state, locator, object, name, fieldName } = props;
+    const { setBounding, filtered, setFiltered, state, locator, object, name, fieldName, ui } = props;
     useEffect(() => {
         if (ref.current) {
             if (setBounding) {
@@ -254,47 +282,75 @@ function FilterButton(props) {
             }
         }
     }, [ref])
-    return (<div
-        className={`bg ${(filtered) ? "bg-altblue" : "bg-grey"} pointer`}
-        style={{
-            minWidth: "28px",
-            fontSize: "14px",
-            lineHeight: "22px",
-        }}
-        ref={ref}
-        data-locator={getLocator(locator || "collectionfilter-" + name || "collectionfilter-" + fieldName || "collectionfilter", object)}
-        onClick={() => setFiltered(o => !o)}
-    >
-        <Badge dot={(state && state.filter && Object.keys(state.filter)?.length > 0) ? true : false}>
-            <FilterOutlined style={{ }} />
-        </Badge>
-    </div>)
+    const hasActiveFilter = state && state.filter && Object.keys(state.filter)?.length > 0;
+    const FilterIcon = ui?.Icons?.Filter;
+    const BadgeComp = ui?.Badge;
+
+    const trigger = FilterIcon ? <FilterIcon style={{}} /> : <span aria-label="filter">⚙</span>;
+
+    return (
+        <div
+            className={`bg ${(filtered) ? "bg-altblue" : "bg-grey"} pointer`}
+            style={{ minWidth: "28px", fontSize: "14px", lineHeight: "22px" }}
+            ref={ref}
+            data-locator={getLocator(locator || "collectionfilter-" + name || "collectionfilter-" + fieldName || "collectionfilter", object)}
+            onClick={() => setFiltered(o => !o)}
+        >
+            {BadgeComp ? (
+                <BadgeComp dot={hasActiveFilter}>{trigger}</BadgeComp>
+            ) : (
+                <span title={hasActiveFilter ? "Есть активные фильтры" : ""}>{trigger}{hasActiveFilter ? " •" : ""}</span>
+            )}
+        </div>
+    );
 }
-function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter }) {
-    return (<React.Fragment>
-        {JSX(() => {
-            const fl = filters?.filter(i => i.filter);
-            if (filtered && fl.length > 0) {
-                return (<React.Fragment>
+function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter, ui }) {
+    const ButtonComp = ui?.Button;
+    const fl = filters?.filter(i => i.filter);
+    const showFilterButtons = filtered && fl?.length > 0;
+
+    return (
+        <React.Fragment>
+            {showFilterButtons && (
+                <>
                     <div style={{}}>
-                        <Button
-                            data-locator={getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object)}
-                            style={{ width: "100%" }} disabled={!state.filterChanged} type="primary" onClick={applyFilter}>Применить</Button>
+                        {ButtonComp ? (
+                            <ButtonComp
+                                data-locator={getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object)}
+                                style={{ width: "100%" }}
+                                disabled={!state.filterChanged}
+                                type="primary"
+                                onClick={applyFilter}
+                            >
+                                Применить
+                            </ButtonComp>
+                        ) : (
+                            <button type="button" disabled={!state.filterChanged} onClick={applyFilter}>Применить</button>
+                        )}
                     </div>
                     <div style={{ marginTop: "5px" }}>
-                        <Button
-                            data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
-                            style={{ width: "100%" }} disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</Button>
+                        {ButtonComp ? (
+                            <ButtonComp
+                                data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
+                                style={{ width: "100%" }}
+                                disabled={_.isEmpty(state.filter)}
+                                onClick={clearFilter}
+                            >
+                                Очистить
+                            </ButtonComp>
+                        ) : (
+                            <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
+                        )}
                     </div>
-                </React.Fragment>)
-            }
-            return (<React.Fragment></React.Fragment>)
-        })}
-        <SortingFieldsUI value={sorting} onChange={setSorting} filters={filters} />
-        <FiltersFieldsUI auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />
-    </React.Fragment>)
+                </>
+            )}
+            <SortingFieldsUI ui={ui} value={sorting} onChange={setSorting} filters={filters} />
+            <FiltersFieldsUI ui={ui} auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />
+        </React.Fragment>
+    );
 }
 export function Collection(props) {
+    const ui = useUIOptional();
     const {
         auth,
         name,
@@ -695,29 +751,34 @@ export function Collection(props) {
             key: "delete",
             title: <span style={{ color: "red" }}>Удалить</span>,
             action: (values, unlock, close, { collection, setCollection }) => {
-                Modal.confirm({
-                    title: `Вы уверены что хотите удалить элемент?`,
-                    icon: <ExclamationCircleOutlined />,
-                    content: (<div>
-                        {(mobject) && <div style={{ fontSize: "12px", color: "grey" }}>
-                            <div>{mobject?.label}</div>
-                        </div>}
-                        <div>{getObjectDisplay(item, name, meta)}</div>
-                    </div>),
-                    okText: "Да",
-                    okType: 'danger',
-                    cancelText: "Нет",
-                    onOk: () => {
-                        GET(auth, "/api/query-delete/" + name.toLowerCase() + '/' + item.ID,
-                            () => {
-                                setCollection(deleteInArray(collection, item))
-                            }, errorCatch
-                        );
-                    },
-                });
+                const onOk = () => {
+                    GET(auth, "/api/query-delete/" + name.toLowerCase() + '/' + item.ID,
+                        () => setCollection(deleteInArray(collection, item)),
+                        errorCatch
+                    );
+                };
+                if (ui?.confirm) {
+                    ui.confirm({
+                        title: `Вы уверены что хотите удалить элемент?`,
+                        content: (<div>
+                            {(mobject) && <div style={{ fontSize: "12px", color: "grey" }}>
+                                <div>{mobject?.label}</div>
+                            </div>}
+                            <div>{getObjectDisplay(item, name, meta)}</div>
+                        </div>),
+                        okText: "Да",
+                        okType: 'danger',
+                        cancelText: "Нет",
+                        onOk,
+                    });
+                } else {
+                    if (typeof window !== 'undefined' && window.confirm('Вы уверены что хотите удалить элемент?')) {
+                        onOk();
+                    }
+                }
             },
         }
-    ], [auth, collection, collectionActions, name, mobject]);
+    ], [auth, collection, collectionActions, name, mobject, ui]);
 
     const defaultCollectionAction = React.useCallback(() => (!name) ? [] : [
         {
@@ -961,6 +1022,7 @@ export function Collection(props) {
         setFiltered,
         renderFilterPanel: () => (
             <FilterContent
+                ui={ui}
                 auth={auth}
                 filters={filters}
                 sorting={sorting}

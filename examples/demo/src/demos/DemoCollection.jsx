@@ -1,7 +1,5 @@
 import React from 'react';
-import { Table, Layout, Button, Pagination, Spin, Popover } from 'antd';
-import { FilterOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
-import { useAuth } from 'fennec-core';
+import { useAuth, useUIOptional } from 'fennec-core';
 import { Collection } from 'fennec-core/components/Collection';
 import { Action } from 'fennec-core/components/Action';
 
@@ -37,7 +35,10 @@ function demoSource(opts) {
       if (typeof val === 'number') {
         const n = Number(v);
         if (Number.isNaN(n)) return true;
-        return val === n || (Array.isArray(v) && v.length >= 2 && val >= Number(v[0]) && val <= Number(v[1]));
+        return (
+          val === n ||
+          (Array.isArray(v) && v.length >= 2 && val >= Number(v[0]) && val <= Number(v[1]))
+        );
       }
       return true;
     });
@@ -72,6 +73,14 @@ function demoSource(opts) {
 
 export default function DemoCollection() {
   const auth = useAuth();
+  const ui = useUIOptional();
+
+  const Button = ui?.Button;
+  const Popover = ui?.Popover;
+  const Icons = ui?.Icons;
+  const FilterIcon = Icons?.Filter;
+  const FullscreenIcon = Icons?.Fullscreen;
+  const FullscreenExitIcon = Icons?.FullscreenExit;
 
   return (
     <Collection
@@ -88,7 +97,6 @@ export default function DemoCollection() {
         const {
           collection,
           loading,
-          state,
           filtered,
           setFiltered,
           filters,
@@ -118,7 +126,15 @@ export default function DemoCollection() {
                 paddingBottom: filters?.length > 0 ? 10 : 0,
               }}
             >
-              <div style={{ flex: '1 1 auto', paddingRight: 15, display: 'flex', gap: 5 }}>
+              <div
+                style={{
+                  flex: '1 1 auto',
+                  paddingRight: 15,
+                  display: 'flex',
+                  gap: 5,
+                  flexWrap: 'wrap',
+                }}
+              >
                 {actions.map((actionConfig, idx) =>
                   typeof actionConfig === 'function' ? (
                     actionConfig(ctx, idx)
@@ -138,49 +154,136 @@ export default function DemoCollection() {
                 )}
               </div>
               {filters?.length > 0 && (
-                <div style={{ flex: '0 0 auto', display: 'flex', gap: 5 }}>
-                  {ctx.allowFullscreen && (
-                    <Button
-                      type={isFullscreen ? 'primary' : 'default'}
-                      icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-                      onClick={() => (isFullscreen ? closeFullscreen() : openFullscreen())}
-                      data-locator={getLocator('collectionfullscreen')}
-                    />
-                  )}
-                  <Popover
-                    content={
-                      typeof renderFilterPanel === 'function' ? (
-                        <div style={{ minWidth: 280 }}>{renderFilterPanel()}</div>
-                      ) : null
-                    }
-                    title="Фильтр"
-                    trigger="click"
-                    open={filtered}
-                    onOpenChange={(open) => setFiltered(open)}
-                  >
+                <div style={{ flex: '0 0 auto', display: 'flex', gap: 8 }}>
+                  {ctx.allowFullscreen &&
+                    (Button && (FullscreenIcon || FullscreenExitIcon) ? (
+                      <Button
+                        type={isFullscreen ? 'primary' : 'default'}
+                        icon={
+                          isFullscreen && FullscreenExitIcon ? (
+                            <FullscreenExitIcon />
+                          ) : FullscreenIcon ? (
+                            <FullscreenIcon />
+                          ) : null
+                        }
+                        onClick={() =>
+                          isFullscreen ? closeFullscreen() : openFullscreen()
+                        }
+                        data-locator={getLocator('collectionfullscreen')}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => (isFullscreen ? closeFullscreen() : openFullscreen())}
+                        data-locator={getLocator('collectionfullscreen')}
+                      >
+                        {isFullscreen ? 'Выйти из полноэкранного режима' : 'Во весь экран'}
+                      </button>
+                    ))}
+
+                  {Button && Popover ? (
+                    <Popover
+                      content={
+                        typeof renderFilterPanel === 'function' ? (
+                          <div style={{ minWidth: 280 }}>{renderFilterPanel()}</div>
+                        ) : null
+                      }
+                      title="Фильтр"
+                      trigger="click"
+                      open={filtered}
+                      onOpenChange={(open) => setFiltered(open)}
+                    >
+                      <Button
+                        type={filtered ? 'primary' : 'default'}
+                        icon={FilterIcon ? <FilterIcon /> : null}
+                        data-locator={getLocator('collectionfilter')}
+                      />
+                    </Popover>
+                  ) : Button ? (
                     <Button
                       type={filtered ? 'primary' : 'default'}
-                      icon={<FilterOutlined />}
+                      icon={FilterIcon ? <FilterIcon /> : null}
+                      onClick={() => setFiltered(!filtered)}
                       data-locator={getLocator('collectionfilter')}
-                    />
-                  </Popover>
+                    >
+                      Фильтр
+                    </Button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setFiltered(!filtered)}
+                      data-locator={getLocator('collectionfilter')}
+                    >
+                      Фильтр {filtered ? '▲' : '▼'}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
 
-            <Layout style={{ backgroundColor: 'transparent' }} className="filtered-body">
-              <div style={{ width: '100%', marginBottom: 0, ...(isFullscreen ? { overflow: 'auto' } : {}) }}>
-                <Spin spinning={loading}>
-                  <Table
-                    rowKey="ID"
-                    size="small"
-                    columns={columns}
-                    dataSource={collection ?? []}
-                    pagination={false}
-                  />
-                </Spin>
+            {filtered && typeof renderFilterPanel === 'function' && !Popover && (
+              <div style={{ marginBottom: 12, minWidth: 280 }}>{renderFilterPanel()}</div>
+            )}
+
+            <div
+              className="filtered-body"
+              style={{
+                width: '100%',
+                marginBottom: 0,
+                ...(isFullscreen ? { overflow: 'auto' } : {}),
+              }}
+            >
+              {loading && (
+                <div style={{ marginBottom: 8, fontSize: 14 }}>Загрузка данных...</div>
+              )}
+              <div style={{ overflowX: 'auto' }}>
+                <table
+                  style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    fontSize: 14,
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      {columns.map((col) => (
+                        <th
+                          key={col.key}
+                          style={{
+                            textAlign: 'left',
+                            padding: '8px 6px',
+                            borderBottom: '1px solid #e5e5e5',
+                            width: col.width,
+                          }}
+                        >
+                          {col.title}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(collection ?? []).map((row) => (
+                      <tr key={row.ID}>
+                        {columns.map((col) => (
+                          <td
+                            key={col.key}
+                            style={{
+                              padding: '6px 6px',
+                              borderBottom: '1px solid #f0f0f0',
+                            }}
+                          >
+                            {row[col.dataIndex]}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {(!collection || collection.length === 0) && !loading && (
+                  <div style={{ padding: 12 }}>Нет данных</div>
+                )}
               </div>
-            </Layout>
+            </div>
 
             {count && total && totalPages > 1 && (
               <div
@@ -190,15 +293,25 @@ export default function DemoCollection() {
                 <div style={{ fontSize: 14, lineHeight: '24px' }}>
                   Элементов: {collection?.length ?? 0} из {total}
                 </div>
-                <Pagination
-                  size="small"
-                  current={current}
-                  onChange={setCurrent}
-                  pageSize={count}
-                  total={total}
-                  showSizeChanger={false}
-                  data-locator={getLocator('filtered-pagination')}
-                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => setCurrent(current - 1)}
+                    disabled={current <= 1}
+                  >
+                    Назад
+                  </button>
+                  <span style={{ fontSize: 14 }}>
+                    Страница {current} из {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrent(current + 1)}
+                    disabled={current >= totalPages}
+                  >
+                    Вперёд
+                  </button>
+                </div>
               </div>
             )}
           </>

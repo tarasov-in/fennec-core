@@ -6,8 +6,7 @@ var decode = _interopDefault(require('jwt-decode'));
 var PubSub = _interopDefault(require('pubsub-js'));
 var uuid = _interopDefault(require('react-uuid'));
 var reactResponsive = require('react-responsive');
-var antd = require('antd');
-var icons = require('@ant-design/icons');
+require('antd');
 
 function _defineProperties(e, r) {
   for (var t = 0; t < r.length; t++) {
@@ -20411,314 +20410,6 @@ function Field(props) {
   });
 }
 
-function FieldLayout(_ref) {
-  var formItem = _ref.formItem,
-    item = _ref.item,
-    children = _ref.children,
-    style = _ref.style;
-  return /*#__PURE__*/React__default.createElement("div", {
-    style: style
-  }, /*#__PURE__*/React__default.createElement("div", null, (item === null || item === void 0 ? void 0 : item.label) && !formItem && /*#__PURE__*/React__default.createElement("div", {
-    style: {}
-  }, item === null || item === void 0 ? void 0 : item.label), (item === null || item === void 0 ? void 0 : item.description) && (item === null || item === void 0 ? void 0 : item.description) !== (item === null || item === void 0 ? void 0 : item.label) && /*#__PURE__*/React__default.createElement("div", {
-    style: {
-      color: "rgb(140, 152, 164)",
-      fontSize: "12px"
-    }
-  }, item === null || item === void 0 ? void 0 : item.description)), children);
-}
-
-function DropdownAction(props) {
-  var button = props.button,
-    menuOptions = props.menuOptions,
-    items = props.items,
-    style = props.style,
-    icon = props.icon;
-  var auth = useAuth();
-  var _useState = React.useState([]),
-    actions = _useState[0],
-    setActions = _useState[1];
-  React.useEffect(function () {
-    if (items) {
-      var _items$filter$map, _items$filter;
-      setActions((_items$filter$map = items === null || items === void 0 ? void 0 : (_items$filter = items.filter(function (e) {
-        return !!e;
-      })) === null || _items$filter === void 0 ? void 0 : _items$filter.map(function (e, idx) {
-        var _e$key;
-        return _extends({}, e, {
-          _menuKey: (_e$key = e.key) != null ? _e$key : "action-" + idx
-        });
-      })) != null ? _items$filter$map : []);
-    }
-  }, [items]);
-  var renderTrigger = function renderTrigger() {
-    if (button) {
-      return button();
-    }
-    return /*#__PURE__*/React__default.createElement(antd.Button, {
-      size: "small",
-      style: {
-        padding: "0 6px"
-      },
-      type: "default",
-      "aria-label": "\u041C\u0435\u043D\u044E \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439",
-      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "menu", props === null || props === void 0 ? void 0 : props.object)
-    }, icon || /*#__PURE__*/React__default.createElement(icons.MenuOutlined, null));
-  };
-  return /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "dropdownaction", props === null || props === void 0 ? void 0 : props.object),
-    style: style
-  }, JSXMap(actions === null || actions === void 0 ? void 0 : actions.filter(function (e) {
-    return !!e.action || !!e.document;
-  }), function (e, idx) {
-    var _ref, _e$_menuKey;
-    var key = (_ref = (_e$_menuKey = e._menuKey) != null ? _e$_menuKey : e.key) != null ? _ref : idx;
-    return /*#__PURE__*/React__default.createElement("div", {
-      key: key
-    }, /*#__PURE__*/React__default.createElement(Action, _extends({
-      key: key,
-      auth: auth,
-      object: e
-    }, e)));
-  }), /*#__PURE__*/React__default.createElement(antd.Dropdown, _extends({
-    placement: "bottomRight",
-    trigger: ['click']
-  }, props, {
-    overlay: /*#__PURE__*/React__default.createElement(antd.Menu, _extends({}, menuOptions, {
-      selectable: false,
-      items: actions !== null && actions !== void 0 && actions.length ? actions === null || actions === void 0 ? void 0 : actions.map(function (e) {
-        var _e$_menuKey2;
-        if (e.type === 'divider') return e;
-        return {
-          key: (_e$_menuKey2 = e._menuKey) != null ? _e$_menuKey2 : e.key,
-          label: e.title || (e.modal ? e.modal.title : ""),
-          danger: e.danger || false
-        };
-      }) : [],
-      onClick: function onClick(e) {
-        if (e.key) publish("action." + e.key + ".click", e.key);
-      }
-    }))
-  }), renderTrigger()));
-}
-
-function ActionsSpace(props) {
-  var className = props.className,
-    children = props.children,
-    item = props.item,
-    data = props.data,
-    setData = props.setData,
-    objectName = props.objectName,
-    auth = props.auth,
-    contextObject = props.contextObject,
-    value = props.value,
-    onChange = props.onChange,
-    loading = props.loading,
-    setLoading = props.setLoading,
-    _property = props.property,
-    _label = props.label,
-    _itemByProperty = props.itemByProperty;
-  var meta = useMetaContext();
-  var _property2 = _property || function (item, value) {
-    if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
-      if (item && lodash.get(item, "relation.reference.property") && value) {
-        return value[item.relation.reference.property];
-      }
-      if (value) return value.ID;
-    } else {
-      return value;
-    }
-    return undefined;
-  };
-  var _itemByProperty2 = _itemByProperty || function (item, value) {
-    if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
-      if (lodash.get(item, "relation.reference.property")) {
-        return data === null || data === void 0 ? void 0 : data.find(function (e) {
-          return e[item.relation.reference.property] === value;
-        });
-      }
-      if (data !== null && data !== void 0 && data.length) return data.find(function (e) {
-        return e.ID === value;
-      });
-    } else {
-      return value;
-    }
-  };
-  var _label2 = _label || function (item, value) {
-    if (item && value) {
-      var _item$relation;
-      if (item.display && lodash.isFunction(item.display)) return item.display(value);
-      if ((_item$relation = item.relation) !== null && _item$relation !== void 0 && _item$relation.display && lodash.isFunction(item.relation.display)) return item.relation.display(value);
-      if ((item === null || item === void 0 ? void 0 : item.type) === "object" || (item === null || item === void 0 ? void 0 : item.type) === "document") {
-        var _item$relation2, _item$relation2$displ, _item$relation3, _fieldMeta$display;
-        var fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
-        var _display = (item !== null && item !== void 0 && (_item$relation2 = item.relation) !== null && _item$relation2 !== void 0 && (_item$relation2$displ = _item$relation2.display) !== null && _item$relation2$displ !== void 0 && _item$relation2$displ.fields ? item === null || item === void 0 ? void 0 : (_item$relation3 = item.relation) === null || _item$relation3 === void 0 ? void 0 : _item$relation3.display : undefined) || (fieldMeta !== null && fieldMeta !== void 0 && (_fieldMeta$display = fieldMeta.display) !== null && _fieldMeta$display !== void 0 && _fieldMeta$display.fields ? fieldMeta === null || fieldMeta === void 0 ? void 0 : fieldMeta.display : undefined);
-        return getDisplay(value, _display, fieldMeta, meta);
-      }
-      return "" + value;
-    }
-    return "";
-  };
-  var RenderActions = React.useCallback(function () {
-    if (!(item !== null && item !== void 0 && item.actions)) return null;
-    var values = clean(_unwrap(item === null || item === void 0 ? void 0 : item.actions(value, item, meta)));
-    if (!(values !== null && values !== void 0 && values.length)) return null;
-    return values === null || values === void 0 ? void 0 : values.map(function (e, idx) {
-      var _item$view;
-      if (lodash.isFunction(e)) {
-        return e({
-          collection: data,
-          setCollection: setData,
-          objectName: objectName,
-          contextObject: contextObject,
-          setCollectionItem: function setCollectionItem(item, first) {
-            return setData === null || setData === void 0 ? void 0 : setData(function (o) {
-              return updateInArray(o, item, first);
-            });
-          },
-          removeCollectionItem: function removeCollectionItem(item) {
-            return setData === null || setData === void 0 ? void 0 : setData(function (o) {
-              return deleteInArray(o, item);
-            });
-          },
-          lock: function lock() {
-            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
-          },
-          unlock: function unlock() {
-            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
-          },
-          loading: loading,
-          property: function property(obj) {
-            return _property2(item, obj);
-          },
-          label: function label(obj) {
-            return _label2(item, obj);
-          },
-          itemByProperty: function itemByProperty(val) {
-            return _itemByProperty2(item, val);
-          },
-          apply: function apply(obj) {
-            return onChange(value, item, _itemByProperty2(item, value));
-          }
-        }, idx);
-      }
-      return /*#__PURE__*/React__default.createElement(Action, _extends({
-        key: e.key || idx,
-        auth: auth,
-        disabled: loading || (item === null || item === void 0 ? void 0 : (_item$view = item.view) === null || _item$view === void 0 ? void 0 : _item$view.disabled),
-        item: item,
-        locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
-        object: e.object || _itemByProperty2(item, value),
-        objectName: objectName,
-        contextObject: contextObject,
-        collection: data,
-        setCollection: setData,
-        property: function property(obj) {
-          return _property2(item, obj);
-        },
-        label: function label(obj) {
-          return _label2(item, obj);
-        },
-        itemByProperty: function itemByProperty(val) {
-          return _itemByProperty2(item, val);
-        },
-        apply: function apply(obj) {
-          return onChange(_property2(item, obj), item, obj);
-        },
-        lock: function lock() {
-          return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
-        },
-        unlock: function unlock() {
-          return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
-        }
-      }, e));
-    });
-  }, [item, data, loading, value, meta, contextObject, objectName]);
-  var RenderDropdownActions = React.useCallback(function () {
-    if (!(item !== null && item !== void 0 && item.dropdownActions)) return null;
-    var values = clean(_unwrap(item === null || item === void 0 ? void 0 : item.dropdownActions(value, item, meta)));
-    if (!(values !== null && values !== void 0 && values.length)) return null;
-    return /*#__PURE__*/React__default.createElement(DropdownAction, {
-      button: function button() {
-        return /*#__PURE__*/React__default.createElement(antd.Button, {
-          type: "default",
-          "aria-label": "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F"
-        }, /*#__PURE__*/React__default.createElement("i", {
-          className: "fa fa-ellipsis-v"
-        }));
-      },
-      locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
-      object: _itemByProperty2(item, value),
-      items: values === null || values === void 0 ? void 0 : values.map(function (e, idx) {
-        var _item$view2;
-        return _extends({
-          key: e.key || idx,
-          auth: auth,
-          disabled: loading || (item === null || item === void 0 ? void 0 : (_item$view2 = item.view) === null || _item$view2 === void 0 ? void 0 : _item$view2.disabled),
-          item: item,
-          locator: (item === null || item === void 0 ? void 0 : item.name) || objectName,
-          object: e.object || _itemByProperty2(item, value),
-          objectName: objectName,
-          contextObject: contextObject,
-          collection: data,
-          setCollection: setData,
-          property: function property(obj) {
-            return _property2(item, obj);
-          },
-          label: function label(obj) {
-            return _label2(item, obj);
-          },
-          itemByProperty: function itemByProperty(val) {
-            return _itemByProperty2(item, val);
-          },
-          apply: function apply(obj) {
-            return onChange(_property2(item, obj), item, obj);
-          },
-          lock: function lock() {
-            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(true);
-          },
-          unlock: function unlock() {
-            return setLoading === null || setLoading === void 0 ? void 0 : setLoading(false);
-          }
-        }, e);
-      })
-    });
-  }, [item, data, loading, value, meta, contextObject, objectName]);
-  return /*#__PURE__*/React__default.createElement(antd.Space.Compact, {
-    className: className,
-    style: {
-      width: '100%'
-    }
-  }, children, (item === null || item === void 0 ? void 0 : item.actions) && /*#__PURE__*/React__default.createElement(Fragment, null, RenderActions()), (item === null || item === void 0 ? void 0 : item.dropdownActions) && /*#__PURE__*/React__default.createElement(Fragment, null, RenderDropdownActions()));
-}
-
-function FieldWrapper(_ref) {
-  var wrapperProps = _ref.wrapperProps,
-    formItem = _ref.formItem,
-    auth = _ref.auth,
-    item = _ref.item,
-    value = _ref.value,
-    onChange = _ref.onChange,
-    children = _ref.children;
-  var _useState = React.useState(false),
-    loading = _useState[0],
-    setLoading = _useState[1];
-  return /*#__PURE__*/React__default.createElement(FieldLayout, {
-    formItem: formItem,
-    item: item,
-    style: (item === null || item === void 0 ? void 0 : item.fieldLayoutStyle) || {
-      width: "100%"
-    }
-  }, /*#__PURE__*/React__default.createElement(ActionsSpace, _extends({
-    auth: auth,
-    item: item,
-    value: value,
-    onChange: onChange,
-    loading: loading,
-    setLoading: setLoading
-  }, wrapperProps), children));
-}
-
 function CollectionByProperty(props) {
   var auth = props.auth,
     item = props.item,
@@ -21079,85 +20770,138 @@ function Model(props) {
   }));
 }
 
-var Option = antd.Select.Option;
-var Text = antd.Typography.Text;
 function SortingFieldsUI(props) {
+  var _filters$filter;
   var filters = props.filters,
     value = props.value,
-    _onChange = props.onChange;
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(antd.Divider, {
-    type: "horizontal",
-    orientation: "left",
+    _onChange = props.onChange,
+    ui = props.ui;
+  var sortOptions = (_filters$filter = filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
+    return f.sort;
+  })) != null ? _filters$filter : [];
+  var locator = function locator(suffix, obj) {
+    return getLocator((props === null || props === void 0 ? void 0 : props.locator) || suffix, obj);
+  };
+  if (ui !== null && ui !== void 0 && ui.Divider && ui !== null && ui !== void 0 && ui.Select && ui !== null && ui !== void 0 && ui.Button && ui !== null && ui !== void 0 && ui.Tooltip && ui !== null && ui !== void 0 && ui.Icons) {
+    var Divider = ui.Divider;
+    var Select = ui.Select;
+    var Button = ui.Button;
+    var Tooltip = ui.Tooltip;
+    var SortAsc = ui.Icons.SortAscending;
+    var SortDesc = ui.Icons.SortDescending;
+    return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(Divider, {
+      type: "horizontal",
+      orientation: "left",
+      style: {
+        margin: "12px 0",
+        fontSize: "13px",
+        fontWeight: "600",
+        padding: "0px 15px 0px 0px"
+      }
+    }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React__default.createElement("div", {
+      "data-locator": locator("sorting", props === null || props === void 0 ? void 0 : props.object),
+      style: {}
+    }, /*#__PURE__*/React__default.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between"
+      }
+    }, /*#__PURE__*/React__default.createElement(Select, {
+      "data-locator": locator("sortingselect", props === null || props === void 0 ? void 0 : props.object),
+      allowClear: true,
+      value: value.name,
+      onChange: function onChange(v) {
+        return _onChange({
+          name: v,
+          order: value.order
+        });
+      },
+      options: sortOptions.map(function (item, idx) {
+        return {
+          value: item.name,
+          label: item.label
+        };
+      }),
+      style: {
+        width: "100%",
+        marginRight: "5px"
+      }
+    }), /*#__PURE__*/React__default.createElement("div", null, value.order === "ASC" && /*#__PURE__*/React__default.createElement(Tooltip, {
+      title: "\u0412\u043E\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
+    }, /*#__PURE__*/React__default.createElement(Button, {
+      icon: SortAsc ? /*#__PURE__*/React__default.createElement(SortAsc, null) : null,
+      "data-locator": locator("sortingasc", props === null || props === void 0 ? void 0 : props.object),
+      onClick: function onClick() {
+        return _onChange({
+          name: value.name,
+          order: "DESC"
+        });
+      }
+    })), value.order === "DESC" && /*#__PURE__*/React__default.createElement(Tooltip, {
+      title: "\u041D\u0438\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
+    }, /*#__PURE__*/React__default.createElement(Button, {
+      icon: SortDesc ? /*#__PURE__*/React__default.createElement(SortDesc, null) : null,
+      "data-locator": locator("sortingdesc", props === null || props === void 0 ? void 0 : props.object),
+      onClick: function onClick() {
+        return _onChange({
+          name: value.name,
+          order: "ASC"
+        });
+      }
+    }))))));
+  }
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {
       margin: "12px 0",
       fontSize: "13px",
-      fontWeight: "600",
-      padding: "0px 15px 0px 0px"
+      fontWeight: "600"
     }
   }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React__default.createElement("div", {
-    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sorting", props === null || props === void 0 ? void 0 : props.object),
-    style: {}
+    "data-locator": locator("sorting", props === null || props === void 0 ? void 0 : props.object)
   }, /*#__PURE__*/React__default.createElement("div", {
     style: {
       display: "flex",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      gap: 8
     }
-  }, /*#__PURE__*/React__default.createElement(antd.Select, {
-    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingselect", props === null || props === void 0 ? void 0 : props.object),
-    allowClear: true,
-    value: value.name,
-    onChange: function onChange(v) {
+  }, /*#__PURE__*/React__default.createElement("select", {
+    "data-locator": locator("sortingselect", props === null || props === void 0 ? void 0 : props.object),
+    value: value.name || '',
+    onChange: function onChange(e) {
       return _onChange({
-        name: v,
+        name: e.target.value,
         order: value.order
       });
     },
-    optionFilterProp: "children",
-    filterOption: function filterOption(input, option) {
-      return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
     style: {
-      width: "100%",
-      marginRight: "5px"
+      flex: 1
     }
-  }, JSXMap(filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
-    return f.sort;
-  }), function (item, idx) {
-    return /*#__PURE__*/React__default.createElement(Option, {
-      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingitem", (props === null || props === void 0 ? void 0 : props.object) || idx),
+  }, /*#__PURE__*/React__default.createElement("option", {
+    value: ""
+  }, "\u2014"), sortOptions.map(function (item, idx) {
+    return /*#__PURE__*/React__default.createElement("option", {
       key: idx,
       value: item.name
     }, item.label);
-  })), /*#__PURE__*/React__default.createElement("div", null, value.order === "ASC" && /*#__PURE__*/React__default.createElement(antd.Tooltip, {
-    title: "\u0412\u043E\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
-  }, /*#__PURE__*/React__default.createElement(antd.Button, {
-    icon: /*#__PURE__*/React__default.createElement(icons.SortAscendingOutlined, null),
-    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingasc", props === null || props === void 0 ? void 0 : props.object),
+  })), /*#__PURE__*/React__default.createElement("button", {
+    type: "button",
+    "data-locator": value.order === "ASC" ? locator("sortingasc", props === null || props === void 0 ? void 0 : props.object) : locator("sortingdesc", props === null || props === void 0 ? void 0 : props.object),
     onClick: function onClick() {
       return _onChange({
         name: value.name,
         order: value.order === "ASC" ? "DESC" : "ASC"
       });
-    }
-  })), value.order === "DESC" && /*#__PURE__*/React__default.createElement(antd.Tooltip, {
-    title: "\u041D\u0438\u0441\u0445\u043E\u0434\u044F\u0449\u0438\u0439"
-  }, /*#__PURE__*/React__default.createElement(antd.Button, {
-    icon: /*#__PURE__*/React__default.createElement(icons.SortDescendingOutlined, null),
-    "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingdesc", props === null || props === void 0 ? void 0 : props.object),
-    onClick: function onClick() {
-      return _onChange({
-        name: value.name,
-        order: value.order === "ASC" ? "DESC" : "ASC"
-      });
-    }
-  }))))));
+    },
+    title: value.order === "ASC" ? "Восходящий" : "Нисходящий"
+  }, value.order === "ASC" ? "↑" : "↓"))));
 }
 function FiltersFieldsUI(props) {
   var auth = props.auth,
     filters = props.filters,
     funcs = props.funcs,
     value = props.value,
-    onChange = props.onChange;
+    onChange = props.onChange,
+    ui = props.ui;
   var _onFilterChange = React__default.useMemo(function () {
     return function (v, item) {
       if (!v && !(item !== null && item !== void 0 && item.permanent) || item !== null && item !== void 0 && item.permanent && (v === undefined || v === null) || lodash.isArray(v) && v.length == 0) {
@@ -21172,7 +20916,8 @@ function FiltersFieldsUI(props) {
       }
     };
   }, [value]);
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(antd.Divider, {
+  var DividerComp = ui === null || ui === void 0 ? void 0 : ui.Divider;
+  var dividerProps = {
     type: "horizontal",
     orientation: "left",
     style: {
@@ -21180,6 +20925,13 @@ function FiltersFieldsUI(props) {
       fontSize: "13px",
       fontWeight: "600",
       padding: "0px 15px 0px 0px"
+    }
+  };
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, DividerComp ? /*#__PURE__*/React__default.createElement(DividerComp, dividerProps, "\u0424\u0438\u043B\u044C\u0442\u0440\u044B") : /*#__PURE__*/React__default.createElement("div", {
+    style: {
+      margin: "12px 0",
+      fontSize: "13px",
+      fontWeight: "600"
     }
   }, "\u0424\u0438\u043B\u044C\u0442\u0440\u044B"), /*#__PURE__*/React__default.createElement("div", {
     "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "filters", props === null || props === void 0 ? void 0 : props.object),
@@ -21194,7 +20946,7 @@ function FiltersFieldsUI(props) {
       style: {
         marginBottom: "10px"
       }
-    }, item.filter && item.type !== "bool" && item.type !== "boolean" && /*#__PURE__*/React__default.createElement(Text, null, item.label), /*#__PURE__*/React__default.createElement(Field, {
+    }, item.filter && item.type !== "bool" && item.type !== "boolean" && /*#__PURE__*/React__default.createElement("span", null, item.label), /*#__PURE__*/React__default.createElement(Field, {
       mode: "filter",
       formItem: true,
       key: item.name,
@@ -21357,41 +21109,49 @@ function FilterContent(_ref) {
     fieldName = _ref.fieldName,
     _onFilterChange = _ref._onFilterChange,
     applyFilter = _ref.applyFilter,
-    clearFilter = _ref.clearFilter;
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, JSX(function () {
-    var fl = filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
-      return i.filter;
-    });
-    if (filtered && fl.length > 0) {
-      return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
-        style: {}
-      }, /*#__PURE__*/React__default.createElement(antd.Button, {
-        "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),
-        style: {
-          width: "100%"
-        },
-        disabled: !state.filterChanged,
-        type: "primary",
-        onClick: applyFilter
-      }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C")), /*#__PURE__*/React__default.createElement("div", {
-        style: {
-          marginTop: "5px"
-        }
-      }, /*#__PURE__*/React__default.createElement(antd.Button, {
-        "data-locator": getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object),
-        style: {
-          width: "100%"
-        },
-        disabled: lodash.isEmpty(state.filter),
-        onClick: clearFilter
-      }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C")));
+    clearFilter = _ref.clearFilter,
+    ui = _ref.ui;
+  var ButtonComp = ui === null || ui === void 0 ? void 0 : ui.Button;
+  var fl = filters === null || filters === void 0 ? void 0 : filters.filter(function (i) {
+    return i.filter;
+  });
+  var showFilterButtons = filtered && (fl === null || fl === void 0 ? void 0 : fl.length) > 0;
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, showFilterButtons && /*#__PURE__*/React__default.createElement(Fragment, null, /*#__PURE__*/React__default.createElement("div", {
+    style: {}
+  }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
+    "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),
+    style: {
+      width: "100%"
+    },
+    disabled: !state.filterChanged,
+    type: "primary",
+    onClick: applyFilter
+  }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C") : /*#__PURE__*/React__default.createElement("button", {
+    type: "button",
+    disabled: !state.filterChanged,
+    onClick: applyFilter
+  }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C")), /*#__PURE__*/React__default.createElement("div", {
+    style: {
+      marginTop: "5px"
     }
-    return /*#__PURE__*/React__default.createElement(React__default.Fragment, null);
-  }), /*#__PURE__*/React__default.createElement(SortingFieldsUI, {
+  }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
+    "data-locator": getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object),
+    style: {
+      width: "100%"
+    },
+    disabled: lodash.isEmpty(state.filter),
+    onClick: clearFilter
+  }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C") : /*#__PURE__*/React__default.createElement("button", {
+    type: "button",
+    disabled: lodash.isEmpty(state.filter),
+    onClick: clearFilter
+  }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C"))), /*#__PURE__*/React__default.createElement(SortingFieldsUI, {
+    ui: ui,
     value: sorting,
     onChange: setSorting,
     filters: filters
   }), /*#__PURE__*/React__default.createElement(FiltersFieldsUI, {
+    ui: ui,
     auth: auth,
     value: state.newFilter,
     onChange: _onFilterChange,
@@ -21400,6 +21160,7 @@ function FilterContent(_ref) {
   }));
 }
 function Collection(props) {
+  var ui = useUIOptional();
   var auth = props.auth,
     name = props.name,
     source = props.source,
@@ -21811,27 +21572,33 @@ function Collection(props) {
       action: function action(values, unlock, close, _ref3) {
         var collection = _ref3.collection,
           setCollection = _ref3.setCollection;
-        antd.Modal.confirm({
-          title: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u043B\u0435\u043C\u0435\u043D\u0442?",
-          icon: /*#__PURE__*/React__default.createElement(icons.ExclamationCircleOutlined, null),
-          content: /*#__PURE__*/React__default.createElement("div", null, mobject && /*#__PURE__*/React__default.createElement("div", {
-            style: {
-              fontSize: "12px",
-              color: "grey"
-            }
-          }, /*#__PURE__*/React__default.createElement("div", null, mobject === null || mobject === void 0 ? void 0 : mobject.label)), /*#__PURE__*/React__default.createElement("div", null, getObjectDisplay(item, name, meta))),
-          okText: "Да",
-          okType: 'danger',
-          cancelText: "Нет",
-          onOk: function onOk() {
-            GET(auth, "/api/query-delete/" + name.toLowerCase() + '/' + item.ID, function () {
-              setCollection(deleteInArray(collection, item));
-            }, errorCatch);
+        var onOk = function onOk() {
+          GET(auth, "/api/query-delete/" + name.toLowerCase() + '/' + item.ID, function () {
+            return setCollection(deleteInArray(collection, item));
+          }, errorCatch);
+        };
+        if (ui !== null && ui !== void 0 && ui.confirm) {
+          ui.confirm({
+            title: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u044D\u043B\u0435\u043C\u0435\u043D\u0442?",
+            content: /*#__PURE__*/React__default.createElement("div", null, mobject && /*#__PURE__*/React__default.createElement("div", {
+              style: {
+                fontSize: "12px",
+                color: "grey"
+              }
+            }, /*#__PURE__*/React__default.createElement("div", null, mobject === null || mobject === void 0 ? void 0 : mobject.label)), /*#__PURE__*/React__default.createElement("div", null, getObjectDisplay(item, name, meta))),
+            okText: "Да",
+            okType: 'danger',
+            cancelText: "Нет",
+            onOk: onOk
+          });
+        } else {
+          if (typeof window !== 'undefined' && window.confirm('Вы уверены что хотите удалить элемент?')) {
+            onOk();
           }
-        });
+        }
       }
     }];
-  }, [auth, collection, _collectionActions, name, mobject]);
+  }, [auth, collection, _collectionActions, name, mobject, ui]);
   var defaultCollectionAction = React__default.useCallback(function () {
     return !name ? [] : [{
       key: "create",
@@ -22040,6 +21807,7 @@ function Collection(props) {
     setFiltered: setFiltered,
     renderFilterPanel: function renderFilterPanel() {
       return /*#__PURE__*/React__default.createElement(FilterContent, {
+        ui: ui,
         auth: auth,
         filters: filters,
         sorting: sorting,
@@ -22162,6 +21930,7 @@ var UIAdapter = /*#__PURE__*/function () {
     this.Form = null;
     this.FormItem = null;
     this.Modal = null;
+    this.confirm = null;
     this.Drawer = null;
     this.Tabs = null;
     this.TabPane = null;
@@ -22170,6 +21939,7 @@ var UIAdapter = /*#__PURE__*/function () {
     this.Button = null;
     this.Dropdown = null;
     this.Tooltip = null;
+    this.Popover = null;
     this.Pagination = null;
     this.Spin = null;
     this.Empty = null;
@@ -22242,10 +22012,8 @@ exports.CollectionByProperty = CollectionByProperty;
 exports.ContextFiltersToQueryFilters = ContextFiltersToQueryFilters;
 exports.DELETE = DELETE;
 exports.DELETEP = DELETEP;
-exports.DropdownAction = DropdownAction;
 exports.FennecError = FennecError;
 exports.Field = Field;
-exports.FieldWrapper = FieldWrapper;
 exports.FilterToQueryParameters = FilterToQueryParameters;
 exports.FiltersFieldsUI = FiltersFieldsUI;
 exports.FooterButton = FooterButton;
