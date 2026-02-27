@@ -21901,6 +21901,20 @@ function Collection(props) {
     },
     getQueryParams: function getQueryParams(filterOverride, currentOverride, countOverride) {
       return collectionQueryParams(filters, contextFilters, filterOverride != null ? filterOverride : state.filter, sorting, currentOverride != null ? currentOverride : current, countOverride != null ? countOverride : count, queryDetail);
+    },
+    getPaginationParams: function getPaginationParams() {
+      return {
+        current: current,
+        setCurrent: setCurrent,
+        count: count,
+        setCount: setCount,
+        total: total,
+        setTotal: setTotal,
+        totalPages: totalPages,
+        setTotalPages: setTotalPages,
+        collection: collection,
+        setCollection: setCollection
+      };
     }
   };
   return render ? render(collectionContext) : null;

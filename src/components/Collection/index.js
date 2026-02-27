@@ -511,13 +511,13 @@ export function Collection(props) {
     }, [name, meta]);
 
     const setCollection = React.useCallback((array) => {
-        if (onSetCollection){
+        if (onSetCollection) {
             let collection = onSetCollection(array);
             _setCollection(collection);
             if (onCollectionChange) {
                 onCollectionChange(collection);
             }
-        } else{
+        } else {
             _setCollection(array);
             if (onCollectionChange) {
                 onCollectionChange(array);
@@ -880,7 +880,7 @@ export function Collection(props) {
             />)
         });
     }, [auth, collection, collectionActions, name, mobject, defaultCollectionAction]);
-   
+
     const onSelection = (item) => {
         if (!selection || !item) return;
         if (selectionType === "radio") {
@@ -1125,7 +1125,19 @@ export function Collection(props) {
             currentOverride ?? current,
             countOverride ?? count,
             queryDetail
-        )
+        ),
+        getPaginationParams: () => ({
+            current: current,
+            setCurrent: setCurrent,
+            count: count,
+            setCount: setCount,
+            total: total,
+            setTotal: setTotal,
+            totalPages: totalPages,
+            setTotalPages: setTotalPages,
+            collection,
+            setCollection: setCollection
+        })
     };
 
     return render ? render(collectionContext) : null;
