@@ -312,7 +312,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
     return (
         <React.Fragment>
             {showFilterButtons && (
-                <>
+                <React.Fragment>
                     <div style={{}}>
                         {ButtonComp ? (
                             <ButtonComp
@@ -342,7 +342,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
                             <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
                         )}
                     </div>
-                </>
+                </React.Fragment>
             )}
             <SortingFieldsUI ui={ui} value={sorting} onChange={setSorting} filters={filters} />
             <FiltersFieldsUI ui={ui} auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />

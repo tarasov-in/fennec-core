@@ -249,7 +249,7 @@ export default function DemoAction() {
             );
           });
         return (
-          <>
+          <React.Fragment>
             {context.trigger()}
             <Modal
               title="Демо Action — форма с подчинённой таблицей"
@@ -265,7 +265,7 @@ export default function DemoAction() {
                 </Spin>
               </div>
             </Modal>
-          </>
+          </React.Fragment>
         );
       }}
     />

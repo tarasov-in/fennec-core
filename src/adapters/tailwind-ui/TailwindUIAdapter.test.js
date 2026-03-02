@@ -1001,10 +1001,10 @@ describe('TailwindUIAdapter', () => {
     test('should have proper ARIA labels', () => {
       const { Input, Select } = adapter
       render(
-        <>
+        <React.Fragment>
           <Input label="Username" value="" onChange={() => {}} />
           <Select label="Country" value="" onChange={() => {}} options={[]} />
-        </>
+        </React.Fragment>
       )
 
       expect(screen.getByLabelText('Username')).toHaveAccessibleName()

@@ -116,7 +116,7 @@ export default function DemoCollection() {
         const actions = getCollectionActions() || [];
 
         const collectionContent = (
-          <>
+          <React.Fragment>
             <div
               className="filtered-header"
               style={{
@@ -314,7 +314,7 @@ export default function DemoCollection() {
                 </div>
               </div>
             )}
-          </>
+          </React.Fragment>
         );
 
         return isFullscreen ? (

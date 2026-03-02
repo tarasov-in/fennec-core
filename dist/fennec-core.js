@@ -21116,7 +21116,7 @@ function FilterContent(_ref) {
     return i.filter;
   });
   var showFilterButtons = filtered && (fl === null || fl === void 0 ? void 0 : fl.length) > 0;
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, showFilterButtons && /*#__PURE__*/React__default.createElement(Fragment, null, /*#__PURE__*/React__default.createElement("div", {
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {}
   }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
     "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),

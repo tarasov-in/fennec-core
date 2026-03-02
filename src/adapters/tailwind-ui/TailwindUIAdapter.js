@@ -183,7 +183,7 @@ class TailwindUIAdapter {
                     }
                   >
                     {({ selected }) => (
-                      <>
+                      <React.Fragment>
                         <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
                           {option.label}
                         </span>
@@ -192,7 +192,7 @@ class TailwindUIAdapter {
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </span>
                         )}
-                      </>
+                      </React.Fragment>
                     )}
                   </Listbox.Option>
                 ))}

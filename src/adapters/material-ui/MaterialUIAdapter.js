@@ -651,7 +651,7 @@ export class MaterialUIAdapter extends UIAdapter {
     const [anchorEl, setAnchorEl] = React.useState(null)
 
     return (
-      <>
+      <React.Fragment>
         <span onClick={(e) => setAnchorEl(e.currentTarget)}>{children}</span>
         <Menu
           anchorEl={anchorEl}
@@ -671,7 +671,7 @@ export class MaterialUIAdapter extends UIAdapter {
             </MenuItem>
           ))}
         </Menu>
-      </>
+      </React.Fragment>
     )
   }
 
