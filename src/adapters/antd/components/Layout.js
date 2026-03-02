@@ -106,8 +106,10 @@ export function Divider({
 }) {
   return (
     <AntDivider
-      type={type}
-      orientation={orientation}
+      // type={type}
+      // orientation={orientation}
+      orientation={type}
+      titlePlacement={orientation}
       {...rest}
     >
       {children}
