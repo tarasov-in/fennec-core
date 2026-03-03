@@ -20352,6 +20352,7 @@ function ActionContent(incomingProps) {
   }, [steps, stepObject, currentStep, props.form, props.auth, props.object, props.locator, props.titles, formInstance, ui]);
   var content = React__default.useCallback(function () {
     return props !== null && props !== void 0 && props.render ? props.render({
+      title: title,
       FormRenderer: FormRenderer,
       footer: footer,
       trigger: trigger,

@@ -443,6 +443,7 @@ function ActionContent(incomingProps) {
         // const title = props.title;
 
         return props?.render ? props.render({
+            title,
             FormRenderer,
             footer,
             trigger,
