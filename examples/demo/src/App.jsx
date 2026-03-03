@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Tabs, Card, Typography } from 'antd';
-import { FormOutlined, UnorderedListOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { FormOutlined, UnorderedListOutlined, ThunderboltOutlined, MobileOutlined } from '@ant-design/icons';
 import DemoAction from './demos/DemoAction';
 import DemoCollection from './demos/DemoCollection';
+import DemoCollectionMobile from './demos/DemoCollectionMobile';
 import DemoModelForm from './demos/DemoModelForm';
 
 const { Title, Paragraph } = Typography;
@@ -67,6 +68,23 @@ export default function App() {
             Список с фильтрами, сортировкой и пагинацией. Данные из мок-API.
           </Paragraph>
           <DemoCollection />
+        </Card>
+      ),
+    },
+    {
+      key: '4',
+      label: (
+        <span>
+          <MobileOutlined /> Collection (antd-mobile)
+        </span>
+      ),
+      children: (
+        <Card>
+          <Title level={5}>Collection с адаптером antd-mobile</Title>
+          <Paragraph type="secondary">
+            Тот же список, но через адаптер antd-mobile: List вместо таблицы, Popup для фильтра, мобильные компоненты.
+          </Paragraph>
+          <DemoCollectionMobile />
         </Card>
       ),
     },

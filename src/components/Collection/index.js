@@ -999,6 +999,7 @@ export function Collection(props) {
         total,
         totalPages,
         filters,
+        filter: state.filter,
         funcStat,
         lastFuncStat,
         selectedRowKeys,

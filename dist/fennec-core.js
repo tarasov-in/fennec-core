@@ -21786,6 +21786,7 @@ function Collection(props) {
     total: total,
     totalPages: totalPages,
     filters: filters,
+    filter: state.filter,
     funcStat: funcStat,
     lastFuncStat: lastFuncStat,
     selectedRowKeys: selectedRowKeys,
