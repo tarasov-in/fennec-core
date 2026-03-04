@@ -415,6 +415,83 @@ describe('AntdMobileAdapter', () => {
     })
   })
 
+  // ========== renderField (Field.js contract) ==========
+
+  describe('renderField', () => {
+    it('should have renderField method (same contract as AntdAdapter)', () => {
+      expect(typeof adapter.renderField).toBe('function')
+    })
+
+    it('should return null when options or type is missing', () => {
+      expect(adapter.renderField(null)).toBeNull()
+      expect(adapter.renderField({})).toBeNull()
+      expect(adapter.renderField({ type: null })).toBeNull()
+    })
+
+    it('should render string field as Input', () => {
+      const result = adapter.renderField({
+        type: 'string',
+        value: 'hello',
+        onChange: () => {},
+        item: {},
+        disabled: false,
+        placeholder: 'Enter'
+      })
+      expect(result).toBeTruthy()
+    })
+
+    it('should render number field as InputNumber', () => {
+      const result = adapter.renderField({
+        type: 'int',
+        value: 42,
+        onChange: () => {},
+        item: {},
+        disabled: false
+      })
+      expect(result).toBeTruthy()
+    })
+
+    it('should render boolean field as Checkbox', () => {
+      const result = adapter.renderField({
+        type: 'boolean',
+        value: true,
+        onChange: () => {},
+        item: {},
+        disabled: false
+      })
+      expect(result).toBeTruthy()
+    })
+
+    it('should render date field as DatePicker', () => {
+      const result = adapter.renderField({
+        type: 'date',
+        value: '2025-01-15',
+        onChange: () => {},
+        item: {},
+        disabled: false
+      })
+      expect(result).toBeTruthy()
+    })
+
+    it('should have formatDate and parseDate for date handling', () => {
+      const d = adapter.formatDate('2025-01-15')
+      expect(d).toBeInstanceOf(Date)
+      const str = adapter.parseDate(d)
+      expect(typeof str).toBe('string')
+    })
+
+    it('should have confirm method for imperative dialogs', () => {
+      expect(typeof adapter.confirm).toBe('function')
+    })
+
+    it('should have transformFormData, transformTableData, createValidator, normalizeFiles', () => {
+      expect(adapter.transformFormData({ a: 1 })).toEqual({ a: 1 })
+      expect(adapter.transformTableData([1, 2])).toEqual([1, 2])
+      expect(adapter.createValidator([])).toEqual([])
+      expect(adapter.normalizeFiles([])).toEqual([])
+    })
+  })
+
   // ========== API Compatibility Tests ==========
 
   describe('API Compatibility with AntdAdapter', () => {

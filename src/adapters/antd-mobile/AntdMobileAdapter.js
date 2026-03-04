@@ -23,7 +23,6 @@ import {
   Badge,
   Image,
   ProgressBar,
-  Modal,
   Popup,
   Toast,
   Dialog,
@@ -40,6 +39,7 @@ import {
 } from 'antd-mobile'
 
 import { UIAdapter } from '../UIAdapter'
+import { setNotifier } from '../../core/error'
 
 /**
  * AntdMobileAdapter
@@ -50,6 +50,7 @@ import { UIAdapter } from '../UIAdapter'
 export class AntdMobileAdapter extends UIAdapter {
   constructor() {
     super()
+    setNotifier({ error: (msg) => Toast.show({ icon: 'fail', content: msg }) })
 
     // Initialize component mappings
     this.initializeComponents()
@@ -93,8 +94,8 @@ export class AntdMobileAdapter extends UIAdapter {
     this.Message = this.wrapToast()
     this.Notification = this.wrapToast()
     this.Popconfirm = this.wrapDialog()
-    this.Spin = Loading
-    this.Loading = Loading
+    this.Spin = this.wrapSpin()
+    this.Loading = this.wrapSpin()
 
     // Navigation Components
     this.Button = Button
@@ -354,7 +355,39 @@ export class AntdMobileAdapter extends UIAdapter {
   }
 
   /**
-   * Wrap Modal to normalize API
+   * Spin/Loading: antd-mobile Loading (DotLoading) не принимает children и spinning.
+   * Обёртка с контрактом как у antd Spin: spinning + children; при spinning=true — оверлей с индикатором, контент виден под ним.
+   */
+  wrapSpin() {
+    return (props) => {
+      const { spinning = false, children, ...rest } = props
+      if (!spinning) {
+        return <>{children}</>
+      }
+      return (
+        <div style={{ position: 'relative', minHeight: 40 }} {...rest}>
+          {children}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(255,255,255,0.6)',
+              zIndex: 10
+            }}
+          >
+            <Loading />
+          </div>
+        </div>
+      )
+    }
+  }
+
+  /**
+   * Wrap Modal as Popup: открывается снизу вверх на всю высоту (antd-mobile Popup).
+   * Контракт как у Modal: visible, onCancel/onClose, title, children, footer (кнопки или массив actions).
    */
   wrapModal() {
     return (props) => {
@@ -365,33 +398,102 @@ export class AntdMobileAdapter extends UIAdapter {
         title,
         children,
         footer,
+        destroyOnClose,
         ...rest
       } = props
 
+      const onClose = onCancel || rest.onClose
+      const isFooterArrayOfObjects =
+        Array.isArray(footer) &&
+        footer.length > 0 &&
+        typeof footer[0] === 'object' &&
+        footer[0] !== null &&
+        !React.isValidElement(footer[0]) &&
+        'key' in footer[0]
+
+      const actions = isFooterArrayOfObjects
+        ? footer
+        : [
+            { key: 'cancel', text: 'Отмена', onClick: onClose },
+            { key: 'ok', text: 'OK', primary: true, onClick: onOk }
+          ]
+
       return (
-        <Modal
+        <Popup
           {...rest}
           visible={visible}
-          title={title}
-          onClose={onCancel}
-          content={children}
-          closeOnAction
-          actions={
-            footer || [
-              {
-                key: 'cancel',
-                text: 'Cancel',
-                onClick: onCancel
-              },
-              {
-                key: 'ok',
-                text: 'OK',
-                primary: true,
-                onClick: onOk
-              }
-            ]
-          }
-        />
+          onMaskClick={onClose}
+          onClose={onClose}
+          position="bottom"
+          destroyOnClose={destroyOnClose !== false}
+          bodyStyle={{
+            height: '100%',
+            maxHeight: '100vh',
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}
+        >
+          <div
+            style={{
+              flex: '0 0 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '12px 16px',
+              borderBottom: '1px solid var(--adm-border-color, #eee)',
+              fontSize: 16,
+              fontWeight: 600
+            }}
+          >
+            <span>{title ?? ''}</span>
+            <button
+              type="button"
+              aria-label="Закрыть"
+              onClick={onClose}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 4,
+                fontSize: 18,
+                cursor: 'pointer',
+                color: 'var(--adm-color-weak, #999)'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+          <div style={{ flex: '1 1 auto', overflow: 'auto', padding: 16 }}>
+            {children}
+          </div>
+          {actions && actions.length > 0 && (
+            <div
+              style={{
+                flex: '0 0 auto',
+                display: 'flex',
+                gap: 8,
+                padding: 12,
+                borderTop: '1px solid var(--adm-border-color, #eee)',
+                background: 'var(--adm-color-background, #fff)'
+              }}
+            >
+              {isFooterArrayOfObjects
+                ? actions.map((a) => (
+                    <Button
+                      key={a.key}
+                      color={a.primary ? 'primary' : 'default'}
+                      onClick={a.onClick}
+                      block
+                    >
+                      {a.text}
+                    </Button>
+                  ))
+                : footer}
+            </div>
+          )}
+        </Popup>
       )
     }
   }
@@ -449,6 +551,214 @@ export class AntdMobileAdapter extends UIAdapter {
         />
       )
     }
+  }
+
+  // ==================== Utility Methods (contract parity with AntdAdapter) ====================
+
+  /**
+   * Императивный диалог подтверждения (как AntdAdapter.confirm)
+   */
+  confirm = (options) => {
+    Dialog.confirm({
+      content: options.content ?? options.title,
+      confirmText: options.okText ?? 'OK',
+      cancelText: options.cancelText ?? 'Отмена',
+      onConfirm: options.onOk,
+      onCancel: options.onCancel
+    })
+  }
+
+  transformFormData(data) {
+    return data
+  }
+
+  transformTableData(data) {
+    return data
+  }
+
+  createValidator(rules) {
+    return rules
+  }
+
+  /**
+   * Форматирование даты для antd-mobile DatePicker (ожидает Date)
+   */
+  formatDate(value, format) {
+    if (!value) return null
+    if (value instanceof Date) return value
+    if (typeof value === 'string') return new Date(value)
+    return new Date(value)
+  }
+
+  /**
+   * Парсинг даты из antd-mobile DatePicker (возвращает ISO string для хранения)
+   */
+  parseDate(value, format) {
+    if (!value) return null
+    if (value instanceof Date) return value.toISOString()
+    return value
+  }
+
+  normalizeFiles(fileList) {
+    if (!fileList) return []
+    return fileList.map((file) => ({
+      uid: file.uid,
+      name: file.name,
+      status: file.status,
+      url: file.url || file.response?.url,
+      response: file.response
+    }))
+  }
+
+  /**
+   * Рендер контрола по типу поля (тот же контракт, что и AntdAdapter.renderField).
+   * Используется в Field.js для построения полей без привязки к десктопу/мобиле.
+   */
+  renderField(options) {
+    if (!options || !options.type) return null
+
+    const { type, value, onChange, mode, item = {}, disabled, placeholder } = options
+    const t = (type || '').toLowerCase()
+    const label = item.label
+    const place = placeholder ?? (mode === 'filter' ? label : undefined)
+    const InputComponent = this.Input
+    const TextAreaComponent = this.TextArea
+    const InputNumberComponent = this.InputNumber
+    const CheckboxComponent = this.Checkbox
+    const DatePickerComponent = this.DatePicker
+    const TimePickerComponent = this.TimePicker
+
+    // string
+    if (t === 'string') {
+      return (
+        <InputComponent
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+        />
+      )
+    }
+
+    if (t === 'password') {
+      return (
+        <InputComponent
+          type="password"
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+        />
+      )
+    }
+
+    if (t === 'text') {
+      return (
+        <TextAreaComponent
+          value={value ?? ''}
+          onChange={onChange}
+          placeholder={place}
+          disabled={disabled}
+          rows={3}
+        />
+      )
+    }
+
+    // number
+    const numTypes = ['int', 'uint', 'integer', 'int64', 'int32', 'uint64', 'uint32']
+    if (numTypes.includes(t)) {
+      return (
+        <InputNumberComponent
+          value={value != null ? Number(value) : undefined}
+          onChange={onChange}
+          disabled={disabled}
+          min={item.min}
+          max={item.max}
+          step={1}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    const floatTypes = ['double', 'float', 'float64', 'float32']
+    if (floatTypes.includes(t)) {
+      return (
+        <InputNumberComponent
+          value={value != null ? Number(value) : undefined}
+          onChange={onChange}
+          disabled={disabled}
+          min={item.min}
+          max={item.max}
+          step={0.01}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    // boolean
+    if (t === 'boolean' || t === 'bool') {
+      return (
+        <CheckboxComponent
+          checked={!!value}
+          onChange={onChange}
+          disabled={disabled}
+        />
+      )
+    }
+
+    // date
+    if (t === 'date') {
+      const format = item.format || 'YYYY-MM-DD'
+      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <DatePickerComponent
+          value={dateValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    if (t === 'datetime' || t === 'time.time') {
+      const format = item.format || 'YYYY-MM-DD HH:mm:ss'
+      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <DatePickerComponent
+          precision="second"
+          value={dateValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    if (t === 'time') {
+      const format = item.format || 'HH:mm:ss'
+      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
+      return (
+        <TimePickerComponent
+          value={dateValue}
+          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
+          format={format}
+          disabled={disabled}
+          style={{ width: '100%' }}
+        />
+      )
+    }
+
+    // fallback: string input
+    return (
+      <InputComponent
+        value={value != null ? String(value) : ''}
+        onChange={onChange}
+        placeholder={place}
+        disabled={disabled}
+      />
+    )
   }
 
   // ========== Render Methods ==========

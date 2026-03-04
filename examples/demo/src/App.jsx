@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Tabs, Card, Typography } from 'antd';
 import { FormOutlined, UnorderedListOutlined, ThunderboltOutlined, MobileOutlined } from '@ant-design/icons';
 import DemoAction from './demos/DemoAction';
+import DemoActionMobile from './demos/DemoActionMobile';
 import DemoCollection from './demos/DemoCollection';
 import DemoCollectionMobile from './demos/DemoCollectionMobile';
 import DemoModelForm from './demos/DemoModelForm';
@@ -68,6 +69,23 @@ export default function App() {
             Список с фильтрами, сортировкой и пагинацией. Данные из мок-API.
           </Paragraph>
           <DemoCollection />
+        </Card>
+      ),
+    },
+    {
+      key: '3m',
+      label: (
+        <span>
+          <MobileOutlined /> Action (antd-mobile)
+        </span>
+      ),
+      children: (
+        <Card>
+          <Title level={5}>Action с адаптером antd-mobile</Title>
+          <Paragraph type="secondary">
+            Та же форма с подчинённой таблицей, но через AntdMobileAdapter: поля строятся через Field и renderField, confirm/Modal/Form — из мобильного адаптера.
+          </Paragraph>
+          <DemoActionMobile />
         </Card>
       ),
     },
