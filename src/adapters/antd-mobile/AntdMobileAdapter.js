@@ -128,10 +128,11 @@ export class AntdMobileAdapter extends UIAdapter {
         <Input
           {...rest}
           onChange={(value) => {
-            console.log(value)
+            // console.log(value)
             // Normalize to antd API: onChange(e) where e.target.value
             if (onChange) {
-              onChange({ target: { value } })
+              // onChange({ target: { value } })
+              onChange(value)
             }
           }}
         />
@@ -152,7 +153,6 @@ export class AntdMobileAdapter extends UIAdapter {
           type="number"
           onChange={(value) => {
             const numValue = value ? Number(value) : undefined
-            console.log(numValue)
             if (onChange) {
               onChange(numValue)
             }
