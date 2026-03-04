@@ -105,6 +105,14 @@ export class AntdMobileAdapter extends UIAdapter {
     this.CascadePicker = CascadePicker
     this.Form = Form
   }
+  
+  useFormInstance() {
+    return Form.useForm()
+  }
+  /**
+   * Хук создания экземпляра формы Ant Design (для использования в компонентах)
+   */
+  createFormInstance = useFormInstance
 
   /**
    * Wrap Input to normalize onChange API
