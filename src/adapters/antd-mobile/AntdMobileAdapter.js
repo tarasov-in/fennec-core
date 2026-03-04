@@ -112,7 +112,7 @@ export class AntdMobileAdapter extends UIAdapter {
   /**
    * Хук создания экземпляра формы Ant Design (для использования в компонентах)
    */
-  createFormInstance = useFormInstance
+  createFormInstance = this.useFormInstance
 
   /**
    * Wrap Input to normalize onChange API
