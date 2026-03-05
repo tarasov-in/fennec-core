@@ -15,7 +15,7 @@ import { Dayjs } from 'dayjs';
 
 // ==================== UI Adapter System ====================
 export * from './adapters/UIAdapter';
-export { UIProvider, useUI, useUIOptional } from './adapters/UIContext';
+export { UIProvider, useUIAdapter, useUIOptional } from './adapters/UIContext';
 export { UIAdapter } from './adapters/UIAdapter';
 // Adapters are not re-exported from main entry. Import from subpaths when needed:
 // fennec-core/adapters/antd, fennec-core/adapters/chakra-ui, etc.

@@ -19897,10 +19897,10 @@ function UIProvider(_ref) {
     value: memoizedAdapter
   }, children);
 }
-function useUI() {
+function useUIAdapter() {
   var adapter = useContext(UIContext);
   if (!adapter) {
-    throw new Error('useUI must be used within UIProvider. ' + 'Wrap your app with <UIProvider adapter={new AntdAdapter()}>');
+    throw new Error('useUIAdapter must be used within UIProvider. ' + 'Wrap your app with <UIProvider adapter={new AntdAdapter()}>');
   }
   return adapter;
 }
@@ -20386,10 +20386,7 @@ function Field(props) {
   var auth = props.auth,
     item = props.item,
     value = props.value,
-    onChange = props.onChange,
-    mode = props.mode,
-    disabled = props.disabled,
-    placeholder = props.placeholder;
+    onChange = props.onChange;
   if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
     return props.item.render(auth, item, value, onChange, props);
   }
@@ -20397,15 +20394,7 @@ function Field(props) {
   if (!ui || !ui.renderField) {
     return null;
   }
-  return ui.renderField({
-    type: item === null || item === void 0 ? void 0 : item.type,
-    value: value,
-    onChange: onChange,
-    mode: mode,
-    item: item != null ? item : {},
-    disabled: disabled,
-    placeholder: placeholder
-  });
+  return ui.renderField(props);
 }
 
 function CollectionByProperty(props) {
@@ -22013,5 +22002,5 @@ var HasRoleID = function HasRoleID(user, roleID) {
   return false;
 };
 
-export { Action, And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, Collection, CollectionByProperty, ContextFiltersToQueryFilters, DELETE, DELETEP, FennecError, Field, FilterToQueryParameters, FiltersFieldsUI, FooterButton, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse, JSX, JSXIndex, JSXMap, JSXPathMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, Model, ObjectToContextFilters, ObjectToQueryParam, Or, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, SortingFieldsUI, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, collectionQueryParams, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useTranslateContext, useUI, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
+export { Action, And, AuthProvider, AuthService, CREATE, CREATEP, ClipboardContext, Collection, CollectionByProperty, ContextFiltersToQueryFilters, DELETE, DELETEP, FennecError, Field, FilterToQueryParameters, FiltersFieldsUI, FooterButton, FormObserverContext, GET, GETP, GETWITH, GETWITHP, GetMeta, GetMetaProperties, GetMetaPropertyByPath, HasRole, HasRoleID, If, IfElse, JSX, JSXIndex, JSXMap, JSXPathMap, LOCATOR_ACTIONS, LOCATOR_TYPES, MetaColumns, MetaContext, MetaProvider, Model, ObjectToContextFilters, ObjectToQueryParam, Or, POST, POSTFormData, POSTFormDataP, POSTP, QueryDetail, QueryFiltersToContextFilters, QueryFunc, QueryOrder, QueryParam, QueryParametersToFilters, QueryParams, READ, READP, READWITH, READWITHP, Request, RequestP, RequireAuth, SetMetaProperties, SortingFieldsUI, TranslateContext, TranslateProvider, UIAdapter, UIProvider, UPDATE, UPDATEP, UserConfigContext, UserConfigProvider, UserContext, arrayUnpack, clean, collectionQueryParams, contextFilterToObject, contextFilterToQueryFilters, createArrayInArray, createInArray, deleteArrayInArray, deleteInArray, deleteInProperties, deleteInPropertiesUUID, deletePropertiesInProperties, detectMutation, emptyInArray, _equals as equals, errorAlert, errorCatch, eventExecution, filterByItem, foreachInProperties, formItemRules, getAILocator, getDisplay, getFieldDisplay, getFormatFieldValueTableView, getLocator, getNotifier, getObjectDisplay, getObjectValue, getObjectValueOrDefault, getSortingDisplayFields, isRequired, makeFormData, messageError, metaGetCloneObject, metaGetFieldByName, preventDefault, priceFormat, publish, pushStateHistoryModal, queryFilterByItem, _queryFiltersToContextFilter as queryFiltersToContextFilter, setNotifier, subscribe, triggerArrayInArray, triggerInArray, triggerInProperties, triggerInPropertiesUUID, triggerPropertiesInProperties, typeIsNumber, uncapitalize, undefinedInArray, unpackFormFields, unsubscribe, _unwrap as unwrap, updateArrayInArray, updateInArray, updateInProperties, updateInPropertiesUUID, updatePropertiesInProperties, upgradeInArray, useActionRef, useAuth, useClipboardContext, useCollectionRef, useFormObserverContext, useMetaContext, useTranslateContext, useUIAdapter, useUIOptional, useUserConfigContext, useUserContext, validator, ycBucket, ycStorage };
 //# sourceMappingURL=fennec-core.modern.js.map

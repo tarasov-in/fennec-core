@@ -36,6 +36,7 @@ import {
   ColorPicker
 } from './components/Utils'
 import dayjs from 'dayjs'
+import { Boolean, Date, DateTime, Float, FloatSlider, GroupObj, Integer, IntegerSlider, Obj, Password, RangeDate, RangeFloat, RangeInteger, String, Time, Unknown, UploadItem, UploadItems } from './components/fields'
 
 /**
  * AntdAdapter - адаптер для Ant Design
@@ -207,144 +208,111 @@ export class AntdAdapter extends UIAdapter {
   /**
    * Рендер контрола по типу поля для Ant Design
    */
-  renderField(options) {
-    if (!options || !options.type) return null
+  renderField(props) {
+    if (!props?.item || !props?.item?.type) return null
 
-    const { type, value, onChange, mode, item = {}, disabled, placeholder } = options
-    const t = (type || '').toLowerCase()
-    const label = item.label
-    const place = placeholder ?? (mode === 'filter' ? label : undefined)
-
-    // string
-    if (t === 'string') {
-      return (
-        <this.Input
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-        />
-      )
+    const { auth, item, value, onChange } = props;
+    switch (item.filterType) {
+      case "group":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "object":
+          case "document":
+            return (<GroupObj {...props}></GroupObj>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      case "range":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<RangeInteger {...props}></RangeInteger>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<RangeFloat {...props}></RangeFloat>)
+          case "date":
+          case "time":
+          case "datetime":
+          case "time.Time":
+            return (<RangeDate {...props}></RangeDate>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      case "slider":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<IntegerSlider {...props}></IntegerSlider>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<FloatSlider {...props}></FloatSlider>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      default:
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "string":
+            return (<String {...props}></String>)
+          case "password":
+            return (<Password {...props}></Password>)
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<Integer {...props}></Integer>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<Float {...props}></Float>)
+          case "boolean":
+          case "bool":
+            return (<Boolean {...props}></Boolean>)
+          case "time":
+            return (<Time {...props}></Time>)
+          case "date":
+            return (<Date {...props}></Date>)
+          case "datetime":
+          case "time.Time":
+            return (<DateTime {...props}></DateTime>)
+          case "object":
+          case "document":
+            return (<Obj {...props} changed={changed}></Obj>)
+          // case "action":
+          //   return (<ActionItem {...props}></ActionItem>)
+          case "file":
+            return (<UploadItem {...props}></UploadItem>)
+          case "files":
+            return (<UploadItems {...props}></UploadItems>)
+          // case "image":
+          //   return (<Image {...props}></Image>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
     }
-
-    if (t === 'password') {
-      return (
-        <this.Input
-          type="password"
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-        />
-      )
-    }
-
-    if (t === 'text') {
-      return (
-        <this.TextArea
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-          rows={3}
-        />
-      )
-    }
-
-    // number
-    const numTypes = ['int', 'uint', 'integer', 'int64', 'int32', 'uint64', 'uint32']
-    if (numTypes.includes(t)) {
-      return (
-        <this.InputNumber
-          value={value != null ? Number(value) : undefined}
-          onChange={onChange}
-          disabled={disabled}
-          min={item.min}
-          max={item.max}
-          step={1}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    const floatTypes = ['double', 'float', 'float64', 'float32']
-    if (floatTypes.includes(t)) {
-      return (
-        <this.InputNumber
-          value={value != null ? Number(value) : undefined}
-          onChange={onChange}
-          disabled={disabled}
-          min={item.min}
-          max={item.max}
-          step={0.01}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    // boolean
-    if (t === 'boolean' || t === 'bool') {
-      return (
-        <this.Checkbox
-          checked={!!value}
-          onChange={onChange}
-          disabled={disabled}
-        />
-      )
-    }
-
-    // date
-    if (t === 'date') {
-      const format = item.format || 'YYYY-MM-DD'
-      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <this.DatePicker
-          value={dayjsValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    if (t === 'datetime' || t === 'time.time') {
-      const format = item.format || 'YYYY-MM-DD HH:mm:ss'
-      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <this.DatePicker
-          showTime
-          value={dayjsValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    if (t === 'time') {
-      const format = item.format || 'HH:mm:ss'
-      const dayjsValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <this.TimePicker
-          value={dayjsValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    // fallback: string input
-    return (
-      <this.Input
-        value={value != null ? String(value) : ''}
-        onChange={onChange}
-        placeholder={place}
-        disabled={disabled}
-      />
-    )
   }
 }

@@ -4,7 +4,6 @@
  */
 export {
   UIProvider,
-  useUI,
   useUIOptional,
   useUIAdapter
 } from './UIContext'

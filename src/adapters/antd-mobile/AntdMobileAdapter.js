@@ -106,7 +106,7 @@ export class AntdMobileAdapter extends UIAdapter {
     this.CascadePicker = CascadePicker
     this.Form = Form
   }
-  
+
   useFormInstance() {
     return Form.useForm()
   }
@@ -416,9 +416,9 @@ export class AntdMobileAdapter extends UIAdapter {
       const actions = isFooterArrayOfObjects
         ? footer
         : [
-            { key: 'cancel', text: 'Отмена', onClick: onClose },
-            { key: 'ok', text: 'OK', primary: true, onClick: onOk }
-          ]
+          { key: 'cancel', text: 'Отмена', onClick: onClose },
+          { key: 'ok', text: 'OK', primary: true, onClick: onOk }
+        ]
 
       return (
         <Popup
@@ -483,15 +483,15 @@ export class AntdMobileAdapter extends UIAdapter {
             >
               {isFooterArrayOfObjects
                 ? actions.map((a) => (
-                    <Button
-                      key={a.key}
-                      color={a.primary ? 'primary' : 'default'}
-                      onClick={a.onClick}
-                      block
-                    >
-                      {a.text}
-                    </Button>
-                  ))
+                  <Button
+                    key={a.key}
+                    color={a.primary ? 'primary' : 'default'}
+                    onClick={a.onClick}
+                    block
+                  >
+                    {a.text}
+                  </Button>
+                ))
                 : footer}
             </div>
           )}
@@ -616,257 +616,114 @@ export class AntdMobileAdapter extends UIAdapter {
    * Рендер контрола по типу поля (тот же контракт, что и AntdAdapter.renderField).
    * Используется в Field.js для построения полей без привязки к десктопу/мобиле.
    */
-  renderField(options) {
-    if (!options || !options.type) return null
+  renderField(props) {
+    if (!props?.item || !props?.item?.type) return null
 
-    const { type, value, onChange, mode, item = {}, disabled, placeholder } = options
-    const t = (type || '').toLowerCase()
-    const label = item.label
-    const place = placeholder ?? (mode === 'filter' ? label : undefined)
-    const InputComponent = this.Input
-    const TextAreaComponent = this.TextArea
-    const InputNumberComponent = this.InputNumber
-    const CheckboxComponent = this.Checkbox
-    const DatePickerComponent = this.DatePicker
-    const TimePickerComponent = this.TimePicker
-
-    // string
-    if (t === 'string') {
-      return (
-        <InputComponent
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-        />
-      )
+    const { auth, item, value, onChange } = props;
+    switch (item.filterType) {
+      case "group":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "object":
+          case "document":
+            return (<GroupObj {...props}></GroupObj>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      case "range":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<RangeInteger {...props}></RangeInteger>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<RangeFloat {...props}></RangeFloat>)
+          case "date":
+          case "time":
+          case "datetime":
+          case "time.Time":
+            return (<RangeDate {...props}></RangeDate>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      case "slider":
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<IntegerSlider {...props}></IntegerSlider>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<FloatSlider {...props}></FloatSlider>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
+      default:
+        switch (item.type) {
+          case "func":
+            return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
+          case "string":
+            return (<String {...props}></String>)
+          case "password":
+            return (<Password {...props}></Password>)
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            return (<Integer {...props}></Integer>)
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            return (<Float {...props}></Float>)
+          case "boolean":
+          case "bool":
+            return (<Boolean {...props}></Boolean>)
+          case "time":
+            return (<Time {...props}></Time>)
+          case "date":
+            return (<Date {...props}></Date>)
+          case "datetime":
+          case "time.Time":
+            return (<DateTime {...props}></DateTime>)
+          case "object":
+          case "document":
+            return (<Obj {...props} changed={changed}></Obj>)
+          case "action":
+            return (<ActionItem {...props}></ActionItem>)
+          case "file":
+            return (<UploadItem {...props}></UploadItem>)
+          case "files":
+            return (<UploadItems {...props}></UploadItems>)
+          // case "imageeditor":
+          //     return (<ImageEditor {...props}></ImageEditor>)
+          // case "image":
+          //     return (<Image {...props}></Image>)
+          default:
+            return (<Unknown {...props}></Unknown>)
+        }
     }
-
-    if (t === 'password') {
-      return (
-        <InputComponent
-          type="password"
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-        />
-      )
-    }
-
-    if (t === 'text') {
-      return (
-        <TextAreaComponent
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={place}
-          disabled={disabled}
-          rows={3}
-        />
-      )
-    }
-
-    // number
-    const numTypes = ['int', 'uint', 'integer', 'int64', 'int32', 'uint64', 'uint32']
-    if (numTypes.includes(t)) {
-      return (
-        <InputNumberComponent
-          value={value != null ? Number(value) : undefined}
-          onChange={onChange}
-          disabled={disabled}
-          min={item.min}
-          max={item.max}
-          step={1}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    const floatTypes = ['double', 'float', 'float64', 'float32']
-    if (floatTypes.includes(t)) {
-      return (
-        <InputNumberComponent
-          value={value != null ? Number(value) : undefined}
-          onChange={onChange}
-          disabled={disabled}
-          min={item.min}
-          max={item.max}
-          step={0.01}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    // boolean
-    if (t === 'boolean' || t === 'bool') {
-      return (
-        <CheckboxComponent
-          checked={!!value}
-          onChange={onChange}
-          disabled={disabled}
-        />
-      )
-    }
-
-    // date
-    if (t === 'date') {
-      const format = item.format || 'YYYY-MM-DD'
-      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <DatePickerComponent
-          value={dateValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    if (t === 'datetime' || t === 'time.time') {
-      const format = item.format || 'YYYY-MM-DD HH:mm:ss'
-      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <DatePickerComponent
-          precision="second"
-          value={dateValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    if (t === 'time') {
-      const format = item.format || 'HH:mm:ss'
-      const dateValue = value != null && value !== '' ? this.formatDate(value, format) : null
-      return (
-        <TimePickerComponent
-          value={dateValue}
-          onChange={(v) => onChange(v ? this.parseDate(v, format) : null)}
-          format={format}
-          disabled={disabled}
-          style={{ width: '100%' }}
-        />
-      )
-    }
-
-    // fallback: string input
-    return (
-      <InputComponent
-        value={value != null ? String(value) : ''}
-        onChange={onChange}
-        placeholder={place}
-        disabled={disabled}
-      />
-    )
-  }
-
-  // ========== Render Methods ==========
-  // These methods provide functional API for rendering components
-
-  /**
-   * Render Input component
-   */
-  renderInput(props) {
-    const InputComponent = this.Input
-    return <InputComponent {...props} />
-  }
-
-  /**
-   * Render TextArea component
-   */
-  renderTextArea(props) {
-    return <TextArea {...props} />
-  }
-
-  /**
-   * Render Select component
-   */
-  renderSelect(props) {
-    const SelectComponent = this.Select
-    return <SelectComponent {...props} />
-  }
-
-  /**
-   * Render DatePicker component
-   */
-  renderDatePicker(props) {
-    const DatePickerComponent = this.DatePicker
-    return <DatePickerComponent {...props} />
-  }
-
-  /**
-   * Render Button component
-   */
-  renderButton(props) {
-    return <Button {...props} />
-  }
-
-  /**
-   * Render Modal component
-   */
-  renderModal(props) {
-    const ModalComponent = this.Modal
-    return <ModalComponent {...props} />
-  }
-
-  /**
-   * Render Popup component
-   */
-  renderPopup(props) {
-    return <Popup {...props} />
-  }
-
-  /**
-   * Render List component
-   */
-  renderList(props) {
-    const ListComponent = this.Table // Uses wrapped List
-    return <ListComponent {...props} />
-  }
-
-  /**
-   * Render Loading component
-   */
-  renderLoading(props) {
-    return <Loading {...props} />
-  }
-
-  /**
-   * Show success message
-   */
-  showSuccess(content) {
-    this.Message.success(content)
-  }
-
-  /**
-   * Show error message
-   */
-  showError(content) {
-    this.Message.error(content)
-  }
-
-  /**
-   * Show info message
-   */
-  showInfo(content) {
-    this.Message.info(content)
-  }
-
-  /**
-   * Get adapter type
-   */
-  getType() {
-    return 'antd-mobile'
-  }
-
-  /**
-   * Check if mobile adapter
-   */
-  isMobile() {
-    return true
   }
 }
 

@@ -19900,10 +19900,10 @@ function UIProvider(_ref) {
     value: memoizedAdapter
   }, children);
 }
-function useUI() {
+function useUIAdapter() {
   var adapter = React.useContext(UIContext);
   if (!adapter) {
-    throw new Error('useUI must be used within UIProvider. ' + 'Wrap your app with <UIProvider adapter={new AntdAdapter()}>');
+    throw new Error('useUIAdapter must be used within UIProvider. ' + 'Wrap your app with <UIProvider adapter={new AntdAdapter()}>');
   }
   return adapter;
 }
@@ -20389,10 +20389,7 @@ function Field(props) {
   var auth = props.auth,
     item = props.item,
     value = props.value,
-    onChange = props.onChange,
-    mode = props.mode,
-    disabled = props.disabled,
-    placeholder = props.placeholder;
+    onChange = props.onChange;
   if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
     return props.item.render(auth, item, value, onChange, props);
   }
@@ -20400,15 +20397,7 @@ function Field(props) {
   if (!ui || !ui.renderField) {
     return null;
   }
-  return ui.renderField({
-    type: item === null || item === void 0 ? void 0 : item.type,
-    value: value,
-    onChange: onChange,
-    mode: mode,
-    item: item != null ? item : {},
-    disabled: disabled,
-    placeholder: placeholder
-  });
+  return ui.renderField(props);
 }
 
 function CollectionByProperty(props) {
@@ -22155,7 +22144,7 @@ exports.useCollectionRef = useCollectionRef;
 exports.useFormObserverContext = useFormObserverContext;
 exports.useMetaContext = useMetaContext;
 exports.useTranslateContext = useTranslateContext;
-exports.useUI = useUI;
+exports.useUIAdapter = useUIAdapter;
 exports.useUIOptional = useUIOptional;
 exports.useUserConfigContext = useUserConfigContext;
 exports.useUserContext = useUserContext;

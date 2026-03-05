@@ -7,9 +7,9 @@ export function Field(props) {
         item,
         value,
         onChange,
-        mode,
-        disabled,
-        placeholder,
+        // mode,
+        // disabled,
+        // placeholder,
     } = props;
 
     if (props?.item?.render) {
@@ -21,15 +21,7 @@ export function Field(props) {
         return null;
     }
 
-    return ui.renderField({
-        type: item?.type,
-        value,
-        onChange,
-        mode,
-        item: item ?? {},
-        disabled,
-        placeholder,
-    });
+    return ui.renderField(props);
 
     // const type = item?.view?.type ?? item?.type;
 

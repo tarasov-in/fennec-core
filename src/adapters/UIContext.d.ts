@@ -42,23 +42,23 @@ export interface UIProviderProps {
 export const UIProvider: ComponentType<UIProviderProps>;
 
 /**
- * useUI - Hook to access current UIAdapter
+ * useUIAdapter - Hook to access current UIAdapter
  *
  * Throws error if used outside UIProvider
  *
  * @example
  * ```tsx
- * import { useUI } from 'fennec-core';
+ * import { useUIAdapter } from 'fennec-core';
  *
  * function MyComponent() {
- *   const adapter = useUI();
+ *   const adapter = useUIAdapter();
  *   const Button = adapter.Button;
  *
  *   return <Button onClick={handleClick}>Click me</Button>;
  * }
  * ```
  */
-export function useUI(): UIAdapter;
+export function useUIAdapter(): UIAdapter;
 
 /**
  * useUIOptional - Hook to access current UIAdapter (optional)
