@@ -562,7 +562,7 @@ export function RangeFloat({ wrapperProps, inputProps, formItem, auth, item, val
             included={true}
             value={val || def}
             onChange={setVal}
-            onAfterChange={(item.realtime) ? onAfterChange : onChange}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
             {...inputProps}  {...item?.inputProps} />
             </div>
     </FieldLayout>
@@ -587,7 +587,7 @@ export function FloatSlider({ wrapperProps, inputProps, formItem, auth, item, va
             step={xstep}
             value={(item.realtime) ? value : val}
             onChange={(item.realtime) ? onChange : setVal}
-            onAfterChange={(item.realtime) ? onAfterChange : onChange}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
             {...inputProps}  {...item?.inputProps} />
             </div>
     </FieldLayout>
@@ -616,7 +616,7 @@ export function RangeInteger({ wrapperProps, inputProps, formItem, auth, item, v
             included={true}
             // onChange={setVal}
             onChange={(item.realtime) ? onChange : setVal}
-            onAfterChange={(item.realtime) ? onAfterChange : onChange}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
             {...inputProps}  {...item?.inputProps} />
             </div>
     </FieldLayout>
@@ -642,7 +642,7 @@ export function IntegerSlider({ wrapperProps, inputProps, formItem, auth, item, 
             step={xstep}
             value={(item.realtime) ? value : val}
             onChange={(item.realtime) ? onChange : setVal}
-            onAfterChange={(item.realtime) ? onAfterChange : onChange}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
             {...inputProps}  {...item?.inputProps} />
             </div>
     </FieldLayout>
