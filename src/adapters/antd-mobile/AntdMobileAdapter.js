@@ -40,6 +40,7 @@ import {
 
 import { UIAdapter } from '../UIAdapter'
 import { setNotifier } from '../../core/error'
+import { Boolean, Date, DateTime, Float, FloatSlider, GroupObj, Integer, IntegerSlider, Obj, Password, RangeDate, RangeFloat, RangeInteger, String, Time, Unknown, UploadItem, UploadItems } from './components/fields'
 
 /**
  * AntdMobileAdapter
@@ -710,8 +711,8 @@ export class AntdMobileAdapter extends UIAdapter {
           case "object":
           case "document":
             return (<Obj {...props} changed={changed}></Obj>)
-          case "action":
-            return (<ActionItem {...props}></ActionItem>)
+          // case "action":
+          //   return (<ActionItem {...props}></ActionItem>)
           case "file":
             return (<UploadItem {...props}></UploadItem>)
           case "files":
