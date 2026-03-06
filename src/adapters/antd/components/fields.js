@@ -437,6 +437,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
                 if (_.isString(labeldisplay)) {
                     return labeldisplay;
                 }
+                console.log("labelString", meta, item, getObjectValue(item, "relation.reference.object"))
                 let fieldMeta = meta[getObjectValue(item, "relation.reference.object")];
                 let _display = ((item?.relation?.display?.fields) ? item?.relation?.display : undefined) || ((fieldMeta?.display?.fields) ? fieldMeta?.display : undefined)
                 return getDisplay(value, _display, fieldMeta, meta)
