@@ -19460,6 +19460,17 @@ var ObjectToContextFilters = function ObjectToContextFilters(obj, method) {
   return contextFilters;
 };
 
+var weekday = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.weekday=function(e){var t=this.$locale().weekStart||0,i=this.$W,n=(i<t?i+7:i)-t;return this.$utils().u(e)?n:this.subtract(n,"day").add(e,"day")};}}));
+});
+
+var utc = require('dayjs/plugin/utc');
+var timezone = require('dayjs/plugin/timezone');
+dayjs_min.extend(utc);
+dayjs_min.extend(timezone);
+dayjs_min.locale('ru');
+dayjs_min.extend(weekday);
+dayjs_min.extend(localeData);
 var queryFilterByItem = function queryFilterByItem(item) {
   if (!item) return [];
   var query = [];
@@ -19595,19 +19606,63 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
         }) : v;
       }
     }
-    function setrange(item, flt, i, s1, s2) {
+    function seta(item, flt, i, s1, s2) {
       var v1 = urlRequestParameters.get("" + s1 + item.name);
       var v2 = urlRequestParameters.get("" + s2 + item.name);
       if (v1 && v2) {
         flt[i].filtered = [v1, v2];
       }
     }
+    function setm(item, flt, i, s1, s2, format) {
+      var v1 = urlRequestParameters.get("" + s1 + item.name);
+      var v2 = urlRequestParameters.get("" + s2 + item.name);
+      if (v1 && v2) {
+        flt[i].filtered = [dayjs_min(v1), dayjs_min(v2)];
+      }
+    }
     switch (item.filterType) {
       case "group":
-        setin(item, flt, i, "w-in-");
+        switch (item.type) {
+          case "object":
+          case "document":
+            setin(item, flt, i, "w-in-");
+            break;
+          default:
+            setin(item, flt, i, "w-in-");
+            break;
+        }
         break;
       case "range":
-        setrange(item, flt, i, "w-lge-", "w-lwe-");
+        switch (item.type) {
+          case "int":
+          case "uint":
+          case "integer":
+          case "int64":
+          case "int32":
+          case "uint64":
+          case "uint32":
+            seta(item, flt, i, "w-lge-", "w-lwe-");
+            break;
+          case "double":
+          case "float":
+          case "float64":
+          case "float32":
+            seta(item, flt, i, "w-lge-", "w-lwe-");
+            break;
+          case "time":
+            setm(item, flt, i, "w-lge-", "w-lwe-");
+            break;
+          case "date":
+            setm(item, flt, i, "w-lge-", "w-lwe-");
+            break;
+          case "datetime":
+          case "time.Time":
+            setm(item, flt, i, "w-lge-", "w-lwe-");
+            break;
+          default:
+            set(item, flt, i, "w-");
+            break;
+        }
         break;
       default:
         switch (item.type) {
@@ -19623,6 +19678,13 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
   };
   for (var i = 0; i < flt.length; i++) {
     _loop();
+  }
+  for (var _i = 0; _i < flt.length; _i++) {
+    var item = flt[_i];
+    var v = urlRequestParameters.get("s-" + item.name);
+    if (v) {
+      flt[_i].sorted = v;
+    }
   }
   return flt;
 }
