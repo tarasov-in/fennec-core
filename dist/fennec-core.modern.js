@@ -21866,6 +21866,8 @@ function Collection(props) {
     setOpenOverlay(false);
   };
   var FilterContentFunction = React.useCallback(function () {
+    var meta = useMetaContext();
+    console.log("asdfasdfasdf", meta);
     return /*#__PURE__*/React.createElement(FilterContent, {
       ui: ui,
       auth: auth,

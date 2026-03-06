@@ -986,7 +986,11 @@ export function Collection(props) {
     const isFullscreen = openOverlay;
     const openFullscreen = () => { setOpenOverlay(true); };
     const closeFullscreen = () => { setOpenOverlay(false); };
-    const FilterContentFunction = React.useCallback(() => (
+    const FilterContentFunction = React.useCallback(() => {
+            const meta = useMetaContext();
+    console.log("asdfasdfasdf", meta)
+
+        return (
         <FilterContent
             ui={ui}
             auth={auth}
@@ -1004,7 +1008,7 @@ export function Collection(props) {
             applyFilter={applyFilter}
             clearFilter={clearFilter}
         />
-    ),[ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName])
+    )},[ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName])
     const collectionContext = {
         // data
         collection,
