@@ -19457,6 +19457,13 @@ var ObjectToContextFilters = function ObjectToContextFilters(obj, method) {
   return contextFilters;
 };
 
+var utc = require('dayjs/plugin/utc');
+var timezone = require('dayjs/plugin/timezone');
+dayjs_min.extend(utc);
+dayjs_min.extend(timezone);
+dayjs_min.locale('ru');
+dayjs_min.extend(weekday);
+dayjs_min.extend(localeData);
 var queryFilterByItem = function queryFilterByItem(item) {
   if (!item) return [];
   var query = [];
@@ -19603,7 +19610,7 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
       var v1 = urlRequestParameters.get("" + s1 + item.name);
       var v2 = urlRequestParameters.get("" + s2 + item.name);
       if (v1 && v2) {
-        flt[i].filtered = [dayjs(v1), dayjs(v2)];
+        flt[i].filtered = [dayjs_min(v1), dayjs_min(v2)];
       }
     }
     switch (item.filterType) {
