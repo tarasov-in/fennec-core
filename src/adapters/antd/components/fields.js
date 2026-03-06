@@ -345,7 +345,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
     }
-    const by = (item) => {
+    const by = React.useCallback((item) => {
         if (!!item?.dependence && !!item?.dependence?.field) {
             if (changed) {
                 if (!!changed[item.dependence.by] && !!item.dependence.eq) {
@@ -357,7 +357,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
             }
             return null
         }
-    };
+    },[changed]);
     const dependenceValue = by(item);
     const defaultQueryParams = useCallback((filter) => {
         var _dependence = (item.dependence?.mode === "server" && item.dependence?.field && by(item)) ? [QueryParam(`w-${item.dependence?.field}`, by(item))] : []

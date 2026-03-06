@@ -986,7 +986,25 @@ export function Collection(props) {
     const isFullscreen = openOverlay;
     const openFullscreen = () => { setOpenOverlay(true); };
     const closeFullscreen = () => { setOpenOverlay(false); };
-
+    const FilterContentFunction = React.useCallback(() => (
+        <FilterContent
+            ui={ui}
+            auth={auth}
+            filters={filters}
+            sorting={sorting}
+            setSorting={setSorting}
+            state={state}
+            funcStat={funcStat}
+            filtered={filtered}
+            locator={getLocator(props?.locator || ("collection-" + name) || ("collection-" + fieldName) || "collection", props?.object)}
+            object={props?.object}
+            name={name}
+            fieldName={fieldName}
+            _onFilterChange={_onFilterChange}
+            applyFilter={applyFilter}
+            clearFilter={clearFilter}
+        />
+    ),[ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName])
     const collectionContext = {
         // data
         collection,
@@ -1021,25 +1039,7 @@ export function Collection(props) {
         onFilterChange: _onFilterChange,
         setSorting,
         setFiltered,
-        renderFilterPanel: () => (
-            <FilterContent
-                ui={ui}
-                auth={auth}
-                filters={filters}
-                sorting={sorting}
-                setSorting={setSorting}
-                state={state}
-                funcStat={funcStat}
-                filtered={filtered}
-                locator={getLocator(props?.locator || ("collection-" + name) || ("collection-" + fieldName) || "collection", props?.object)}
-                object={props?.object}
-                name={name}
-                fieldName={fieldName}
-                _onFilterChange={_onFilterChange}
-                applyFilter={applyFilter}
-                clearFilter={clearFilter}
-            />
-        ),
+        renderFilterPanel: FilterContentFunction,
         // pagination
         setCurrent,
         setCount,
