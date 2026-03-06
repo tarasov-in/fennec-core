@@ -18,10 +18,10 @@ import { useMetaContext } from '../../../Context';
 import { InboxOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone, UploadOutlined } from '@ant-design/icons';
 
-import dayjs from 'dayjs'
+import {dayjs, utc, timezone} from '../../../core/utils'
 import 'dayjs/locale/ru'
-import weekday from "dayjs/plugin/weekday"
-import localeData from "dayjs/plugin/localeData"
+// import weekday from "dayjs/plugin/weekday"
+// import localeData from "dayjs/plugin/localeData"
 import { Model } from '../../../components/Model';
 import { Action } from '../../../components/Action';
 import { Collection } from '../../../components/Collection';
@@ -30,13 +30,13 @@ import { Collection } from '../../../components/Collection';
 import { clean, deleteInArray, errorCatch, getDisplay, getLocator, getObjectValue, GETWITH, JSXMap, QueryDetail, READWITH, unwrap, updateInArray } from '../../../core/utils';
 import { QueryOrder, QueryParam } from '../../../core/query';
 import { DropdownAction } from './DropdownAction';
-var utc = require('dayjs/plugin/utc')
-var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.locale('ru');
-dayjs.extend(weekday)
-dayjs.extend(localeData)
+// var utc = require('dayjs/plugin/utc')
+// var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
+// dayjs.extend(utc)
+// dayjs.extend(timezone)
+// dayjs.locale('ru');
+// dayjs.extend(weekday)
+// dayjs.extend(localeData)
 
 var _ = require('lodash');
 const { Dragger } = Upload;

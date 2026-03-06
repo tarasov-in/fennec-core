@@ -35,7 +35,7 @@ import {
   Rate,
   ColorPicker
 } from './components/Utils'
-import dayjs from 'dayjs'
+import {dayjs} from '../../core/utils'
 import { Boolean, Date, DateTime, Float, FloatSlider, GroupObj, Integer, IntegerSlider, Obj, Password, RangeDate, RangeFloat, RangeInteger, String, Time, Unknown, UploadItem, UploadItems } from './components/fields'
 
 /**

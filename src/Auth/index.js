@@ -1,8 +1,8 @@
 import React, { createContext, useContext } from 'react';
 import decode from 'jwt-decode';
 import WSocket from '../IO/WSocket';
-import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
+import {dayjs} from '../core/utils'
+
 import Cookies from 'js-cookie'
 import { getNotifier } from '../core/error'
 

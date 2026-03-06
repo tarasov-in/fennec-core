@@ -60,7 +60,7 @@ import {
 import { DatePicker, TimePicker, DateTimePicker } from '@mui/x-date-pickers'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import dayjs from 'dayjs'
+import {dayjs} from '../../core/utils'
 import React from 'react'
 
 export class MaterialUIAdapter extends UIAdapter {

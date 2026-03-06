@@ -4,7 +4,7 @@
  */
 
 import _ from 'lodash'
-import dayjs from 'dayjs'
+import {dayjs} from '../utils'
 import { getObjectValue } from './object'
 import { uncapitalize } from './functional'
 import { metaGetFieldByName } from '../meta/helpers'

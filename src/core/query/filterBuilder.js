@@ -3,18 +3,7 @@
  * Migrated from Tool/index.js
  */
 import _ from 'lodash'
-import dayjs from 'dayjs'
-import weekday from "dayjs/plugin/weekday"
-import localeData from "dayjs/plugin/localeData"
-import 'dayjs/locale/ru'
-var utc = require('dayjs/plugin/utc')
-var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.locale('ru');
-dayjs.extend(weekday)
-dayjs.extend(localeData)
-
+import {dayjs} from '../utils'
 
 /**
  * Converts item object to query string
