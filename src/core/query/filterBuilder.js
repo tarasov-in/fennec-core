@@ -2,19 +2,8 @@
  * Filter building and conversion functions
  * Migrated from Tool/index.js
  */
-import _ from 'lodash'
-import dayjs from 'dayjs'
-import weekday from "dayjs/plugin/weekday"
-import localeData from "dayjs/plugin/localeData"
-import 'dayjs/locale/ru'
-var utc = require('dayjs/plugin/utc')
-var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.locale('ru');
-dayjs.extend(weekday)
-dayjs.extend(localeData)
 
+import _ from 'lodash'
 
 /**
  * Converts item object to query string
@@ -163,112 +152,54 @@ export function FilterToQueryParameters(filters, filter, sorting, page, count) {
  * @returns {Array} Filters with applied values
  */
 export function QueryParametersToFilters(urlRequestParameters, filters) {
-    let flt = [...filters]
-    for (let i = 0; i < flt.length; i++) {
-        const item = flt[i];
+  let flt = [...filters]
+  for (let i = 0; i < flt.length; i++) {
+    const item = flt[i]
 
-        function set(item, flt, i, s) {
-            let v = urlRequestParameters.get(`${s}${item.name}`)
-            if (v) {
-                flt[i].filtered = v;
-            }
-        }
-        function setin(item, flt, i, s) {
-            let v = urlRequestParameters.get(`${s}${item.name}`)
-            if (v) {
-                flt[i].filtered = (v && v.split) ? v.split(",").map((val) => {
-                    let nval = parseInt(val)
-                    if (!isNaN(nval)) {
-                        return nval;
-                    }
-
-                    return val;
-                }) : v;
-            }
-        }
-        function seta(item, flt, i, s1, s2) {
-            let v1 = urlRequestParameters.get(`${s1}${item.name}`)
-            let v2 = urlRequestParameters.get(`${s2}${item.name}`)
-            if (v1 && v2) {
-                flt[i].filtered = [v1, v2];
-            }
-        }
-        function setm(item, flt, i, s1, s2, format) {
-            let v1 = urlRequestParameters.get(`${s1}${item.name}`)
-            let v2 = urlRequestParameters.get(`${s2}${item.name}`)
-            if (v1 && v2) {
-                flt[i].filtered = [dayjs(v1), dayjs(v2)];
-            }
-        }
-        switch (item.filterType) {
-            case "group":
-                switch (item.type) {
-                    case "object":
-                    case "document":
-                        setin(item, flt, i, "w-in-");
-                        break;
-                    default:
-                        setin(item, flt, i, "w-in-");
-                        break;
-                }
-                break;
-            case "range":
-                switch (item.type) {
-                    case "int":
-                    case "uint":
-                    case "integer":
-                    case "int64":
-                    case "int32":
-                    case "uint64":
-                    case "uint32":
-                        seta(item, flt, i, "w-lge-", "w-lwe-");
-                        break;
-                    case "double":
-                    case "float":
-                    case "float64":
-                    case "float32":
-                        seta(item, flt, i, "w-lge-", "w-lwe-");
-                        break;
-                    case "time":
-                        setm(item, flt, i, "w-lge-", "w-lwe-", "HH:mm:ss");
-                        break;
-                    case "date":
-                        setm(item, flt, i, "w-lge-", "w-lwe-", "YYYY-MM-DD");
-                        break;
-                    case "datetime":
-                    case "time.Time":
-                        setm(item, flt, i, "w-lge-", "w-lwe-", "YYYY-MM-DD HH:mm");
-                        break;
-                    default:
-                        set(item, flt, i, "w-");
-                        break;
-                }
-                break;
-            default:
-                switch (item.type) {
-                    case "string":
-                        set(item, flt, i, "w-co-");
-                        break;
-                    default:
-                        set(item, flt, i, "w-");
-                        break;
-                }
-                break;
-        }
+    function set(item, flt, i, s) {
+      let v = urlRequestParameters.get(`${s}${item.name}`)
+      if (v) {
+        flt[i].filtered = v
+      }
+    }
+    function setin(item, flt, i, s) {
+      let v = urlRequestParameters.get(`${s}${item.name}`)
+      if (v) {
+        flt[i].filtered = (v && v.split) ? v.split(",").map((val) => {
+          let nval = parseInt(val)
+          if (!isNaN(nval)) {
+            return nval
+          }
+          return val
+        }) : v
+      }
+    }
+    function setrange(item, flt, i, s1, s2) {
+      let v1 = urlRequestParameters.get(`${s1}${item.name}`)
+      let v2 = urlRequestParameters.get(`${s2}${item.name}`)
+      if (v1 && v2) {
+        flt[i].filtered = [v1, v2]
+      }
     }
 
-    for (let i = 0; i < flt.length; i++) {
-        const item = flt[i];
-        let v = urlRequestParameters.get(`s-${item.name}`)
-        if (v) {
-            flt[i].sorted = v;
+    switch (item.filterType) {
+      case "group":
+        setin(item, flt, i, "w-in-")
+        break
+      case "range":
+        setrange(item, flt, i, "w-lge-", "w-lwe-")
+        break
+      default:
+        switch (item.type) {
+          case "string":
+            set(item, flt, i, "w-co-")
+            break
+          default:
+            set(item, flt, i, "w-")
+            break
         }
+        break
     }
-
-    // for (let i = 0; i < flt.length; i++) {
-    //     const item = flt[i];
-    //     let v = urlRequestParameters.get(`f-max-${item.name}`)
-    //     flt[i].func = ["max"]
-    // }
-    return flt
+  }
+  return flt
 }

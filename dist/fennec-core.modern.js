@@ -19457,21 +19457,6 @@ var ObjectToContextFilters = function ObjectToContextFilters(obj, method) {
   return contextFilters;
 };
 
-var weekday = createCommonjsModule(function (module, exports) {
-!function(e,t){module.exports=t();}(commonjsGlobal,(function(){return function(e,t){t.prototype.weekday=function(e){var t=this.$locale().weekStart||0,i=this.$W,n=(i<t?i+7:i)-t;return this.$utils().u(e)?n:this.subtract(n,"day").add(e,"day")};}}));
-});
-
-var localeData = createCommonjsModule(function (module, exports) {
-!function(n,e){module.exports=e();}(commonjsGlobal,(function(){return function(n,e,t){var r=e.prototype,o=function(n){return n&&(n.indexOf?n:n.s)},u=function(n,e,t,r,u){var i=n.name?n:n.$locale(),a=o(i[e]),s=o(i[t]),f=a||s.map((function(n){return n.slice(0,r)}));if(!u)return f;var d=i.weekStart;return f.map((function(n,e){return f[(e+(d||0))%7]}))},i=function(){return t.Ls[t.locale()]},a=function(n,e){return n.formats[e]||function(n){return n.replace(/(\[[^\]]+])|(MMMM|MM|DD|dddd)/g,(function(n,e,t){return e||t.slice(1)}))}(n.formats[e.toUpperCase()])},s=function(){var n=this;return {months:function(e){return e?e.format("MMMM"):u(n,"months")},monthsShort:function(e){return e?e.format("MMM"):u(n,"monthsShort","months",3)},firstDayOfWeek:function(){return n.$locale().weekStart||0},weekdays:function(e){return e?e.format("dddd"):u(n,"weekdays")},weekdaysMin:function(e){return e?e.format("dd"):u(n,"weekdaysMin","weekdays",2)},weekdaysShort:function(e){return e?e.format("ddd"):u(n,"weekdaysShort","weekdays",3)},longDateFormat:function(e){return a(n.$locale(),e)},meridiem:this.$locale().meridiem,ordinal:this.$locale().ordinal}};r.localeData=function(){return s.bind(this)()},t.localeData=function(){var n=i();return {firstDayOfWeek:function(){return n.weekStart||0},weekdays:function(){return t.weekdays()},weekdaysShort:function(){return t.weekdaysShort()},weekdaysMin:function(){return t.weekdaysMin()},months:function(){return t.months()},monthsShort:function(){return t.monthsShort()},longDateFormat:function(e){return a(n,e)},meridiem:n.meridiem,ordinal:n.ordinal}},t.months=function(){return u(i(),"months")},t.monthsShort=function(){return u(i(),"monthsShort","months",3)},t.weekdays=function(n){return u(i(),"weekdays",null,null,n)},t.weekdaysShort=function(n){return u(i(),"weekdaysShort","weekdays",3,n)},t.weekdaysMin=function(n){return u(i(),"weekdaysMin","weekdays",2,n)};}}));
-});
-
-var utc = require('dayjs/plugin/utc');
-var timezone = require('dayjs/plugin/timezone');
-dayjs_min.extend(utc);
-dayjs_min.extend(timezone);
-dayjs_min.locale('ru');
-dayjs_min.extend(weekday);
-dayjs_min.extend(localeData);
 var queryFilterByItem = function queryFilterByItem(item) {
   if (!item) return [];
   var query = [];
@@ -19607,63 +19592,19 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
         }) : v;
       }
     }
-    function seta(item, flt, i, s1, s2) {
+    function setrange(item, flt, i, s1, s2) {
       var v1 = urlRequestParameters.get("" + s1 + item.name);
       var v2 = urlRequestParameters.get("" + s2 + item.name);
       if (v1 && v2) {
         flt[i].filtered = [v1, v2];
       }
     }
-    function setm(item, flt, i, s1, s2, format) {
-      var v1 = urlRequestParameters.get("" + s1 + item.name);
-      var v2 = urlRequestParameters.get("" + s2 + item.name);
-      if (v1 && v2) {
-        flt[i].filtered = [dayjs_min(v1), dayjs_min(v2)];
-      }
-    }
     switch (item.filterType) {
       case "group":
-        switch (item.type) {
-          case "object":
-          case "document":
-            setin(item, flt, i, "w-in-");
-            break;
-          default:
-            setin(item, flt, i, "w-in-");
-            break;
-        }
+        setin(item, flt, i, "w-in-");
         break;
       case "range":
-        switch (item.type) {
-          case "int":
-          case "uint":
-          case "integer":
-          case "int64":
-          case "int32":
-          case "uint64":
-          case "uint32":
-            seta(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "double":
-          case "float":
-          case "float64":
-          case "float32":
-            seta(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "time":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "date":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          case "datetime":
-          case "time.Time":
-            setm(item, flt, i, "w-lge-", "w-lwe-");
-            break;
-          default:
-            set(item, flt, i, "w-");
-            break;
-        }
+        setrange(item, flt, i, "w-lge-", "w-lwe-");
         break;
       default:
         switch (item.type) {
@@ -19679,13 +19620,6 @@ function QueryParametersToFilters(urlRequestParameters, filters) {
   };
   for (var i = 0; i < flt.length; i++) {
     _loop();
-  }
-  for (var _i = 0; _i < flt.length; _i++) {
-    var item = flt[_i];
-    var v = urlRequestParameters.get("s-" + item.name);
-    if (v) {
-      flt[_i].sorted = v;
-    }
   }
   return flt;
 }
