@@ -1,6 +1,6 @@
 {
   "name": "fennec-core",
-  "version": "2.3.40",
+  "version": "2.3.41",
   "description": "Modern React UI library with UI-agnostic architecture",
   "author": "tarasovin",
   "license": "MIT",

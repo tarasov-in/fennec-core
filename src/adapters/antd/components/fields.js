@@ -81,7 +81,7 @@ export function ActionsSpace(props) {
         }
         return undefined;
     });
-    const itemByProperty = _itemByProperty || ((item, value) => {
+    const x_itemByProperty = React.useCallback((item, value) => {
         if (item?.type == "object" || item?.type == "document") {
             if (_.get(item, "relation.reference.property")) {
                 return data.find(e => e[item.relation.reference.property] === value);
@@ -92,8 +92,9 @@ export function ActionsSpace(props) {
         } else {
             return value;
         }
-    });
-    const label = _label || ((item, value) => {
+    },[data]);
+    const itemByProperty = _itemByProperty || x_itemByProperty;
+    const x_label = React.useCallback((item, value) => {
         if (item && value) {
             if (item.display && _.isFunction(item.display)) {
                 return item.display(value)
@@ -108,8 +109,9 @@ export function ActionsSpace(props) {
             }
         }
         return "";
-    });
-    const labelString = (item, value) => {
+    },[meta]);
+    const label = _label || x_label;
+    const labelString = React.useCallback((item, value) => {
         if (item && value) {
             if (item.displayString && _.isFunction(item.displayString)) {
                 return item.displayString(value)
@@ -128,7 +130,7 @@ export function ActionsSpace(props) {
             }
         }
         return "";
-    };
+    },[meta]);
 
     const RendeActions = React.useCallback(() => {
         if (!item?.actions) return <React.Fragment></React.Fragment>;
@@ -656,7 +658,7 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
     }
-    const by = (item) => {
+    const by = React.useCallback((item) => {
         if (!!item?.dependence && !!item?.dependence?.field) {
             if (changed) {
                 if (!!changed[item.dependence.by] && !!item.dependence.eq) {
@@ -668,7 +670,7 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
             }
             return null
         }
-    };
+    },[changed]);
     const dependenceValue = by(item);
     const defaultQueryParams = useCallback((filter) => {
         var _dependence = (item.dependence?.mode === "server" && item.dependence?.field && by(item)) ? [QueryParam(`w-${item.dependence?.field}`, by(item))] : []
@@ -737,7 +739,7 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
         }
         return data.find(e => e.ID === value);
     };
-    const labelString = (item, value) => {
+    const labelString = React.useCallback((item, value) => {
         if (item && value) {
             if (item.displayString && _.isFunction(item.displayString)) {
                 return item.displayString(value)
@@ -754,8 +756,8 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
             }
         }
         return "";
-    };
-    const label = (item, value) => {
+    },[meta]);
+    const label = React.useCallback((item, value) => {
         if (item && value) {
             if (item.display && _.isFunction(item.display)) {
                 return item.display(value)
@@ -768,7 +770,7 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
             }
         }
         return "";
-    };
+    },[meta]);
 
     const elements = useCallback((data) => {
         if (item.dependence?.mode !== "server" && item.dependence) {
