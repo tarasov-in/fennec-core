@@ -428,7 +428,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
         return data.find(e => e.ID === value);
     };
     const labelString = (item, value) => {
-        console.log("labelString", meta, item, getObjectValue(item, "relation.reference.object"))
+        console.log("labelString", meta, item, value, getObjectValue(item, "relation.reference.object"))
         if (item && value) {
             if (item.displayString && _.isFunction(item.displayString)) {
                 return item.displayString(value)
@@ -447,7 +447,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
         return "";
     };
     const label = (item, value) => {
-        console.log("label", meta, item, getObjectValue(item, "relation.reference.object"))
+        console.log("label", meta, item, value, getObjectValue(item, "relation.reference.object"))
         if (item && value) {
             if (item.display && _.isFunction(item.display)) {
                 return item.display(value)
