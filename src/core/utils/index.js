@@ -12,6 +12,7 @@ export * from './object'
 export * from './display'
 export * from './form'
 export * from './jsx'
+export * from './dayjs'
 
 // Реэкспорт для ModelCore (meta + validation)
 export { GetMeta, GetMetaProperties, GetMetaPropertyByPath } from '../meta'
