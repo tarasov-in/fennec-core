@@ -21866,8 +21866,6 @@ function Collection(props) {
     setOpenOverlay(false);
   };
   var FilterContentFunction = React.useCallback(function () {
-    var meta = useMetaContext();
-    console.log("asdfasdfasdf", meta);
     return /*#__PURE__*/React.createElement(FilterContent, {
       ui: ui,
       auth: auth,
@@ -21885,7 +21883,7 @@ function Collection(props) {
       applyFilter: applyFilter,
       clearFilter: clearFilter
     });
-  }, [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName]);
+  }, [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName, meta]);
   var collectionContext = {
     collection: collection,
     loading: loading,

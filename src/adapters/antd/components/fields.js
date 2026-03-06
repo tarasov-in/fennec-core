@@ -343,6 +343,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const meta = useMetaContext();
+    console.log("11111111111111!!!", meta)
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
