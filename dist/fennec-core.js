@@ -21868,6 +21868,25 @@ function Collection(props) {
   var closeFullscreen = function closeFullscreen() {
     setOpenOverlay(false);
   };
+  var FilterContentFunction = React__default.useCallback(function () {
+    return /*#__PURE__*/React__default.createElement(FilterContent, {
+      ui: ui,
+      auth: auth,
+      filters: filters,
+      sorting: sorting,
+      setSorting: setSorting,
+      state: state,
+      funcStat: funcStat,
+      filtered: filtered,
+      locator: getLocator((props === null || props === void 0 ? void 0 : props.locator) || "collection-" + name || "collection-" + fieldName || "collection", props === null || props === void 0 ? void 0 : props.object),
+      object: props === null || props === void 0 ? void 0 : props.object,
+      name: name,
+      fieldName: fieldName,
+      _onFilterChange: _onFilterChange,
+      applyFilter: applyFilter,
+      clearFilter: clearFilter
+    });
+  }, [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName]);
   var collectionContext = {
     collection: collection,
     loading: loading,
@@ -21899,25 +21918,7 @@ function Collection(props) {
     onFilterChange: _onFilterChange,
     setSorting: setSorting,
     setFiltered: setFiltered,
-    renderFilterPanel: function renderFilterPanel() {
-      return /*#__PURE__*/React__default.createElement(FilterContent, {
-        ui: ui,
-        auth: auth,
-        filters: filters,
-        sorting: sorting,
-        setSorting: setSorting,
-        state: state,
-        funcStat: funcStat,
-        filtered: filtered,
-        locator: getLocator((props === null || props === void 0 ? void 0 : props.locator) || "collection-" + name || "collection-" + fieldName || "collection", props === null || props === void 0 ? void 0 : props.object),
-        object: props === null || props === void 0 ? void 0 : props.object,
-        name: name,
-        fieldName: fieldName,
-        _onFilterChange: _onFilterChange,
-        applyFilter: applyFilter,
-        clearFilter: clearFilter
-      });
-    },
+    renderFilterPanel: FilterContentFunction,
     setCurrent: setCurrent,
     setCount: setCount,
     onSelection: onSelection,

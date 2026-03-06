@@ -420,13 +420,13 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
         }
         return undefined;
     };
-    const itemByProperty = (item, value) => {
+    const itemByProperty = React.useCallback((item, value) => {
         if (_.get(item, "relation.reference.property")) {
             return data.find(e => e[item.relation.reference.property] === value);
         }
         return data.find(e => e.ID === value);
-    };
-    const labelString = (item, value) => {
+    },[data]);
+    const labelString = React.useCallback((item, value) => {
         if (item && value) {
             if (item.displayString && _.isFunction(item.displayString)) {
                 return item.displayString(value)
@@ -443,8 +443,8 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
             }
         }
         return "";
-    };
-    const label = (item, value) => {
+    },[meta]);
+    const label = React.useCallback((item, value) => {
         if (item && value) {
             if (item.display && _.isFunction(item.display)) {
                 return item.display(value)
@@ -457,7 +457,7 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
             }
         }
         return "";
-    };
+    },[meta]);
     const elements = useCallback((data) => {
         if (item.dependence?.mode !== "server" && item.dependence) {
             if (item.dependence.field && by(item)) {
