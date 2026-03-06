@@ -18,7 +18,7 @@ import { useMetaContext } from '../../../Context';
 import { InboxOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone, UploadOutlined } from '@ant-design/icons';
 
-import { dayjs, utc, timezone } from '../../../core/utils'
+import {dayjs, utc, timezone} from '../../../core/utils'
 import 'dayjs/locale/ru'
 // import weekday from "dayjs/plugin/weekday"
 // import localeData from "dayjs/plugin/localeData"
@@ -341,7 +341,6 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const meta = useMetaContext();
-    console.log("GroupObj", meta, item, getObjectValue(item, "relation.reference.object"))
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
@@ -428,7 +427,6 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
         return data.find(e => e.ID === value);
     };
     const labelString = (item, value) => {
-        console.log("labelString", meta, item, value, getObjectValue(item, "relation.reference.object"))
         if (item && value) {
             if (item.displayString && _.isFunction(item.displayString)) {
                 return item.displayString(value)
@@ -447,7 +445,6 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
         return "";
     };
     const label = (item, value) => {
-        console.log("label", meta, item, value, getObjectValue(item, "relation.reference.object"))
         if (item && value) {
             if (item.display && _.isFunction(item.display)) {
                 return item.display(value)
@@ -478,22 +475,22 @@ export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <Select
-                data-locator={getLocator(item?.name || objectName, itemByProperty(item, value))}
-                size={(item.size) ? item.size : "middle"}
-                mode="multiple"
-                showSearch
-                value={value}
-                onChange={e => onChange(e, item, itemByProperty(item, e))}
-                style={{ width: "100%" }}
-                allowClear={true}
-                disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
-                filterOption={(input, option) => {
-                    return option?.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }}
-                {...inputProps}  {...item?.inputProps}
-            >
-                {elements(data)}
-            </Select>
+            data-locator={getLocator(item?.name || objectName, itemByProperty(item, value))}
+            size={(item.size) ? item.size : "middle"}
+            mode="multiple"
+            showSearch
+            value={value}
+            onChange={e => onChange(e, item, itemByProperty(item, e))}
+            style={{ width: "100%" }}
+            allowClear={true}
+            disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
+            filterOption={(input, option) => {
+                return option?.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }}
+            {...inputProps}  {...item?.inputProps}
+        >
+            {elements(data)}
+        </Select>
         </div>
     </FieldLayout>
     )
@@ -509,8 +506,8 @@ export function RangeTime({ wrapperProps, inputProps, formItem, auth, item, valu
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <TimePicker.RangePicker data-locator={getLocator(item?.name)} changeOnBlur={true} value={a} onChange={onChange} type="time" format="HH:mm:ss" locale={locale} style={{ width: "100%" }}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>)
 }
 export function RangeDate({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange }) {
@@ -524,8 +521,8 @@ export function RangeDate({ wrapperProps, inputProps, formItem, auth, item, valu
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <DatePicker.RangePicker data-locator={getLocator(item?.name)} changeOnBlur={true} value={a} onChange={onChange} format="DD.MM.YYYY" locale={locale} style={{ width: "100%" }}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>)
 }
 export function RangeDateTime({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange }) {
@@ -539,8 +536,8 @@ export function RangeDateTime({ wrapperProps, inputProps, formItem, auth, item, 
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <DatePicker.RangePicker data-locator={getLocator(item?.name)} changeOnBlur={true} showTime={{ format: 'HH:mm' }} value={a} onChange={onChange} format="DD.MM.YYYY HH:mm" locale={locale} style={{ width: "100%" }}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>)
 }
 export function RangeFloat({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange }) {
@@ -556,18 +553,18 @@ export function RangeFloat({ wrapperProps, inputProps, formItem, auth, item, val
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <Slider
-                data-locator={getLocator(item?.name)}
-                range
-                defaultValue={def}
-                min={(xmin - (xmin % xstep))}
-                max={(xmax + (xstep - xmax % xstep))}
-                step={xstep}
-                included={true}
-                value={val || def}
-                onChange={setVal}
-                onChangeComplete={(item.realtime) ? onAfterChange : onChange}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            data-locator={getLocator(item?.name)}
+            range
+            defaultValue={def}
+            min={(xmin - (xmin % xstep))}
+            max={(xmax + (xstep - xmax % xstep))}
+            step={xstep}
+            included={true}
+            value={val || def}
+            onChange={setVal}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>
     )
 }
@@ -583,16 +580,16 @@ export function FloatSlider({ wrapperProps, inputProps, formItem, auth, item, va
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <Slider
-                data-locator={getLocator(item?.name)}
-                disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
-                min={xmin}
-                max={xmax}
-                step={xstep}
-                value={(item.realtime) ? value : val}
-                onChange={(item.realtime) ? onChange : setVal}
-                onChangeComplete={(item.realtime) ? onAfterChange : onChange}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            data-locator={getLocator(item?.name)}
+            disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
+            min={xmin}
+            max={xmax}
+            step={xstep}
+            value={(item.realtime) ? value : val}
+            onChange={(item.realtime) ? onChange : setVal}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>
     )
 }
@@ -609,19 +606,19 @@ export function RangeInteger({ wrapperProps, inputProps, formItem, auth, item, v
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
             <Slider
-                data-locator={getLocator(item?.name)}
-                range
-                defaultValue={def}
-                min={(xmin - (xmin % xstep))}
-                max={(xmax + (xstep - xmax % xstep))}
-                step={xstep}
-                value={val}
-                included={true}
-                // onChange={setVal}
-                onChange={(item.realtime) ? onChange : setVal}
-                onChangeComplete={(item.realtime) ? onAfterChange : onChange}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+            data-locator={getLocator(item?.name)}
+            range
+            defaultValue={def}
+            min={(xmin - (xmin % xstep))}
+            max={(xmax + (xstep - xmax % xstep))}
+            step={xstep}
+            value={val}
+            included={true}
+            // onChange={setVal}
+            onChange={(item.realtime) ? onChange : setVal}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>
     )
 }
@@ -637,17 +634,17 @@ export function IntegerSlider({ wrapperProps, inputProps, formItem, auth, item, 
 
     return (<FieldLayout formItem={formItem} item={item} style={(item?.fieldLayoutStyle) ? item.fieldLayoutStyle : { width: "100%" }}>
         <div {...wrapperProps}>
-            <Slider
-                data-locator={getLocator(item?.name)}
-                disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
-                min={xmin}
-                max={xmax}
-                step={xstep}
-                value={(item.realtime) ? value : val}
-                onChange={(item.realtime) ? onChange : setVal}
-                onChangeComplete={(item.realtime) ? onAfterChange : onChange}
-                {...inputProps}  {...item?.inputProps} />
-        </div>
+        <Slider
+            data-locator={getLocator(item?.name)}
+            disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
+            min={xmin}
+            max={xmax}
+            step={xstep}
+            value={(item.realtime) ? value : val}
+            onChange={(item.realtime) ? onChange : setVal}
+            onChangeComplete={(item.realtime) ? onAfterChange : onChange}
+            {...inputProps}  {...item?.inputProps} />
+            </div>
     </FieldLayout>
     )
 }
@@ -1095,7 +1092,7 @@ export function ObjCollection({ wrapperProps, inputProps, formItem, auth, item, 
             style={{
                 width: '100%',
             }}
-            {...wrapperProps}
+             {...wrapperProps}
         >
             <div style={{
                 width: "100%",
