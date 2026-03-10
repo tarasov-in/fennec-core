@@ -21000,8 +21000,6 @@ function FiltersFieldsUI(props) {
     value = props.value,
     onChange = props.onChange,
     ui = props.ui;
-  var meta = useMetaContext();
-  console.log("FiltersFieldsUI", meta);
   var _onFilterChange = React__default.useMemo(function () {
     return function (v, item) {
       if (!v && !(item !== null && item !== void 0 && item.permanent) || item !== null && item !== void 0 && item.permanent && (v === undefined || v === null) || lodash.isArray(v) && v.length == 0) {
@@ -21216,8 +21214,6 @@ function FilterContent(_ref) {
     return i.filter;
   });
   var showFilterButtons = filtered && (fl === null || fl === void 0 ? void 0 : fl.length) > 0;
-  var meta = useMetaContext();
-  console.log("FilterContent", meta);
   return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {}
   }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {

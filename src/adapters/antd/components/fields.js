@@ -340,7 +340,6 @@ export function UploadItem({ wrapperProps, inputProps, formItem, auth, item, val
 export function GroupObj({ meta, wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    console.log("GroupObj", meta)
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data

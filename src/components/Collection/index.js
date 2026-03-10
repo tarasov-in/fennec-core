@@ -85,8 +85,6 @@ export function SortingFieldsUI(props) {
 }
 export function FiltersFieldsUI(props) {
     const { auth, filters, funcs, value, onChange, ui } = props;
-    const meta = useMetaContext();
-    console.log("FiltersFieldsUI", meta)
     const _onFilterChange = React.useMemo(() => (v, item) => {
         if ((!v && !item?.permanent) || (item?.permanent && (v === undefined || v === null)) || (_.isArray(v) && v.length == 0)) {
             let f = { ...value };
@@ -309,8 +307,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
     const ButtonComp = ui?.Button;
     const fl = filters?.filter(i => i.filter);
     const showFilterButtons = filtered && fl?.length > 0;
-    const meta = useMetaContext();
-    console.log("FilterContent", meta)
+
     return (
         <React.Fragment>
             {showFilterButtons && (
