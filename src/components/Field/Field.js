@@ -1,6 +1,6 @@
 import React from 'react';
 import { useUIOptional } from '../../adapters/UIContext';
-import { useMetaContext } from 'fennec-core/Context';
+import { useMetaContext } from '../../Context';
 
 export function Field(props) {
     const {

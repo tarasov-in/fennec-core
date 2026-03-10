@@ -3,7 +3,6 @@ import decode from 'jwt-decode';
 import PubSub from 'pubsub-js';
 import uuid from 'react-uuid';
 import { useMediaQuery } from 'react-responsive';
-import { useMetaContext as useMetaContext$1 } from 'fennec-core/Context';
 import 'antd';
 
 function _defineProperties(e, r) {
@@ -20491,7 +20490,7 @@ function Field(props) {
     item = props.item,
     value = props.value,
     onChange = props.onChange;
-  var meta = useMetaContext$1();
+  var meta = useMetaContext();
   console.log("Field", meta);
   if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
     return props.item.render(auth, item, value, onChange, props);

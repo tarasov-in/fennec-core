@@ -6,7 +6,6 @@ var decode = _interopDefault(require('jwt-decode'));
 var PubSub = _interopDefault(require('pubsub-js'));
 var uuid = _interopDefault(require('react-uuid'));
 var reactResponsive = require('react-responsive');
-var Context = require('fennec-core/Context');
 require('antd');
 
 function _defineProperties(e, r) {
@@ -20494,7 +20493,7 @@ function Field(props) {
     item = props.item,
     value = props.value,
     onChange = props.onChange;
-  var meta = Context.useMetaContext();
+  var meta = useMetaContext();
   console.log("Field", meta);
   if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
     return props.item.render(auth, item, value, onChange, props);
