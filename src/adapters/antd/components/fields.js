@@ -14,7 +14,6 @@ import {
     Spin,
 } from 'antd';
 
-import { useMetaContext } from '../../../Context';
 import { InboxOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone, UploadOutlined } from '@ant-design/icons';
 
@@ -61,12 +60,11 @@ export function FieldLayout({ formItem, auth, item, children, style }) {
     </div>)
 }
 export function ActionsSpace(props) {
-    const { className, children, item, data, setData, objectName, auth, contextObject, value, onChange, loading, setLoading,
+    const { meta, className, children, item, data, setData, objectName, auth, contextObject, value, onChange, loading, setLoading,
         property: _property,
         label: _label,
         itemByProperty: _itemByProperty
     } = props;
-    const meta = useMetaContext();
 
     const property = _property || ((item, value) => {
         if (item?.type == "object" || item?.type == "document") {
@@ -339,10 +337,9 @@ export function UploadItem({ wrapperProps, inputProps, formItem, auth, item, val
     );
 }
 
-export function GroupObj({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function GroupObj({ meta, wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const meta = useMetaContext();
     console.log("GroupObj", meta)
 
     const dataOrContent = (data) => {
@@ -651,10 +648,9 @@ export function IntegerSlider({ wrapperProps, inputProps, formItem, auth, item, 
     </FieldLayout>
     )
 }
-export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function Obj({ meta, wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-    const meta = useMetaContext();
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
@@ -900,10 +896,9 @@ export function Obj({ wrapperProps, inputProps, formItem, auth, item, value, onC
     </FieldLayout>
     )
 }
-export function ObjCollection({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function ObjCollection({ meta, wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const meta = useMetaContext();
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data
@@ -1129,10 +1124,9 @@ export function ObjCollection({ wrapperProps, inputProps, formItem, auth, item, 
     </FieldLayout>
     )
 }
-export function BigObj({ wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function BigObj({ meta, wrapperProps, inputProps, formItem, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const meta = useMetaContext();
 
     const dataOrContent = (data) => {
         return (data && data.content) ? data.content : (_.has(data, 'content')) ? [] : data

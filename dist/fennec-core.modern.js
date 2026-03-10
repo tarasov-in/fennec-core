@@ -20491,15 +20491,18 @@ function Field(props) {
     value = props.value,
     onChange = props.onChange;
   var meta = useMetaContext();
-  console.log("Field", meta);
   if (props !== null && props !== void 0 && (_props$item = props.item) !== null && _props$item !== void 0 && _props$item.render) {
-    return props.item.render(auth, item, value, onChange, props);
+    return props.item.render(auth, item, value, onChange, _extends({}, props, {
+      meta: meta
+    }));
   }
   var ui = useUIOptional();
   if (!ui || !ui.renderField) {
     return null;
   }
-  return ui.renderField(props);
+  return ui.renderField(_extends({}, props, {
+    meta: meta
+  }));
 }
 
 function CollectionByProperty(props) {

@@ -12,12 +12,11 @@ export function Field(props) {
         // disabled,
         // placeholder,
     } = props;
-
+    
     const meta = useMetaContext();
-    console.log("Field", meta)
 
     if (props?.item?.render) {
-        return props.item.render(auth, item, value, onChange, props);
+        return props.item.render(auth, item, value, onChange, {...props, meta});
     }
 
     const ui = useUIOptional();
@@ -25,7 +24,7 @@ export function Field(props) {
         return null;
     }
 
-    return ui.renderField(props);
+    return ui.renderField({...props, meta});
 
     // const type = item?.view?.type ?? item?.type;
 
