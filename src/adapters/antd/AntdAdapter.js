@@ -37,6 +37,7 @@ import {
 } from './components/Utils'
 import {dayjs} from '../../core/utils'
 import { Boolean, Date, DateTime, Float, FloatSlider, GroupObj, Integer, IntegerSlider, Obj, Password, RangeDate, RangeFloat, RangeInteger, String, Time, Unknown, UploadItem, UploadItems } from './components/fields'
+import { MetaContext } from '../../Context'
 
 /**
  * AntdAdapter - адаптер для Ant Design
@@ -219,7 +220,10 @@ export class AntdAdapter extends UIAdapter {
             return (props?.item?.render) ? props?.item?.render(auth, item, value, onChange, props) : undefined;
           case "object":
           case "document":
-            return (<GroupObj {...props}></GroupObj>)
+            return (<MetaContext.Consumer>{(meta)=>{
+              console.log("UIAdapter", meta)
+              return(<GroupObj {...props}></GroupObj>)
+            }}</MetaContext.Consumer>)
           default:
             return (<Unknown {...props}></Unknown>)
         }

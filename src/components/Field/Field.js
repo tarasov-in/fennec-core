@@ -1,5 +1,6 @@
 import React from 'react';
 import { useUIOptional } from '../../adapters/UIContext';
+import { useMetaContext } from 'fennec-core/Context';
 
 export function Field(props) {
     const {
@@ -11,6 +12,9 @@ export function Field(props) {
         // disabled,
         // placeholder,
     } = props;
+
+    const meta = useMetaContext();
+    console.log("Field", meta)
 
     if (props?.item?.render) {
         return props.item.render(auth, item, value, onChange, props);
