@@ -19304,7 +19304,9 @@ var js_cookie = createCommonjsModule(function (module, exports) {
 
 var AuthService = /*#__PURE__*/function () {
   function AuthService(domain) {
+    var _window$location$prot;
     this.fetchRfToken = configureRefreshFetch(this);
+    var locationProtocol = typeof window !== 'undefined' ? (_window$location$prot = window.location.protocol) === null || _window$location$prot === void 0 ? void 0 : _window$location$prot.replace(":", "") : "";
     this.ws = new WSocket({
       auth: this
     });
@@ -19312,7 +19314,7 @@ var AuthService = /*#__PURE__*/function () {
     this._portws = process.env.REACT_APP_PORTWS ? ":" + process.env.REACT_APP_PORTWS : "";
     this._domainParam = domain;
     this.schemws = process.env.REACT_APP_SCHEMWS || "ws";
-    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || "http";
+    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || locationProtocol || "http";
     this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp;
     this.appProfile = process.env.REACT_APP_PROFILE || "dev";
     this.publicMode = false;
@@ -19684,14 +19686,9 @@ var AuthService = /*#__PURE__*/function () {
       return typeof window !== 'undefined' ? window.location.hostname + this._portws || "localhost:8480" : "localhost" + this._portws;
     }
   }, {
-    key: "scheme",
-    get: function get() {
-      return typeof window !== 'undefined' ? window.location.protocol || this.schemhttp + ":" : this.schemhttp + ":";
-    }
-  }, {
     key: "domain",
     get: function get() {
-      return this._domainParam || this.scheme + '//' + this.Hostname;
+      return this._domainParam || this.schemhttp + '://' + this.Hostname;
     }
   }]);
 }();

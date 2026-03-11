@@ -8,12 +8,14 @@ import { getNotifier } from '../core/error'
 
 export class AuthService {
     constructor(domain) {
+        let locationProtocol = typeof window !== 'undefined' ? (window.location.protocol?.replace(":", "")) : "";
+
         this.ws = new WSocket({ auth: this });
         this._port = (process.env.REACT_APP_PORT) ? ":" + process.env.REACT_APP_PORT : "";
         this._portws = (process.env.REACT_APP_PORTWS) ? ":" + process.env.REACT_APP_PORTWS : "";
         this._domainParam = domain;
         this.schemws = process.env.REACT_APP_SCHEMWS || "ws"
-        this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || "http"
+        this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || locationProtocol || "http"
         this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp
         this.appProfile = process.env.REACT_APP_PROFILE || "dev"
         this.publicMode = false
@@ -47,11 +49,8 @@ export class AuthService {
     get Hostnamews() {
         return typeof window !== 'undefined' ? (window.location.hostname + this._portws) || "localhost:8480" : "localhost" + this._portws;
     }
-    get scheme() {
-        return typeof window !== 'undefined' ? (window.location.protocol) || this.schemhttp+":" : this.schemhttp+":";
-    }
     get domain() {
-        return this._domainParam || (this.scheme + '//' + this.Hostname);
+        return this._domainParam || (this.schemhttp + '://' + this.Hostname);
     }
 
     getDomainWithoutSubdomain(url) {
