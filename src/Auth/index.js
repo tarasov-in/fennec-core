@@ -47,8 +47,11 @@ export class AuthService {
     get Hostnamews() {
         return typeof window !== 'undefined' ? (window.location.hostname + this._portws) || "localhost:8480" : "localhost" + this._portws;
     }
+    get scheme() {
+        return typeof window !== 'undefined' ? (window.location.protocol) || this.schemhttp+":" : this.schemhttp+":";
+    }
     get domain() {
-        return this._domainParam || (this.schemhttp + '://' + this.Hostname);
+        return this._domainParam || (this.scheme + '//' + this.Hostname);
     }
 
     getDomainWithoutSubdomain(url) {

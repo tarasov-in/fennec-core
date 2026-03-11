@@ -19684,9 +19684,14 @@ var AuthService = /*#__PURE__*/function () {
       return typeof window !== 'undefined' ? window.location.hostname + this._portws || "localhost:8480" : "localhost" + this._portws;
     }
   }, {
+    key: "scheme",
+    get: function get() {
+      return typeof window !== 'undefined' ? window.location.protocol || this.schemhttp + ":" : this.schemhttp + ":";
+    }
+  }, {
     key: "domain",
     get: function get() {
-      return this._domainParam || this.schemhttp + '://' + this.Hostname;
+      return this._domainParam || this.scheme + '//' + this.Hostname;
     }
   }]);
 }();
