@@ -19313,13 +19313,15 @@ var AuthService = /*#__PURE__*/function () {
     this.ws = new WSocket({
       auth: this
     });
-    this._port = process.env.REACT_APP_PORT ? ":" + process.env.REACT_APP_PORT : "";
-    this._portws = process.env.REACT_APP_PORTWS ? ":" + process.env.REACT_APP_PORTWS : "";
+    var PORT = process.env.REACT_APP_PORT || process.env.NEXT_PUBLIC_PORT;
+    var PORTWS = process.env.REACT_APP_PORTWS || process.env.NEXT_PUBLIC_PORTWS;
+    this._port = PORT ? ":" + PORT : "";
+    this._portws = PORTWS ? ":" + PORTWS : "";
     this._domainParam = domain;
-    this.schemws = process.env.REACT_APP_SCHEMWS || "ws";
+    this.schemws = process.env.REACT_APP_SCHEMWS || process.env.NEXT_PUBLIC_SCHEMWS || "ws";
     this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || locationProtocol || "http";
-    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp;
-    this.appProfile = process.env.REACT_APP_PROFILE || "dev";
+    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || process.env.NEXT_PUBLIC_AUTHSCHEMHTTP || this.schemhttp;
+    this.appProfile = process.env.REACT_APP_PROFILE || process.env.NEXT_PUBLIC_PROFILE || "dev";
     this.publicMode = false;
     this.setPublicMode = this.setPublicMode.bind(this);
     this.keepAlive = "";
