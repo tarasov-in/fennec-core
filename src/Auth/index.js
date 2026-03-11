@@ -13,7 +13,7 @@ export class AuthService {
         this._portws = (process.env.REACT_APP_PORTWS) ? ":" + process.env.REACT_APP_PORTWS : "";
         this._domainParam = domain;
         this.schemws = process.env.REACT_APP_SCHEMWS || "ws"
-        this.schemhttp = process.env.REACT_APP_SCHEMHTTP || "http"
+        this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || "http"
         this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp
         this.appProfile = process.env.REACT_APP_PROFILE || "dev"
         this.publicMode = false
