@@ -20880,7 +20880,10 @@ function SortingFieldsUI(props) {
   var locator = function locator(suffix, obj) {
     return getLocator((props === null || props === void 0 ? void 0 : props.locator) || suffix, obj);
   };
-  if (ui !== null && ui !== void 0 && ui.Divider && ui !== null && ui !== void 0 && ui.Select && ui !== null && ui !== void 0 && ui.Button && ui !== null && ui !== void 0 && ui.Tooltip && ui !== null && ui !== void 0 && ui.Icons) {
+  var isDesktopOrLaptop = useMediaQuery({
+    minWidth: 769
+  });
+  if (isDesktopOrLaptop && ui !== null && ui !== void 0 && ui.Divider && ui !== null && ui !== void 0 && ui.Select && ui !== null && ui !== void 0 && ui.Button && ui !== null && ui !== void 0 && ui.Tooltip && ui !== null && ui !== void 0 && ui.Icons) {
     var Divider = ui.Divider;
     var Select = ui.Select;
     var Button = ui.Button;
@@ -20947,6 +20950,129 @@ function SortingFieldsUI(props) {
         });
       }
     }))))));
+  } else if (!isDesktopOrLaptop && ui !== null && ui !== void 0 && ui.Picker && ui !== null && ui !== void 0 && ui.Icons && ui.Icons.SortAscending && ui.Icons.SortDescending) {
+    var Picker = ui.Picker;
+    var _SortAsc = ui.Icons.SortAscending;
+    var _SortDesc = ui.Icons.SortDescending;
+    var s = React.useMemo(function () {
+      var so = filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
+        return f.sort;
+      });
+      return so === null || so === void 0 ? void 0 : so.map(function (item) {
+        return {
+          label: item.label,
+          value: item.name,
+          item: item
+        };
+      });
+    }, [filters]);
+    var sortingOrder = React.useCallback(function () {
+      if (value.order === "ASC") {
+        _onChange({
+          name: value.name,
+          order: "DESC"
+        });
+      } else {
+        _onChange({
+          name: value.name,
+          order: "ASC"
+        });
+      }
+    }, [value]);
+    var onSortingChangeString = React.useCallback(function (v) {
+      _onChange({
+        name: v,
+        order: value.order
+      });
+    }, [value]);
+    var onOk = React.useCallback(function (v) {
+      if (v.length) {
+        onSortingChangeString(v[0], filters.find(function (i) {
+          return i.name === v[0];
+        }));
+      }
+    }, [filters, onSortingChangeString]);
+    var _useState = useState(false),
+      visible = _useState[0],
+      setVisible = _useState[1];
+    var current = React.useMemo(function () {
+      var _s$find;
+      return s === null || s === void 0 ? void 0 : (_s$find = s.find(function (e) {
+        return e.value === value.name;
+      })) === null || _s$find === void 0 ? void 0 : _s$find.label;
+    }, [value]);
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sorting", props === null || props === void 0 ? void 0 : props.object)
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: "10px",
+        paddingRight: "10px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, 'Open Sans', 'Helvetica Neue', 'Noto Sans Armenian', 'Noto Sans Bengali', 'Noto Sans Cherokee', 'Noto Sans Devanagari', 'Noto Sans Ethiopic', 'Noto Sans Georgian', 'Noto Sans Hebrew', 'Noto Sans Kannada', 'Noto Sans Khmer', 'Noto Sans Lao', 'Noto Sans Osmanya', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Thai', sans-serif",
+        fontWeight: "600",
+        color: "rgba(0, 0, 0, 0.85)",
+        padding: "0px 21px 0px 11px"
+      }
+    }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: "auto",
+        margin: "10px 10px",
+        height: "1px",
+        backgroundColor: "#f0f0f0"
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: "5px 0px",
+        margin: "10px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "bg bg-grey",
+      style: {
+        textAlign: "left",
+        paddingLeft: "5px",
+        marginBottom: "5px"
+      }
+    }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        paddingBottom: "10px",
+        display: "flex",
+        gap: "5px"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        setVisible(true);
+      },
+      style: {
+        flex: "1 1 auto",
+        border: "1px solid #e5e5e5",
+        borderRadius: "4px",
+        padding: "2px 6px"
+      }
+    }, /*#__PURE__*/React.createElement(Picker, {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingselect", props === null || props === void 0 ? void 0 : props.object),
+      columns: [s],
+      visible: visible,
+      onClose: function onClose() {
+        setVisible(false);
+      },
+      cancelText: "\u041E\u0442\u043C\u0435\u043D\u0430",
+      confirmText: "\u0412\u044B\u0431\u0440\u0430\u0442\u044C",
+      value: [value.name],
+      onConfirm: onOk
+    }), current), /*#__PURE__*/React.createElement("div", {
+      "data-locator": getLocator((props === null || props === void 0 ? void 0 : props.locator) || "sortingorder", props === null || props === void 0 ? void 0 : props.object),
+      onClick: sortingOrder,
+      style: {
+        flex: "0 0 35px",
+        border: "1px solid #e5e5e5",
+        borderRadius: "4px",
+        padding: "2px 6px"
+      }
+    }, value.order === "ASC" && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(_SortAsc, null)), value.order === "DESC" && /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement(_SortDesc, null)))))));
   }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -21327,52 +21453,52 @@ function Collection(props) {
   };
   var fltrs = props.filters ? props.filters() : [];
   var meta = useMetaContext();
-  var _useState = useState(false),
-    loading = _useState[0],
-    setLoading = _useState[1];
-  var _useState2 = useState([]),
-    collection = _useState2[0],
-    _setCollection = _useState2[1];
-  var _useState3 = useState(),
-    response = _useState3[0],
-    setResponse = _useState3[1];
+  var _useState2 = useState(false),
+    loading = _useState2[0],
+    setLoading = _useState2[1];
+  var _useState3 = useState([]),
+    collection = _useState3[0],
+    _setCollection = _useState3[1];
   var _useState4 = useState(),
-    funcStat = _useState4[0],
-    setFuncStat = _useState4[1];
+    response = _useState4[0],
+    setResponse = _useState4[1];
   var _useState5 = useState(),
-    lastFuncStat = _useState5[0],
-    setLastFuncStat = _useState5[1];
-  var _useState6 = useState({
+    funcStat = _useState5[0],
+    setFuncStat = _useState5[1];
+  var _useState6 = useState(),
+    lastFuncStat = _useState6[0],
+    setLastFuncStat = _useState6[1];
+  var _useState7 = useState({
       filter: defFilters(props.filters ? fltrs : []),
       newFilter: defFilters(props.filters ? fltrs : []),
       filterChanged: false
     }),
-    state = _useState6[0],
-    setState = _useState6[1];
-  var _useState7 = useState(false),
-    filtered = _useState7[0],
-    setFiltered = _useState7[1];
-  var _useState8 = useState(),
-    filters = _useState8[0],
-    setFilters = _useState8[1];
+    state = _useState7[0],
+    setState = _useState7[1];
+  var _useState8 = useState(false),
+    filtered = _useState8[0],
+    setFiltered = _useState8[1];
   var _useState9 = useState(),
-    mobject = _useState9[0],
-    setMObject = _useState9[1];
-  var _useState0 = useState(defSorting(props.filters ? fltrs : [])),
-    sorting = _useState0[0],
-    setSorting = _useState0[1];
-  var _useState1 = useState(props.page ? parseInt(props.page()) || 1 : 1),
-    current = _useState1[0],
-    _setCurrent = _useState1[1];
-  var _useState10 = useState(props.count ? parseInt(props.count()) || 20 : 20),
-    count = _useState10[0],
-    setCount = _useState10[1];
-  var _useState11 = useState(1),
-    total = _useState11[0],
-    setTotal = _useState11[1];
+    filters = _useState9[0],
+    setFilters = _useState9[1];
+  var _useState0 = useState(),
+    mobject = _useState0[0],
+    setMObject = _useState0[1];
+  var _useState1 = useState(defSorting(props.filters ? fltrs : [])),
+    sorting = _useState1[0],
+    setSorting = _useState1[1];
+  var _useState10 = useState(props.page ? parseInt(props.page()) || 1 : 1),
+    current = _useState10[0],
+    _setCurrent = _useState10[1];
+  var _useState11 = useState(props.count ? parseInt(props.count()) || 20 : 20),
+    count = _useState11[0],
+    setCount = _useState11[1];
   var _useState12 = useState(1),
-    totalPages = _useState12[0],
-    setTotalPages = _useState12[1];
+    total = _useState12[0],
+    setTotal = _useState12[1];
+  var _useState13 = useState(1),
+    totalPages = _useState13[0],
+    setTotalPages = _useState13[1];
   useEffect(function () {
     if (onChangeRequestParameters) {
       onChangeRequestParameters({
@@ -21580,15 +21706,15 @@ function Collection(props) {
   useEffect(function () {
     _request(state.filter);
   }, [source, name, state.filter, filters, sorting, current, contextFilters]);
-  var _useState13 = useState(selection || 'checkbox'),
-    selectionType = _useState13[0],
-    setSelectionType = _useState13[1];
-  var _useState14 = useState([]),
-    selectedRowKeys = _useState14[0],
-    setSelectedRowKeys = _useState14[1];
+  var _useState14 = useState(selection || 'checkbox'),
+    selectionType = _useState14[0],
+    setSelectionType = _useState14[1];
   var _useState15 = useState([]),
-    selectedRows = _useState15[0],
-    setSelectedRows = _useState15[1];
+    selectedRowKeys = _useState15[0],
+    setSelectedRowKeys = _useState15[1];
+  var _useState16 = useState([]),
+    selectedRows = _useState16[0],
+    setSelectedRows = _useState16[1];
   useEffect(function () {
     setSelectionType(selection);
   }, [selection]);
@@ -21862,9 +21988,9 @@ function Collection(props) {
       };
     }
   }, [collection, setCollection, setCollectionItem, removeCollectionItem, loading, update, state.filter, sorting, current, count]);
-  var _useState16 = useState(false),
-    openOverlay = _useState16[0],
-    setOpenOverlay = _useState16[1];
+  var _useState17 = useState(false),
+    openOverlay = _useState17[0],
+    setOpenOverlay = _useState17[1];
   var isFullscreen = openOverlay;
   var openFullscreen = function openFullscreen() {
     setOpenOverlay(true);
