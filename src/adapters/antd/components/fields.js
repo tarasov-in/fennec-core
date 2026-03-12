@@ -18,7 +18,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { EyeInvisibleOutlined, EyeTwoTone, UploadOutlined } from '@ant-design/icons';
 
 import {dayjs, utc, timezone} from '../../../core/utils'
-import 'dayjs/locale/ru'
+// import 'dayjs/locale/ru'
 // import weekday from "dayjs/plugin/weekday"
 // import localeData from "dayjs/plugin/localeData"
 import { Model } from '../../../components/Model';

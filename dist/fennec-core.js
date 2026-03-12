@@ -20953,10 +20953,8 @@ function SortingFieldsUI(props) {
         });
       }
     }))))));
-  } else if (!isDesktopOrLaptop && ui !== null && ui !== void 0 && ui.Picker && ui !== null && ui !== void 0 && ui.Icons && ui.Icons.SortAscending && ui.Icons.SortDescending) {
+  } else if (!isDesktopOrLaptop && ui !== null && ui !== void 0 && ui.Picker) {
     var Picker = ui.Picker;
-    var _SortAsc = ui.Icons.SortAscending;
-    var _SortDesc = ui.Icons.SortDescending;
     var s = React__default.useMemo(function () {
       var so = filters === null || filters === void 0 ? void 0 : filters.filter(function (f) {
         return f.sort;
@@ -21075,7 +21073,11 @@ function SortingFieldsUI(props) {
         borderRadius: "4px",
         padding: "2px 6px"
       }
-    }, value.order === "ASC" && /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(_SortAsc, null)), value.order === "DESC" && /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement(_SortDesc, null)))))));
+    }, value.order === "ASC" && /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement("i", {
+      className: "fa-solid fa-arrow-down-short-wide"
+    })), value.order === "DESC" && /*#__PURE__*/React__default.createElement("span", null, /*#__PURE__*/React__default.createElement("i", {
+      className: "fa-solid fa-arrow-down-wide-short"
+    })))))));
   }
   return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {

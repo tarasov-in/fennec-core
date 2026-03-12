@@ -55,10 +55,10 @@ export function SortingFieldsUI(props) {
                 </div>
             </React.Fragment>
         );
-    } else if (!isDesktopOrLaptop && ui?.Picker && ui?.Icons && ui.Icons.SortAscending && ui.Icons.SortDescending) {
+    } else if (!isDesktopOrLaptop && ui?.Picker) {
         const Picker = ui.Picker;
-        const SortAsc = ui.Icons.SortAscending;
-        const SortDesc = ui.Icons.SortDescending;
+        // const SortAsc = ui.Icons.SortAscending;
+        // const SortDesc = ui.Icons.SortDescending;
         const s = React.useMemo(() => {
             const so = filters?.filter(f => f.sort);
             return so?.map((item) => {
@@ -140,10 +140,10 @@ export function SortingFieldsUI(props) {
                                 padding: "2px 6px",
                             }}>
                             {value.order === "ASC" &&
-                                <span><SortAsc /></span>
+                                <span><i className="fa-solid fa-arrow-down-short-wide"></i></span>
                             }
                             {value.order === "DESC" &&
-                                <span><SortDesc /></span>
+                                <span><i className="fa-solid fa-arrow-down-wide-short"></i></span>
                             }
                         </div>
                     </div>
