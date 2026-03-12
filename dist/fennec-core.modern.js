@@ -21012,8 +21012,7 @@ function SortingFieldsUI(props) {
       style: {
         fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, 'Open Sans', 'Helvetica Neue', 'Noto Sans Armenian', 'Noto Sans Bengali', 'Noto Sans Cherokee', 'Noto Sans Devanagari', 'Noto Sans Ethiopic', 'Noto Sans Georgian', 'Noto Sans Hebrew', 'Noto Sans Kannada', 'Noto Sans Khmer', 'Noto Sans Lao', 'Noto Sans Osmanya', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Thai', sans-serif",
         fontWeight: "600",
-        color: "rgba(0, 0, 0, 0.85)",
-        padding: "0px 21px 0px 11px"
+        color: "rgba(0, 0, 0, 0.85)"
       }
     }, "\u0421\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u043A\u0430"), /*#__PURE__*/React.createElement("div", {
       style: {
@@ -21024,8 +21023,7 @@ function SortingFieldsUI(props) {
       }
     })), /*#__PURE__*/React.createElement("div", {
       style: {
-        padding: "5px 0px",
-        margin: "10px"
+        padding: "5px 0px"
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "bg bg-grey",

@@ -97,13 +97,12 @@ export function SortingFieldsUI(props) {
                         fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, 'Open Sans', 'Helvetica Neue', 'Noto Sans Armenian', 'Noto Sans Bengali', 'Noto Sans Cherokee', 'Noto Sans Devanagari', 'Noto Sans Ethiopic', 'Noto Sans Georgian', 'Noto Sans Hebrew', 'Noto Sans Kannada', 'Noto Sans Khmer', 'Noto Sans Lao', 'Noto Sans Osmanya', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Thai', sans-serif",
                         fontWeight: "600",
                         color: "rgba(0, 0, 0, 0.85)",
-                        padding: "0px 21px 0px 11px",
                     }}>
                         Сортировка
                     </div>
                     <div style={{ flex: "auto", margin: "10px 10px", height: "1px", backgroundColor: "#f0f0f0" }}></div>
                 </div>
-                <div style={{ padding: "5px 0px", margin: "10px" }}>
+                <div style={{ padding: "5px 0px" }}>
                     <div className='bg bg-grey' style={{ textAlign: "left", paddingLeft: "5px", marginBottom: "5px" }}>
                         Сортировать по
                     </div>
