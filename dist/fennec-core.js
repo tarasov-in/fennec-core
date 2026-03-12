@@ -21322,7 +21322,8 @@ function collectionQueryParams(filters, contextFilters, filter, sorting, current
   return params;
 }
 function FilterContent(_ref) {
-  var auth = _ref.auth,
+  var close = _ref.close,
+    auth = _ref.auth,
     filters = _ref.filters,
     sorting = _ref.sorting,
     setSorting = _ref.setSorting,
@@ -21345,6 +21346,12 @@ function FilterContent(_ref) {
   var isDesktopOrLaptop = reactResponsive.useMediaQuery({
     minWidth: 769
   });
+  var apply = React__default.useCallback(function () {
+    applyFilter();
+    if (close) {
+      close();
+    }
+  }, [close, applyFilter]);
   return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, isDesktopOrLaptop && showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {}
   }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
@@ -21417,7 +21424,7 @@ function FilterContent(_ref) {
     },
     disabled: !state.filterChanged,
     type: "primary",
-    onClick: applyFilter
+    onClick: apply
   }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C") : /*#__PURE__*/React__default.createElement("button", {
     type: "button",
     disabled: !state.filterChanged,
@@ -22040,7 +22047,7 @@ function Collection(props) {
   var closeFullscreen = function closeFullscreen() {
     setOpenOverlay(false);
   };
-  var FilterContentFunction = React__default.useCallback(function () {
+  var FilterContentFunction = React__default.useCallback(function (close) {
     return /*#__PURE__*/React__default.createElement(FilterContent, {
       ui: ui,
       auth: auth,
@@ -22056,7 +22063,8 @@ function Collection(props) {
       fieldName: fieldName,
       _onFilterChange: _onFilterChange,
       applyFilter: applyFilter,
-      clearFilter: clearFilter
+      clearFilter: clearFilter,
+      close: close
     });
   }, [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName, meta]);
   var collectionContext = {

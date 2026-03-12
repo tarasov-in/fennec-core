@@ -400,11 +400,17 @@ function FilterButton(props) {
         </div>
     );
 }
-function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter, ui }) {
+function FilterContent({ close, auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter, ui }) {
     const ButtonComp = ui?.Button;
     const fl = filters?.filter(i => i.filter);
     const showFilterButtons = filtered && fl?.length > 0;
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 769 })
+    const apply = React.useCallback(() => {
+        applyFilter();
+        if (close) {
+            close();
+        }
+    }, [close, applyFilter])
     return (
         <React.Fragment>
             {(isDesktopOrLaptop && showFilterButtons) && (
@@ -416,7 +422,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
                                 style={{ width: "100%" }}
                                 disabled={!state.filterChanged}
                                 type="primary"
-                                onClick={applyFilter}
+                                onClick={apply}
                             >
                                 Применить
                             </ButtonComp>
@@ -466,7 +472,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
                                     style={{ width: "100%" }}
                                     disabled={!state.filterChanged}
                                     type="primary"
-                                    onClick={applyFilter}
+                                    onClick={apply}
                                 >
                                     Применить
                                 </ButtonComp>
@@ -1117,7 +1123,7 @@ export function Collection(props) {
     const isFullscreen = openOverlay;
     const openFullscreen = () => { setOpenOverlay(true); };
     const closeFullscreen = () => { setOpenOverlay(false); };
-    const FilterContentFunction = React.useCallback(() => (
+    const FilterContentFunction = React.useCallback((close) => (
         <FilterContent
             ui={ui}
             auth={auth}
@@ -1134,6 +1140,7 @@ export function Collection(props) {
             _onFilterChange={_onFilterChange}
             applyFilter={applyFilter}
             clearFilter={clearFilter}
+            close={close}
         />
     ), [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName, meta])
     const collectionContext = {
