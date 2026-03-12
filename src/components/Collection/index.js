@@ -404,10 +404,10 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
     const ButtonComp = ui?.Button;
     const fl = filters?.filter(i => i.filter);
     const showFilterButtons = filtered && fl?.length > 0;
-
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 769 })
     return (
         <React.Fragment>
-            {showFilterButtons && (
+            {(isDesktopOrLaptop && showFilterButtons) && (
                 <React.Fragment>
                     <div style={{}}>
                         {ButtonComp ? (
@@ -442,6 +442,41 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
             )}
             <SortingFieldsUI ui={ui} value={sorting} onChange={setSorting} filters={filters} />
             <FiltersFieldsUI ui={ui} auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />
+            {(!isDesktopOrLaptop && showFilterButtons) && (
+                <React.Fragment>
+                    <div style={{ display: "flex" }}>
+                        <div style={{}}>
+                            {ButtonComp ? (
+                                <ButtonComp
+                                    data-locator={getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object)}
+                                    style={{ width: "100%" }}
+                                    disabled={!state.filterChanged}
+                                    type="primary"
+                                    onClick={applyFilter}
+                                >
+                                    Применить
+                                </ButtonComp>
+                            ) : (
+                                <button type="button" disabled={!state.filterChanged} onClick={applyFilter}>Применить</button>
+                            )}
+                        </div>
+                        <div style={{ marginTop: "5px" }}>
+                            {ButtonComp ? (
+                                <ButtonComp
+                                    data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
+                                    style={{ width: "100%" }}
+                                    disabled={_.isEmpty(state.filter)}
+                                    onClick={clearFilter}
+                                >
+                                    Очистить
+                                </ButtonComp>
+                            ) : (
+                                <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
+                            )}
+                        </div>
+                    </div>
+                </React.Fragment>
+            )}
         </React.Fragment>
     );
 }

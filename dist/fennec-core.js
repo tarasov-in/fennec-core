@@ -21342,7 +21342,10 @@ function FilterContent(_ref) {
     return i.filter;
   });
   var showFilterButtons = filtered && (fl === null || fl === void 0 ? void 0 : fl.length) > 0;
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
+  var isDesktopOrLaptop = reactResponsive.useMediaQuery({
+    minWidth: 769
+  });
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, isDesktopOrLaptop && showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
     style: {}
   }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
     "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),
@@ -21383,7 +21386,40 @@ function FilterContent(_ref) {
     onChange: _onFilterChange,
     filters: filters,
     funcs: funcStat
-  }));
+  }), !isDesktopOrLaptop && showFilterButtons && /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", {
+    style: {
+      display: "flex"
+    }
+  }, /*#__PURE__*/React__default.createElement("div", {
+    style: {}
+  }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
+    "data-locator": getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object),
+    style: {
+      width: "100%"
+    },
+    disabled: !state.filterChanged,
+    type: "primary",
+    onClick: applyFilter
+  }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C") : /*#__PURE__*/React__default.createElement("button", {
+    type: "button",
+    disabled: !state.filterChanged,
+    onClick: applyFilter
+  }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C")), /*#__PURE__*/React__default.createElement("div", {
+    style: {
+      marginTop: "5px"
+    }
+  }, ButtonComp ? /*#__PURE__*/React__default.createElement(ButtonComp, {
+    "data-locator": getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object),
+    style: {
+      width: "100%"
+    },
+    disabled: lodash.isEmpty(state.filter),
+    onClick: clearFilter
+  }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C") : /*#__PURE__*/React__default.createElement("button", {
+    type: "button",
+    disabled: lodash.isEmpty(state.filter),
+    onClick: clearFilter
+  }, "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C")))));
 }
 function Collection(props) {
   var ui = useUIOptional();
