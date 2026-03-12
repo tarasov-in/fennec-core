@@ -20738,7 +20738,6 @@ function Frm(props) {
       objectName: name,
       contextObject: contextObject,
       auth: auth,
-      formItem: true,
       data: data,
       item: _extends({}, item, {
         filterType: undefined,
@@ -21044,9 +21043,8 @@ function FiltersFieldsUI(props) {
       style: {
         marginBottom: "10px"
       }
-    }, item.filter && item.type !== "bool" && item.type !== "boolean" && /*#__PURE__*/React__default.createElement("span", null, item.label), /*#__PURE__*/React__default.createElement(Field, {
+    }, /*#__PURE__*/React__default.createElement(Field, {
       mode: "filter",
-      formItem: true,
       key: item.name,
       auth: auth,
       item: _extends({}, item, {

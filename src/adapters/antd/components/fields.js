@@ -45,18 +45,13 @@ const { Option } = Select;
 export function FieldLayout({ formItem, auth, item, children, style }) {
     return (<div style={style}>
         <div>
-            {(item?.label && !formItem) && <div style={{}}>{item?.label}</div>}
+            {/* {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>} */}
+            {(item?.label && (item.type !== "bool" && item.type !== "boolean")) && <div style={{}}>{item?.label}</div>}
             {(item?.description && item?.description !== item?.label) && <div style={{ color: "rgb(140, 152, 164)", fontSize: "12px" }}>
                 {item?.description}
             </div>}
         </div>
         {children}
-        {/* <div className='gradient-border'>
-            <div className='gradient-border-content'>
-                {children}
-            </div>
-        </div> */}
-
     </div>)
 }
 export function ActionsSpace(props) {

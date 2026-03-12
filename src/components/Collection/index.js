@@ -107,10 +107,10 @@ export function FiltersFieldsUI(props) {
                 <div>
                     {JSXMap(filters?.filter(i => i.filter), (item) => (
                         <div data-locator={getLocator(props?.locator || "filtersfield", props?.object)} key={item.name} style={{ marginBottom: "10px" }}>
-                            {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>}
+                            {/* {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>} */}
                             <Field
                                 mode="filter"
-                                formItem={true}
+                                // formItem={true}
                                 key={item.name}
                                 auth={auth}
                                 item={{ ...item, func: (funcs && funcs[item?.name?.toLowerCase()]) ? funcs[item.name.toLowerCase()] : {} }}
