@@ -444,8 +444,22 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
             <FiltersFieldsUI ui={ui} auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />
             {(!isDesktopOrLaptop && showFilterButtons) && (
                 <React.Fragment>
-                    <div style={{ display: "flex" }}>
-                        <div style={{}}>
+                    <div style={{ display: "flex", gap: "5px" }}>
+                        <div style={{ flex: "1 1 auto" }}>
+                            {ButtonComp ? (
+                                <ButtonComp
+                                    data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
+                                    style={{ width: "100%" }}
+                                    disabled={_.isEmpty(state.filter)}
+                                    onClick={clearFilter}
+                                >
+                                    Очистить
+                                </ButtonComp>
+                            ) : (
+                                <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
+                            )}
+                        </div>
+                        <div style={{ flex: "1 1 auto" }}>
                             {ButtonComp ? (
                                 <ButtonComp
                                     data-locator={getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object)}
@@ -458,20 +472,6 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
                                 </ButtonComp>
                             ) : (
                                 <button type="button" disabled={!state.filterChanged} onClick={applyFilter}>Применить</button>
-                            )}
-                        </div>
-                        <div style={{ marginTop: "5px" }}>
-                            {ButtonComp ? (
-                                <ButtonComp
-                                    data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
-                                    style={{ width: "100%" }}
-                                    disabled={_.isEmpty(state.filter)}
-                                    onClick={clearFilter}
-                                >
-                                    Очистить
-                                </ButtonComp>
-                            ) : (
-                                <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
                             )}
                         </div>
                     </div>
