@@ -21358,7 +21358,7 @@ function FilterContent(_ref) {
     },
     disabled: !state.filterChanged,
     type: "primary",
-    onClick: applyFilter
+    onClick: apply
   }, "\u041F\u0440\u0438\u043C\u0435\u043D\u0438\u0442\u044C") : /*#__PURE__*/React.createElement("button", {
     type: "button",
     disabled: !state.filterChanged,
