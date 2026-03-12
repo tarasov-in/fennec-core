@@ -19307,17 +19307,21 @@ var js_cookie = createCommonjsModule(function (module, exports) {
 
 var AuthService = /*#__PURE__*/function () {
   function AuthService(domain) {
+    var _window$location$prot;
     this.fetchRfToken = configureRefreshFetch(this);
+    var locationProtocol = typeof window !== 'undefined' ? (_window$location$prot = window.location.protocol) === null || _window$location$prot === void 0 ? void 0 : _window$location$prot.replace(":", "") : "";
     this.ws = new WSocket({
       auth: this
     });
-    this._port = process.env.REACT_APP_PORT ? ":" + process.env.REACT_APP_PORT : "";
-    this._portws = process.env.REACT_APP_PORTWS ? ":" + process.env.REACT_APP_PORTWS : "";
+    var PORT = process.env.REACT_APP_PORT || process.env.NEXT_PUBLIC_PORT;
+    var PORTWS = process.env.REACT_APP_PORTWS || process.env.NEXT_PUBLIC_PORTWS;
+    this._port = PORT ? ":" + PORT : "";
+    this._portws = PORTWS ? ":" + PORTWS : "";
     this._domainParam = domain;
-    this.schemws = process.env.REACT_APP_SCHEMWS || "ws";
-    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || "http";
-    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || this.schemhttp;
-    this.appProfile = process.env.REACT_APP_PROFILE || "dev";
+    this.schemws = process.env.REACT_APP_SCHEMWS || process.env.NEXT_PUBLIC_SCHEMWS || "ws";
+    this.schemhttp = process.env.REACT_APP_SCHEMHTTP || process.env.NEXT_PUBLIC_SCHEMHTTP || locationProtocol || "http";
+    this.authschemhttp = process.env.REACT_APP_AUTHSCHEMHTTP || process.env.NEXT_PUBLIC_AUTHSCHEMHTTP || this.schemhttp;
+    this.appProfile = process.env.REACT_APP_PROFILE || process.env.NEXT_PUBLIC_PROFILE || "dev";
     this.publicMode = false;
     this.setPublicMode = this.setPublicMode.bind(this);
     this.keepAlive = "";
