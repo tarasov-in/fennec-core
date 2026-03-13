@@ -1,0 +1,2 @@
+import r,{createContext as e,useMemo as t,useContext as n}from"react";var a=e(null);function u(e){var n=e.children,u=e.adapter,i=t(function(){return u},[u]);return r.createElement(a.Provider,{value:i},n)}function i(){var r=n(a);if(!r)throw new Error("useUIAdapter must be used within UIProvider. Wrap your app with <UIProvider adapter={new AntdAdapter()}>");return r}function o(){return n(a)}export{u as UIProvider,i as useUIAdapter,o as useUIOptional};
+//# sourceMappingURL=fennec-core.modern.js.map
