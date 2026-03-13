@@ -177,7 +177,7 @@ function Frm(props) {
         objectName: name,
         contextObject,
         auth,
-        formItem: true,
+        // formItem: true,
         data,
         item: { ...item, filterType: undefined, func: (funcStat && funcStat[item?.name?.toLowerCase()]) ? funcStat[item?.name?.toLowerCase()] : {} },
         isChanged: isChangedField ? isChangedField((item.type !== "object" && item.type !== "document") ? uncapitalize(item?.name) : uncapitalize(item?.name) + "ID") : undefined

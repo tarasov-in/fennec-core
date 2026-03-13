@@ -1,2 +1,0 @@
-var e,r=require("react"),t=(e=r)&&"object"==typeof e&&"default"in e?e.default:e,n=r.createContext(null);exports.UIProvider=function(e){var u=e.children,o=e.adapter,a=r.useMemo(function(){return o},[o]);return t.createElement(n.Provider,{value:a},u)},exports.useUIAdapter=function(){var e=r.useContext(n);if(!e)throw new Error("useUIAdapter must be used within UIProvider. Wrap your app with <UIProvider adapter={new AntdAdapter()}>");return e},exports.useUIOptional=function(){return r.useContext(n)};
-//# sourceMappingURL=fennec-core.js.map

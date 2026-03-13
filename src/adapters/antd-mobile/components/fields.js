@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import 'moment/locale/ru';
+// import 'moment/locale/ru';
 import { errorCatch, getDisplay, getLocator, getObjectValue, GETWITH, JSXMap, pushStateHistoryModal, READWITH } from '../../../core/utils';
-import moment from 'moment';
+// import moment from 'moment';
+import {dayjs, utc, timezone} from '../../../core/utils'
 import { Checkbox, Input, TextArea, Slider, DatePicker, Button, ImageUploader, Popup, CheckList, SearchBar, Image as AntImage } from 'antd-mobile';
 
 
@@ -156,8 +157,8 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
     useEffect(() => {
         if (value && value.length === 2 && value[0] && value[1]) {
             setVal([
-                moment(value[0]).toDate(),
-                moment(value[1]).toDate()
+                dayjs(value[0]).toDate(),
+                dayjs(value[1]).toDate()
             ]);
         } else {
             setVal([])
@@ -201,7 +202,7 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                         }}
                         precision='day'
                         max={val[1]}
-                        min={moment().subtract(100, "years").toDate()}
+                        min={dayjs().subtract(100, "years").toDate()}
                         disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
                         title={item?.label}
                         confirmText={item.okText || "Выбрать"}
@@ -210,11 +211,11 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                         onClose={() => {
                             setVisible1(false)
                         }}
-                        onConfirm={(v) => onChange([moment(v), (val[1]) ? moment(val[1]) : moment(v)])}
+                        onConfirm={(v) => onChange([dayjs(v), (val[1]) ? dayjs(val[1]) : dayjs(v)])}
                         value={val[0] || null}
                     >
                         {value =>
-                            value ? moment(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
+                            value ? dayjs(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
                         }
                     </DatePicker>
                 </div>
@@ -244,11 +245,11 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                         onClose={() => {
                             setVisible2(false)
                         }}
-                        onConfirm={(v) => onChange([(val[0]) ? moment(val[0]) : moment(v), moment(v)])}
+                        onConfirm={(v) => onChange([(val[0]) ? dayjs(val[0]) : dayjs(v), dayjs(v)])}
                         value={val[1] || null}
                     >
                         {value =>
-                            value ? moment(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
+                            value ? dayjs(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
                         }
                     </DatePicker>
                 </div>
@@ -1017,7 +1018,7 @@ export function Date({ wrapperProps, inputProps, item, value, onChange, onAfterC
     const [val, setVal] = useState();
     useEffect(() => {
         if (value) {
-            setVal(moment(value).toDate());
+            setVal(dayjs(value).toDate());
         } else {
             setVal()
         }
@@ -1057,7 +1058,7 @@ export function Date({ wrapperProps, inputProps, item, value, onChange, onAfterC
                             "--item-font-size": "13px"
                         }}
                         precision='day'
-                        min={moment().subtract(100, "years").toDate()}
+                        min={dayjs().subtract(100, "years").toDate()}
                         disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
                         title={item?.label}
                         confirmText={item.okText || "Выбрать"}
@@ -1070,12 +1071,12 @@ export function Date({ wrapperProps, inputProps, item, value, onChange, onAfterC
                                 setVisible(false)
                             }
                         }}
-                        onConfirm={value => onChange(moment(value))}
+                        onConfirm={value => onChange(dayjs(value))}
                         value={val || null}
                         {...inputProps}  {...item?.inputProps}
                     >
                         {value =>
-                            value ? moment(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
+                            value ? dayjs(value).format('YYYY-MM-DD') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
                         }
                     </DatePicker>
                 </div>
@@ -1088,7 +1089,7 @@ export function DateTime({ wrapperProps, inputProps, item, value, onChange, onAf
     const [val, setVal] = useState();
     useEffect(() => {
         if (value) {
-            setVal(moment(value).toDate());
+            setVal(dayjs(value).toDate());
         } else {
             setVal()
         }
@@ -1128,7 +1129,7 @@ export function DateTime({ wrapperProps, inputProps, item, value, onChange, onAf
                             "--item-font-size": "13px"
                         }}
                         precision='minute'
-                        min={moment().subtract(100, "years").toDate()}
+                        min={dayjs().subtract(100, "years").toDate()}
                         disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
                         title={item?.label}
                         confirmText={item.okText || "Выбрать"}
@@ -1141,12 +1142,12 @@ export function DateTime({ wrapperProps, inputProps, item, value, onChange, onAf
                                 setVisible(false)
                             }
                         }}
-                        onConfirm={value => onChange(moment(value))}
+                        onConfirm={value => onChange(dayjs(value))}
                         value={val || null}
                         {...inputProps}  {...item?.inputProps}
                     >
                         {value =>
-                            value ? moment(value).format('YYYY-MM-DD HH:mm:ss') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
+                            value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
                         }
                     </DatePicker>
                 </div>
@@ -1159,7 +1160,7 @@ export function Time({ wrapperProps, inputProps, item, value, onChange, onAfterC
     const [val, setVal] = useState();
     useEffect(() => {
         if (value) {
-            setVal(moment(value).toDate());
+            setVal(dayjs(value).toDate());
         } else {
             setVal()
         }
@@ -1199,7 +1200,7 @@ export function Time({ wrapperProps, inputProps, item, value, onChange, onAfterC
                             "--item-font-size": "13px"
                         }}
                         precision='second'
-                        min={moment().subtract(100, "years").toDate()}
+                        min={dayjs().subtract(100, "years").toDate()}
                         disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
                         title={item?.label}
                         confirmText={item.okText || "Выбрать"}
@@ -1212,12 +1213,12 @@ export function Time({ wrapperProps, inputProps, item, value, onChange, onAfterC
                                 setVisible(false)
                             }
                         }}
-                        onConfirm={value => onChange(moment(value))}
+                        onConfirm={value => onChange(dayjs(value))}
                         value={val || null}
                         {...inputProps}  {...item?.inputProps}
                     >
                         {value =>
-                            value ? moment(value).format('HH:mm:ss') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
+                            value ? dayjs(value).format('HH:mm:ss') : <span style={{ color: "rgb(177 177 177)" }}>{item.placeholder || (`выберите  ${(item?.label) ? item?.label?.toLowerCase() : "значение"}`)}</span>
                         }
                     </DatePicker>
                 </div>

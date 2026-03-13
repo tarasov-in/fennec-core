@@ -38,6 +38,16 @@ import {
   InfiniteScroll
 } from 'antd-mobile'
 
+// import {
+//   FilterOutlined,
+//   SortAscendingOutlined,
+//   SortDescendingOutlined,
+//   FullscreenOutlined,
+//   FullscreenExitOutlined,
+//   ExclamationCircleOutlined
+// } from '@ant-design/icons'
+
+
 import { UIAdapter } from '../UIAdapter'
 import { setNotifier } from '../../core/error'
 import { Boolean, Date, DateTime, Float, FloatSlider, GroupObj, Integer, IntegerSlider, Obj, Password, RangeDate, RangeFloat, RangeInteger, String, Time, Unknown, UploadItem, UploadItems } from './components/fields'
@@ -106,6 +116,14 @@ export class AntdMobileAdapter extends UIAdapter {
     this.Picker = Picker
     this.CascadePicker = CascadePicker
     this.Form = Form
+    // ==================== Icons (optional, for CollectionRenderer) ====================
+    // this.Icons = {
+    //   Filter: FilterOutline,
+    //   SortAscending: SortAscendingOutlined,
+    //   SortDescending: SortDescendingOutlined,
+    //   Fullscreen: FullscreenOutlined,
+    //   FullscreenExit: FullscreenExitOutlined
+    // }
   }
 
   useFormInstance() {

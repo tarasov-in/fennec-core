@@ -8,13 +8,16 @@ import { useMetaContext } from '../../Context';
 import { useUIOptional } from '../../adapters/UIContext';
 import { Overlay } from '../../Overlay';
 import { PopoverModal } from '../../PopoverModal';
+import { useMediaQuery } from 'react-responsive';
 
 export function SortingFieldsUI(props) {
     const { filters, value, onChange, ui } = props;
     const sortOptions = filters?.filter(f => f.sort) ?? [];
     const locator = (suffix, obj) => getLocator(props?.locator || suffix, obj);
 
-    if (ui?.Divider && ui?.Select && ui?.Button && ui?.Tooltip && ui?.Icons) {
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 769 })
+
+    if (isDesktopOrLaptop && ui?.Divider && ui?.Select && ui?.Button && ui?.Tooltip && ui?.Icons) {
         const Divider = ui.Divider;
         const Select = ui.Select;
         const Button = ui.Button;
@@ -52,6 +55,100 @@ export function SortingFieldsUI(props) {
                 </div>
             </React.Fragment>
         );
+    } else if (!isDesktopOrLaptop && ui?.Picker) {
+        const Picker = ui.Picker;
+        // const SortAsc = ui.Icons.SortAscending;
+        // const SortDesc = ui.Icons.SortDescending;
+        const s = React.useMemo(() => {
+            const so = filters?.filter(f => f.sort);
+            return so?.map((item) => {
+                return {
+                    label: item.label,
+                    value: item.name,
+                    item
+                };
+            });
+        }, [filters]);
+        const sortingOrder = React.useCallback(() => {
+            if (value.order === "ASC") {
+                onChange({ name: value.name, order: "DESC" });
+            } else {
+                onChange({ name: value.name, order: "ASC" });
+            }
+        }, [value])
+
+        const onSortingChangeString = React.useCallback((v) => {
+            onChange({ name: v, order: value.order })
+        }, [value]);
+
+        const onOk = React.useCallback((v) => {
+            if (v.length) {
+                onSortingChangeString(v[0], filters.find(i => i.name === v[0]))
+            }
+        }, [filters, onSortingChangeString]);
+        const [visible, setVisible] = useState(false);
+        const current = React.useMemo(() => {
+            return s?.find(e => e.value === value.name)?.label;
+        }, [value])
+        return (<React.Fragment>
+            <div data-locator={getLocator(props?.locator || "sorting", props?.object)}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", paddingRight: "10px" }}>
+                    <div style={{
+                        fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, 'Open Sans', 'Helvetica Neue', 'Noto Sans Armenian', 'Noto Sans Bengali', 'Noto Sans Cherokee', 'Noto Sans Devanagari', 'Noto Sans Ethiopic', 'Noto Sans Georgian', 'Noto Sans Hebrew', 'Noto Sans Kannada', 'Noto Sans Khmer', 'Noto Sans Lao', 'Noto Sans Osmanya', 'Noto Sans Tamil', 'Noto Sans Telugu', 'Noto Sans Thai', sans-serif",
+                        fontWeight: "600",
+                        color: "rgba(0, 0, 0, 0.85)",
+                    }}>
+                        Сортировка
+                    </div>
+                    <div style={{ flex: "auto", margin: "10px 10px", height: "1px", backgroundColor: "#f0f0f0" }}></div>
+                </div>
+                <div style={{ padding: "5px 0px" }}>
+                    <div className='bg bg-grey' style={{ textAlign: "left", paddingLeft: "5px", marginBottom: "5px" }}>
+                        Сортировать по
+                    </div>
+                    <div style={{ paddingBottom: "10px", display: "flex", gap: "5px" }}>
+                        <div onClick={() => {
+                            setVisible(true)
+                        }} style={{
+                            flex: "1 1 auto",
+                            border: "1px solid #e5e5e5",
+                            borderRadius: "4px",
+                            padding: "2px 6px"
+                        }}>
+                            <Picker
+                                data-locator={getLocator(props?.locator || "sortingselect", props?.object)}
+                                columns={[s]}
+                                visible={visible}
+                                onClose={() => {
+                                    setVisible(false)
+                                }}
+                                cancelText="Отмена"
+                                confirmText="Выбрать"
+                                value={[value.name]}
+                                onConfirm={onOk}
+                            />
+                            {current}
+                        </div>
+                        <div
+                            data-locator={getLocator(props?.locator || "sortingorder", props?.object)}
+                            onClick={sortingOrder}
+                            style={{
+                                flex: "0 0 35px",
+                                border: "1px solid #e5e5e5",
+                                borderRadius: "4px",
+                                padding: "2px 6px",
+                            }}>
+                            {value.order === "ASC" &&
+                                <span><i className="fa-solid fa-arrow-down-short-wide"></i></span>
+                            }
+                            {value.order === "DESC" &&
+                                <span><i className="fa-solid fa-arrow-down-wide-short"></i></span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </React.Fragment>)
     }
 
     return (
@@ -107,10 +204,10 @@ export function FiltersFieldsUI(props) {
                 <div>
                     {JSXMap(filters?.filter(i => i.filter), (item) => (
                         <div data-locator={getLocator(props?.locator || "filtersfield", props?.object)} key={item.name} style={{ marginBottom: "10px" }}>
-                            {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>}
+                            {/* {item.filter && (item.type !== "bool" && item.type !== "boolean") && <span>{item.label}</span>} */}
                             <Field
                                 mode="filter"
-                                formItem={true}
+                                // formItem={true}
                                 key={item.name}
                                 auth={auth}
                                 item={{ ...item, func: (funcs && funcs[item?.name?.toLowerCase()]) ? funcs[item.name.toLowerCase()] : {} }}
@@ -303,14 +400,20 @@ function FilterButton(props) {
         </div>
     );
 }
-function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter, ui }) {
+function FilterContent({ close, auth, filters, sorting, setSorting, state, funcStat, filtered, locator, object, name, fieldName, _onFilterChange, applyFilter, clearFilter, ui }) {
     const ButtonComp = ui?.Button;
     const fl = filters?.filter(i => i.filter);
     const showFilterButtons = filtered && fl?.length > 0;
-
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 769 })
+    const apply = React.useCallback(() => {
+        applyFilter();
+        if (close) {
+            close();
+        }
+    }, [close, applyFilter])
     return (
         <React.Fragment>
-            {showFilterButtons && (
+            {(isDesktopOrLaptop && showFilterButtons) && (
                 <React.Fragment>
                     <div style={{}}>
                         {ButtonComp ? (
@@ -319,7 +422,7 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
                                 style={{ width: "100%" }}
                                 disabled={!state.filterChanged}
                                 type="primary"
-                                onClick={applyFilter}
+                                onClick={apply}
                             >
                                 Применить
                             </ButtonComp>
@@ -345,6 +448,41 @@ function FilterContent({ auth, filters, sorting, setSorting, state, funcStat, fi
             )}
             <SortingFieldsUI ui={ui} value={sorting} onChange={setSorting} filters={filters} />
             <FiltersFieldsUI ui={ui} auth={auth} value={state.newFilter} onChange={_onFilterChange} filters={filters} funcs={funcStat} />
+            {(!isDesktopOrLaptop && showFilterButtons) && (
+                <React.Fragment>
+                    <div style={{ display: "flex", gap: "5px" }}>
+                        <div style={{ flex: "1 1 auto" }}>
+                            {ButtonComp ? (
+                                <ButtonComp
+                                    data-locator={getLocator(locator || "collectionfilterclear-" + name || "collectionfilterclear-" + fieldName || "collectionfilterclear", object)}
+                                    style={{ width: "100%" }}
+                                    disabled={_.isEmpty(state.filter)}
+                                    onClick={clearFilter}
+                                >
+                                    Очистить
+                                </ButtonComp>
+                            ) : (
+                                <button type="button" disabled={_.isEmpty(state.filter)} onClick={clearFilter}>Очистить</button>
+                            )}
+                        </div>
+                        <div style={{ flex: "1 1 auto" }}>
+                            {ButtonComp ? (
+                                <ButtonComp
+                                    data-locator={getLocator(locator || "collectionfilterapply-" + name || "collectionfilterapply-" + fieldName || "collectionfilterapply", object)}
+                                    style={{ width: "100%" }}
+                                    disabled={!state.filterChanged}
+                                    type="primary"
+                                    onClick={apply}
+                                >
+                                    Применить
+                                </ButtonComp>
+                            ) : (
+                                <button type="button" disabled={!state.filterChanged} onClick={applyFilter}>Применить</button>
+                            )}
+                        </div>
+                    </div>
+                </React.Fragment>
+            )}
         </React.Fragment>
     );
 }
@@ -985,7 +1123,7 @@ export function Collection(props) {
     const isFullscreen = openOverlay;
     const openFullscreen = () => { setOpenOverlay(true); };
     const closeFullscreen = () => { setOpenOverlay(false); };
-    const FilterContentFunction = React.useCallback(() => (
+    const FilterContentFunction = React.useCallback((close) => (
         <FilterContent
             ui={ui}
             auth={auth}
@@ -1002,8 +1140,9 @@ export function Collection(props) {
             _onFilterChange={_onFilterChange}
             applyFilter={applyFilter}
             clearFilter={clearFilter}
+            close={close}
         />
-    ),[ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName, meta])
+    ), [ui, auth, filters, sorting, state, funcStat, filtered, name, fieldName, meta])
     const collectionContext = {
         // data
         collection,
