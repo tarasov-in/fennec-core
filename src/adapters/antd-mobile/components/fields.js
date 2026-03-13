@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 // import 'moment/locale/ru';
 import { errorCatch, getDisplay, getLocator, getObjectValue, GETWITH, JSXMap, pushStateHistoryModal, READWITH } from '../../../core/utils';
 // import moment from 'moment';
-import {dayjs, utc, timezone} from '../../../core/utils'
+import { dayjs, utc, timezone } from '../../../core/utils'
 import { Checkbox, Input, TextArea, Slider, DatePicker, Button, ImageUploader, Popup, CheckList, SearchBar, Image as AntImage } from 'antd-mobile';
 
 
@@ -187,6 +187,9 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                 <div
                     data-locator={getLocator(item?.name, "visible1")}
                     onClick={() => {
+                        if (typeof window !== 'undefined') {
+                            pushStateHistoryModal(setVisible1);
+                        }
                         setVisible1(true)
                     }} style={{
                         flex: "1",
@@ -209,7 +212,11 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                         cancelText={item.dismissText || "Отмена"}
                         visible={visible1}
                         onClose={() => {
-                            setVisible1(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible1(false)
+                            }
                         }}
                         onConfirm={(v) => onChange([dayjs(v), (val[1]) ? dayjs(val[1]) : dayjs(v)])}
                         value={val[0] || null}
@@ -222,6 +229,9 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                 <div
                     data-locator={getLocator(item?.name, "visible2")}
                     onClick={() => {
+                        if (typeof window !== 'undefined') {
+                            pushStateHistoryModal(setVisible2);
+                        }
                         setVisible2(true)
                     }} style={{
                         flex: "1",
@@ -243,7 +253,11 @@ export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onA
                         cancelText={item.dismissText || "Отмена"}
                         visible={visible2}
                         onClose={() => {
-                            setVisible2(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible2(false)
+                            }
                         }}
                         onConfirm={(v) => onChange([(val[0]) ? dayjs(val[0]) : dayjs(v), dayjs(v)])}
                         value={val[1] || null}
