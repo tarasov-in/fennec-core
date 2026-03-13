@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import 'moment/locale/ru';
-import { errorCatch, getDisplay, getLocator, getObjectValue, GETWITH, JSXMap, READWITH } from '../../../core/utils';
+import { errorCatch, getDisplay, getLocator, getObjectValue, GETWITH, JSXMap, pushStateHistoryModal, READWITH } from '../../../core/utils';
 import moment from 'moment';
 import { Checkbox, Input, TextArea, Slider, DatePicker, Button, ImageUploader, Popup, CheckList, SearchBar, Image as AntImage } from 'antd-mobile';
 
@@ -11,7 +11,7 @@ import { QueryDetail, QueryOrder, QueryParam } from '../../../core/query';
 
 var _ = require('lodash');
 
-export function UploadItems({wrapperProps, inputProps, auth, item, value, onChange, changed }) {
+export function UploadItems({ wrapperProps, inputProps, auth, item, value, onChange, changed }) {
     const [files, setFiles] = useState([]);
     const [urls, setUrls] = useState([]);
     useEffect(() => {
@@ -76,7 +76,7 @@ export function UploadItems({wrapperProps, inputProps, auth, item, value, onChan
         </div>
     );
 }
-export function UploadItem({wrapperProps, inputProps, auth, item, value, onChange, changed }) {
+export function UploadItem({ wrapperProps, inputProps, auth, item, value, onChange, changed }) {
     const [files, setFiles] = useState([]);
     const [urls, setUrls] = useState([]);
     useEffect(() => {
@@ -149,7 +149,7 @@ export function UploadItem({wrapperProps, inputProps, auth, item, value, onChang
         </div>
     );
 }
-export function RangeDate({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function RangeDate({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [visible1, setVisible1] = useState(false)
     const [visible2, setVisible2] = useState(false)
     const [val, setVal] = useState([]);
@@ -173,29 +173,29 @@ export function RangeDate({wrapperProps, inputProps, item, value, onChange, onAf
                     display: "flex",
                     justifyContent: "space-between"
                 }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
-                <Button fill='none' size='mini' 
-                data-locator={getLocator(item?.name, "clear")}
-                onClick={(v) => {
-                    onChange();
-                }}>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
+                <Button fill='none' size='mini'
+                    data-locator={getLocator(item?.name, "clear")}
+                    onClick={(v) => {
+                        onChange();
+                    }}>
                     <i className="fa fa-times"></i>
                 </Button>
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
-                <div 
-                data-locator={getLocator(item?.name,"visible1")}
-                onClick={() => {
-                    setVisible1(true)
-                }} style={{
-                    flex: "1",
-                    border: "1px solid #e5e5e5",
-                    fontSize: "13px",
-                    borderRadius: "4px",
-                    padding: "2px 6px"
-                }}>
+                <div
+                    data-locator={getLocator(item?.name, "visible1")}
+                    onClick={() => {
+                        setVisible1(true)
+                    }} style={{
+                        flex: "1",
+                        border: "1px solid #e5e5e5",
+                        fontSize: "13px",
+                        borderRadius: "4px",
+                        padding: "2px 6px"
+                    }}>
                     <DatePicker
-                    data-locator={getLocator(item?.name, "input1")}
+                        data-locator={getLocator(item?.name, "input1")}
                         style={{
                             "--item-font-size": "13px"
                         }}
@@ -218,19 +218,19 @@ export function RangeDate({wrapperProps, inputProps, item, value, onChange, onAf
                         }
                     </DatePicker>
                 </div>
-                <div 
-                data-locator={getLocator(item?.name,"visible2")}
-                onClick={() => {
-                    setVisible2(true)
-                }} style={{
-                    flex: "1",
-                    border: "1px solid #e5e5e5",
-                    fontSize: "13px",
-                    borderRadius: "4px",
-                    padding: "2px 6px"
-                }}>
+                <div
+                    data-locator={getLocator(item?.name, "visible2")}
+                    onClick={() => {
+                        setVisible2(true)
+                    }} style={{
+                        flex: "1",
+                        border: "1px solid #e5e5e5",
+                        fontSize: "13px",
+                        borderRadius: "4px",
+                        padding: "2px 6px"
+                    }}>
                     <DatePicker
-                    data-locator={getLocator(item?.name,"input2")}
+                        data-locator={getLocator(item?.name, "input2")}
                         style={{
                             "--item-font-size": "13px"
                         }}
@@ -256,7 +256,7 @@ export function RangeDate({wrapperProps, inputProps, item, value, onChange, onAf
         </div>
     )
 }
-export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function RangeFloat({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [val, setVal] = useState();
     useEffect(() => {
         setVal(value);
@@ -284,12 +284,12 @@ export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onA
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
-                <Button fill='none' size='mini' 
-                data-locator={getLocator(item?.name,"clear")}
-                onClick={(v) => {
-                    onChange();
-                }}>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
+                <Button fill='none' size='mini'
+                    data-locator={getLocator(item?.name, "clear")}
+                    onClick={(v) => {
+                        onChange();
+                    }}>
                     <i className="fa fa-times"></i>
                 </Button>
             </div>}
@@ -302,7 +302,7 @@ export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onA
                     padding: "2px 6px"
                 }}>
                     <Input
-                    data-locator={getLocator(item?.name,"left")}
+                        data-locator={getLocator(item?.name, "left")}
                         type={"number"}
                         onChange={onChangeLeft}
                         value={(val && val.length > 1) ? val[0] : def[0]}
@@ -316,7 +316,7 @@ export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onA
                     padding: "2px 6px"
                 }}>
                     <Input
-                    data-locator={getLocator(item?.name,"right")}
+                        data-locator={getLocator(item?.name, "right")}
                         type={"number"}
                         onChange={onChangeRight}
                         value={(val && val.length > 1) ? val[1] : def[1]}
@@ -325,7 +325,7 @@ export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onA
             </div>
             <div>
                 <Slider
-                data-locator={getLocator(item?.name,"input")}
+                    data-locator={getLocator(item?.name, "input")}
                     range
                     defaultValue={def}
                     min={(xmin - (xmin % xstep))}
@@ -339,7 +339,7 @@ export function RangeFloat({wrapperProps, inputProps, item, value, onChange, onA
         </div>
     )
 }
-export function FloatSlider({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function FloatSlider({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [val, setVal] = useState();
     useEffect(() => {
         setVal(value);
@@ -357,11 +357,11 @@ export function FloatSlider({wrapperProps, inputProps, item, value, onChange, on
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button
                     disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
-                    fill='none' size='mini' 
-                    data-locator={getLocator(item?.name,"clear")}
+                    fill='none' size='mini'
+                    data-locator={getLocator(item?.name, "clear")}
                     onClick={(v) => {
                         onChange();
                     }}>
@@ -370,7 +370,7 @@ export function FloatSlider({wrapperProps, inputProps, item, value, onChange, on
             </div>}
             <div {...wrapperProps}>
                 <Slider
-                data-locator={getLocator(item?.name,"input")}
+                    data-locator={getLocator(item?.name, "input")}
                     disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
                     range
                     min={xmin}
@@ -385,7 +385,7 @@ export function FloatSlider({wrapperProps, inputProps, item, value, onChange, on
         </div>
     )
 }
-export function RangeInteger({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function RangeInteger({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [val, setVal] = useState();
     useEffect(() => {
         setVal(value);
@@ -413,12 +413,12 @@ export function RangeInteger({wrapperProps, inputProps, item, value, onChange, o
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini'
-                data-locator={getLocator(item?.name,"clear")}
-                 onClick={(v) => {
-                    onChange();
-                }}>
+                    data-locator={getLocator(item?.name, "clear")}
+                    onClick={(v) => {
+                        onChange();
+                    }}>
                     <i className="fa fa-times"></i>
                 </Button>
             </div>}
@@ -431,7 +431,7 @@ export function RangeInteger({wrapperProps, inputProps, item, value, onChange, o
                     padding: "2px 6px"
                 }}>
                     <Input
-                    data-locator={getLocator(item?.name, "left")}
+                        data-locator={getLocator(item?.name, "left")}
                         type={"number"}
                         onChange={onChangeLeft}
                         value={(val && val.length > 1) ? val[0] : def[0]}
@@ -445,7 +445,7 @@ export function RangeInteger({wrapperProps, inputProps, item, value, onChange, o
                     padding: "2px 6px"
                 }}>
                     <Input
-                    data-locator={getLocator(item?.name, "right")}
+                        data-locator={getLocator(item?.name, "right")}
                         type={"number"}
                         onChange={onChangeRight}
                         value={(val && val.length > 1) ? val[1] : def[1]}
@@ -453,7 +453,7 @@ export function RangeInteger({wrapperProps, inputProps, item, value, onChange, o
                 </div>
             </div>
             <Slider
-            data-locator={getLocator(item?.name, "input")}
+                data-locator={getLocator(item?.name, "input")}
                 // style={{ marginLeft: 15, marginRight: 15, height: "22px" }}
                 range
                 defaultValue={def}
@@ -468,7 +468,7 @@ export function RangeInteger({wrapperProps, inputProps, item, value, onChange, o
         </div>
     )
 }
-export function IntegerSlider({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function IntegerSlider({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [val, setVal] = useState();
     useEffect(() => {
         setVal(value);
@@ -486,10 +486,10 @@ export function IntegerSlider({wrapperProps, inputProps, item, value, onChange, 
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button
                     disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
-                    fill='none' size='mini' 
+                    fill='none' size='mini'
                     data-locator={getLocator(item?.name, "clear")}
                     onClick={(v) => {
                         onChange();
@@ -498,7 +498,7 @@ export function IntegerSlider({wrapperProps, inputProps, item, value, onChange, 
                 </Button>
             </div>}
             <Slider
-            data-locator={getLocator(item?.name, "input")}
+                data-locator={getLocator(item?.name, "input")}
                 disabled={(item && item.view && item.view.disabled) ? item.view.disabled : false}
                 min={xmin}
                 max={xmax}
@@ -511,7 +511,7 @@ export function IntegerSlider({wrapperProps, inputProps, item, value, onChange, 
         </div>
     )
 }
-export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function Obj({ wrapperProps, inputProps, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [data, setData] = useState([]);
     const meta = useMetaContext();
 
@@ -681,7 +681,7 @@ export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAf
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' onClick={(v) => {
                     onChange(undefined, item, undefined);
                 }}>
@@ -690,6 +690,9 @@ export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAf
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
                 <div onClick={() => {
+                    if (typeof window !== 'undefined') {
+                        pushStateHistoryModal(setVisible);
+                    }
                     setVisible(true)
                 }} style={{
                     flex: "1",
@@ -703,13 +706,17 @@ export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAf
                         showCloseButton
                         bodyStyle={{ height: "100%" }}
                         onClose={() => {
-                            setVisible(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible(false)
+                            }
                         }}
                     >
                         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                             <div style={{ flex: "0", padding: "0 10px" }}>
                                 <div style={{ display: "flex", justifyContent: "center", padding: "10px 30px 10px 15px", fontSize: "16px" }}>
-                                    <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                                    <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                                 </div>
                             </div>
                             <div style={{ flex: "0", padding: "0 10px" }}>
@@ -736,7 +743,11 @@ export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAf
                             <div style={{ flex: "0" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", padding: "10px" }}>
                                     <Button style={{ flex: "auto" }} type="ghost" onClick={() => {
-                                        setVisible(false)
+                                        if (typeof window !== 'undefined') {
+                                            window.history.back();
+                                        } else {
+                                            setVisible(false)
+                                        }
                                     }}>Закрыть</Button>
                                 </div>
                             </div>
@@ -752,7 +763,7 @@ export function Obj({wrapperProps, inputProps, auth, item, value, onChange, onAf
         </div >
     )
 }
-export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
+export function GroupObj({ wrapperProps, inputProps, auth, item, value, onChange, onAfterChange, changed, contextObject, objectName }) {
     const [data, setData] = useState([]);
     const meta = useMetaContext();
 
@@ -919,7 +930,7 @@ export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange,
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' onClick={(v) => {
                     onChange(undefined, item, undefined);
                 }}>
@@ -928,6 +939,9 @@ export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange,
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
                 <div onClick={() => {
+                    if (typeof window !== 'undefined') {
+                        pushStateHistoryModal(setVisible);
+                    }
                     setVisible(true)
                 }} style={{
                     flex: "1",
@@ -941,13 +955,17 @@ export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange,
                         showCloseButton
                         bodyStyle={{ height: "100%" }}
                         onClose={() => {
-                            setVisible(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible(false)
+                            }
                         }}
                     >
                         <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
                             <div style={{ flex: "0", padding: "0 10px" }}>
                                 <div style={{ display: "flex", justifyContent: "center", padding: "10px 30px 10px 15px", fontSize: "16px" }}>
-                                    <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                                    <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                                 </div>
                             </div>
                             <div style={{ flex: "0", padding: "0 10px" }}>
@@ -974,7 +992,11 @@ export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange,
                             <div style={{ flex: "0" }}>
                                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", padding: "10px" }}>
                                     <Button style={{ flex: "auto" }} type="ghost" onClick={() => {
-                                        setVisible(false)
+                                        if (typeof window !== 'undefined') {
+                                            window.history.back();
+                                        } else {
+                                            setVisible(false)
+                                        }
                                     }}>Закрыть</Button>
                                 </div>
                             </div>
@@ -990,7 +1012,7 @@ export function GroupObj({wrapperProps, inputProps, auth, item, value, onChange,
         </div >
     )
 }
-export function Date({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Date({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [visible, setVisible] = useState(false)
     const [val, setVal] = useState();
     useEffect(() => {
@@ -1009,7 +1031,7 @@ export function Date({wrapperProps, inputProps, item, value, onChange, onAfterCh
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1018,6 +1040,9 @@ export function Date({wrapperProps, inputProps, item, value, onChange, onAfterCh
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
                 <div data-locator={getLocator(item?.name, "visible")} onClick={() => {
+                    if (typeof window !== 'undefined') {
+                        pushStateHistoryModal(setVisible);
+                    }
                     setVisible(true)
                 }} style={{
                     flex: "1",
@@ -1039,7 +1064,11 @@ export function Date({wrapperProps, inputProps, item, value, onChange, onAfterCh
                         cancelText={item.dismissText || "Отмена"}
                         visible={visible}
                         onClose={() => {
-                            setVisible(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible(false)
+                            }
                         }}
                         onConfirm={value => onChange(moment(value))}
                         value={val || null}
@@ -1054,7 +1083,7 @@ export function Date({wrapperProps, inputProps, item, value, onChange, onAfterCh
         </div>
     )
 }
-export function DateTime({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function DateTime({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [visible, setVisible] = useState(false)
     const [val, setVal] = useState();
     useEffect(() => {
@@ -1073,7 +1102,7 @@ export function DateTime({wrapperProps, inputProps, item, value, onChange, onAft
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1082,6 +1111,9 @@ export function DateTime({wrapperProps, inputProps, item, value, onChange, onAft
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
                 <div data-locator={getLocator(item?.name, "visible")} onClick={() => {
+                    if (typeof window !== 'undefined') {
+                        pushStateHistoryModal(setVisible);
+                    }
                     setVisible(true)
                 }} style={{
                     flex: "1",
@@ -1103,7 +1135,11 @@ export function DateTime({wrapperProps, inputProps, item, value, onChange, onAft
                         cancelText={item.dismissText || "Отмена"}
                         visible={visible}
                         onClose={() => {
-                            setVisible(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible(false)
+                            }
                         }}
                         onConfirm={value => onChange(moment(value))}
                         value={val || null}
@@ -1118,7 +1154,7 @@ export function DateTime({wrapperProps, inputProps, item, value, onChange, onAft
         </div>
     )
 }
-export function Time({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Time({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [visible, setVisible] = useState(false)
     const [val, setVal] = useState();
     useEffect(() => {
@@ -1137,7 +1173,7 @@ export function Time({wrapperProps, inputProps, item, value, onChange, onAfterCh
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1146,6 +1182,9 @@ export function Time({wrapperProps, inputProps, item, value, onChange, onAfterCh
             </div>}
             <div style={{ display: "flex", justifyContent: "space-between", gap: "5px" }}>
                 <div onClick={() => {
+                    if (typeof window !== 'undefined') {
+                        pushStateHistoryModal(setVisible);
+                    }
                     setVisible(true)
                 }} style={{
                     flex: "1",
@@ -1167,7 +1206,11 @@ export function Time({wrapperProps, inputProps, item, value, onChange, onAfterCh
                         cancelText={item.dismissText || "Отмена"}
                         visible={visible}
                         onClose={() => {
-                            setVisible(false)
+                            if (typeof window !== 'undefined') {
+                                window.history.back();
+                            } else {
+                                setVisible(false)
+                            }
                         }}
                         onConfirm={value => onChange(moment(value))}
                         value={val || null}
@@ -1182,22 +1225,22 @@ export function Time({wrapperProps, inputProps, item, value, onChange, onAfterCh
         </div>
     )
 }
-export function Boolean({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Boolean({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     return (
         <div {...wrapperProps}>
-        <Checkbox
-            data-locator={getLocator(item?.name)}
-            disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
-            onChange={onChange}
-            checked={value}
-            {...inputProps}  {...item?.inputProps}
-        >
-            {item?.label}
-        </Checkbox>
+            <Checkbox
+                data-locator={getLocator(item?.name)}
+                disabled={(item.view && item.view.disabled) ? item.view.disabled : false}
+                onChange={onChange}
+                checked={value}
+                {...inputProps}  {...item?.inputProps}
+            >
+                {item?.label}
+            </Checkbox>
         </div>
     )
 }
-export function Float({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Float({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     return (
         <div data-locator={getLocator(item?.name)} style={{ padding: "5px 0px" }}>
             {(item && item.header !== false) && <div className='bg bg-grey' style={{
@@ -1207,7 +1250,7 @@ export function Float({wrapperProps, inputProps, item, value, onChange, onAfterC
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1240,7 +1283,7 @@ export function Float({wrapperProps, inputProps, item, value, onChange, onAfterC
         </div>
     )
 }
-export function Integer({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Integer({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     return (
         <div data-locator={getLocator(item?.name)} style={{ padding: "5px 0px" }}>
             {(item && item.header !== false) && <div className='bg bg-grey' style={{
@@ -1250,7 +1293,7 @@ export function Integer({wrapperProps, inputProps, item, value, onChange, onAfte
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1283,7 +1326,7 @@ export function Integer({wrapperProps, inputProps, item, value, onChange, onAfte
         </div>
     )
 }
-export function String({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function String({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     return (
         <div data-locator={getLocator(item?.name)} style={{ padding: "5px 0px" }}>
             {(item && item.header !== false) && <div className='bg bg-grey' style={{
@@ -1293,7 +1336,7 @@ export function String({wrapperProps, inputProps, item, value, onChange, onAfter
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clean")} onClick={(v) => {
                     onChange();
                 }}>
@@ -1326,7 +1369,7 @@ export function String({wrapperProps, inputProps, item, value, onChange, onAfter
     )
 }
 
-export function Password({wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
+export function Password({ wrapperProps, inputProps, item, value, onChange, onAfterChange }) {
     const [visible, setVisible] = useState(false)
     return (
         <div data-locator={getLocator(item?.name)} style={{ padding: "5px 0px" }}>
@@ -1337,7 +1380,7 @@ export function Password({wrapperProps, inputProps, item, value, onChange, onAft
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <div className={(item?.validators?.required)?'item-required':''}>{item?.label}</div>
+                <div className={(item?.validators?.required) ? 'item-required' : ''}>{item?.label}</div>
                 <Button fill='none' size='mini' data-locator={getLocator(item?.name, "clear")} onClick={(v) => {
                     onChange();
                 }}>
