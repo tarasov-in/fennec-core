@@ -3,6 +3,7 @@
  * Used by CollectionRenderer and others
  */
 import React from 'react'
+import _ from 'lodash';
 
 export function JSX(render) {
     return render();

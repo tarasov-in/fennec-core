@@ -9,7 +9,7 @@ const http = require('http')
 const path = require('path')
 
 // --- Конфигурация (переменные вверху скрипта) ---
-const OLLAMA_MODEL = 'qwen3:4b'
+const OLLAMA_MODEL = 'qwen3.5:2b'
 const OLLAMA_BASE_URL = 'http://localhost:11434'
 
 // Системный промпт для первого шага: развёрнутое описание изменений по diff

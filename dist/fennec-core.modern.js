@@ -18054,12 +18054,12 @@ function JSXMap(array, render) {
   });
 }
 function JSXPathMap(object, path, render) {
-  var array = _.get(object, path);
+  var array = lodash.get(object, path);
   return JSXMap(array, render);
 }
 function JSXIndex(array, index, render) {
   if (!array) return /*#__PURE__*/React.createElement(React.Fragment, null);
-  if (!_.isArray(index)) {
+  if (!lodash.isArray(index)) {
     if (array.length < index) return /*#__PURE__*/React.createElement(React.Fragment, null);
     return render(array[index], index);
   } else {
